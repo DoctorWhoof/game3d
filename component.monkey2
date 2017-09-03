@@ -12,6 +12,7 @@ Class Component
 	Protected
 	Field _name 			:= "noName"
 	Field _init				:= False
+	Field _view				:SceneView
 
 
 	'************************************* Instance properties *************************************
@@ -32,6 +33,10 @@ Class Component
 		Return gameObj.entity
 	Setter( ent:Entity )
 		gameObj.entity = ent
+	End
+	
+	Property View:SceneView()
+		Return gameObj.View
 	End
 	
 	'************************************* Instance methods *************************************
@@ -72,7 +77,6 @@ Class Component
 		all.Remove( Self )
 		OnDestroy()
 	End
-	
 
 	'************************************* Virtual methods *************************************
 	

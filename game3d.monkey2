@@ -21,7 +21,6 @@ Using clock..
 Using util..
 
 Const smallFont:Font = Font.Load( "font::DejaVuSans.ttf", 10 )
-Global game:SceneView
 
 Class SceneView Extends View
 	
@@ -37,7 +36,6 @@ Class SceneView Extends View
 	Field render3DScene := False
 	
 	Protected
-'	Field _virtualRes :Vec2i
 	Field _firstFrame := True
 	Field _paused:= False
 	Field _echoStack:= New Stack<String>		'Contains all the text messages to be displayed
@@ -90,18 +88,18 @@ Class SceneView Extends View
 			keyLight.Rotate( 45, 45, 0 )
 		End
 		
-		game = Self
+'		game = Self
 		Style.Font = smallFont
 	End
 	
 	
-	Method OnMeasure:Vec2i() Override
+	Method OnMeasure:Vec2i() Override Final
 		Return camera2D.Size
 	End
 	
 	
-	Method OnRender( canvas:Canvas ) Override
-		Echo( "Width="+Width+",    Height="+Height+",    Camera2D=" + camera2D.ToString() + ",    FPS="+App.FPS + "    WorldMouse=" + WorldMouse + ",    Clock:" + Truncate( Clock.Now() ) )
+	Method OnRender( canvas:Canvas ) Override Final
+		Echo( "Width="+Width+",Height="+Height+",    Camera2D=" + camera2D.ToString() + ",    FPS="+App.FPS + ",    WorldMouse=" + WorldMouse + ",    Clock:" + Truncate( Clock.Now() ) )
 		Self.canvas = canvas
 		App.RequestRender()
 		
@@ -163,6 +161,16 @@ Class SceneView Extends View
 	End
 	
 	
+	Method Echo( text:String, ignoreDebug:Bool = True, color:Color = Color.White )
+		If Not Paused
+			If debug Or ignoreDebug
+				_echoStack.Push( text )
+				_echoColorStack.Push( color )
+			End
+		End
+	End
+	
+	
 	'********************************* Virtual Methods *********************************
 	
 	
@@ -201,16 +209,6 @@ Class SceneView Extends View
 	
 	Public
 	
-End
-
-
-Function Echo( text:String, ignoreDebug:Bool = True, color:Color = Color.White )
-	If Not game.Paused
-		If game.debug Or ignoreDebug
-			game._echoStack.Push( text )
-			game._echoColorStack.Push( color )
-		End
-	End
 End
 
 

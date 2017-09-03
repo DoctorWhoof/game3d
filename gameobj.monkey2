@@ -33,6 +33,7 @@ Class GameObj
 	Field _name				:= "entity"
 	Field _parent			:GameObj						'Parent obj directly above this one
 	Field _root				:GameObj						'Top parent obj (root of the entire hierarchy)
+	Field _view				:SceneView
 	Field _init				:= False						'Has this entity been initialized?
 
 	Field _time				:Double
@@ -121,18 +122,24 @@ Class GameObj
 		Return _startTime
 	End
 	
+	Property View:SceneView()
+		Return _view
+	End
+	
 	
 	'************************************* Public Methods *************************************
 	
 	
-	Method New( name:String )
+	Method New( name:String, view:SceneView )
 		SetUniqueName( name )
 		all.Add( name, Self )
 		rootObjs.Add( name, Self )
 		_root = Self
+		_view = view
 '   		Self.layer = layer
 '   		layer.Add( Self )
 '   		animation = New Animation( Self )
+		
 	End
 
 
