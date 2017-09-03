@@ -1,0 +1,7 @@
+{
+	"animations":{
+		"fastSpeed":	{"loop":true,	"rate":20,	"frames":[0,1,1,2,3,4,5,5,6,6,7,7,7]},
+		"mediumSpeed":	{"loop":true,	"rate":10,	"frames":[0,1,1,2,3,4,5,5,6,6,7,7,7]},
+		"slowSpeed":	{"loop":true,	"rate":5,	"frames":[0,1,2,3,4,5,6,6,7,7]}
+	}
+}

@@ -1,0 +1,33 @@
+{
+	"animations":{
+		"WalkRight":	{"loop":true,	"rate":20,	"frames":[2,2,3,3,3,4,4,5,5,5]},
+		"WalkLeft":		{"loop":true,	"rate":20,	"frames":[2,2,3,3,3,4,4,5,5,5]},
+		"WalkUp":		{"loop":true,	"rate":20,	"frames":[2,2,3,3,3,4,4,5,5,5]},
+		"WalkDown":		{"loop":true,	"rate":20,	"frames":[2,2,3,3,3,4,4,5,5,5]},
+
+		"IdleRight":	{"loop":true,	"rate":5,	"frames":[0,1,2,1]},
+		"IdleLeft":		{"loop":true,	"rate":5,	"frames":[0,1,2,1]},
+		"IdleUp":		{"loop":true,	"rate":5,	"frames":[0,1,2,1]},
+		"IdleDown":		{"loop":true,	"rate":5,	"frames":[0,1,2,1]},
+
+		"DeadRight":	{"loop":false,	"rate":10,	"frames":[6]},
+		"DeadLeft":		{"loop":false,	"rate":10,	"frames":[6]},
+		"DeadUp":		{"loop":false,	"rate":10,	"frames":[6]},
+		"DeadDown":		{"loop":false,	"rate":10,	"frames":[6]},
+
+		"WalkRightSub":	{"loop":true,	"rate":10,	"frames":[9,9,10,10,10,11,11,12,12,12]},
+		"WalkLeftSub":	{"loop":true,	"rate":10,	"frames":[9,9,10,10,10,11,11,12,12,12]},
+		"WalkUpSub":	{"loop":true,	"rate":10,	"frames":[9,9,10,10,10,11,11,12,12,12]},
+		"WalkDownSub":	{"loop":true,	"rate":10,	"frames":[9,9,10,10,10,11,11,12,12,12]},
+
+		"IdleRightSub":	{"loop":true,	"rate":5,	"frames":[7,8,9,8]},
+		"IdleLeftSub":	{"loop":true,	"rate":5,	"frames":[7,8,9,8]},
+		"IdleUpSub":	{"loop":true,	"rate":5,	"frames":[7,8,9,8]},
+		"IdleDownSub":	{"loop":true,	"rate":5,	"frames":[7,8,9,8]},
+
+		"DeadRightSub":	{"loop":true,	"rate":2,	"frames":[13,14,15]},
+		"DeadLeftSub":	{"loop":true,	"rate":2,	"frames":[13,14,15]},
+		"DeadUpSub":	{"loop":true,	"rate":2,	"frames":[13,14,15]},
+		"DeadDownSub":	{"loop":true,	"rate":2,	"frames":[13,14,15]}
+	}
+}

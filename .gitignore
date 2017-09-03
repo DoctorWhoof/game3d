@@ -1,0 +1,3 @@
+*.products
+*.build*
+*.DS_Store
