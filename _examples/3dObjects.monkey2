@@ -14,15 +14,22 @@ Using game3d..
 
 Function Main()
 	New AppInstance
-	New Test
+	New TestWindow
 	App.Run()
 End
 
-
-Class Test Extends Game
-
+Class TestWindow Extends Window
 	Method New()
-		Super.New( "Test", 640, 480 )
+		Super.New( "Test", 1024, 600, WindowFlags.Resizable )
+		ContentView = New GameView( 1280, 720 )
+	End
+End
+
+
+Class GameView Extends SceneView
+
+	Method New( width:Int, height:Int )
+		Super.New( width, height )
 		Layout = "fill"
 	End
 
@@ -58,24 +65,10 @@ Class Test Extends Game
 		WasdInit( Self )
 		camera.Position = New Vec3f( 10, 0, 0 )
 		camera.Rotation = New Vec3f( 0, 90, 0 )
-		
-		camera2D = New Rectf( 0, 0 , 240, 180 )
 	End
 	
 	Method OnUpdate() Override
-		WasdCameraControl( camera, Self, Clock.Delta() )
-		If Keyboard.KeyDown( Key.LeftGui )
-			If Keyboard.KeyDown( Key.Left )
-				MoveCamera2D( -1, 0 )
-			Elseif Keyboard.KeyDown( Key.Right )
-				MoveCamera2D( 1, 0 )
-			End
-			If Keyboard.KeyDown( Key.Up )
-				MoveCamera2D( 0, -1 )
-			Elseif Keyboard.KeyDown( Key.Down )
-				MoveCamera2D( 0, 1 )
-			End
-		End
+		WasdCameraControl( game.camera, Self, Clock.Delta() )
 	End
 	
 End

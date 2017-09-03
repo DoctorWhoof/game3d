@@ -116,6 +116,13 @@ Class Area<T>
 		Return New Rect<T>( _x0, _y0, _x1, _y1 )
 	End
 	
+	Property Size:Vec2<T>()
+		Return New Vec2<T>( _width, _height )
+	Setter( v:Vec2<T> )
+		Width = v.X
+		Height = v.Y
+	End
+	
 	'transformed corners. Make sure you call Transform( mat ) first
 	
 	Property TopLeft:Vec2<T>()
@@ -253,7 +260,7 @@ Class Area<T>
 	
 	
 	Method ToString:String()
-		Return "Area("+_pos.X+","+_pos.Y+"; "+ Cast<Int>( _width ) + "x"+ Cast<Int>( _height )+")"
+		Return "("+_pos.X+","+_pos.Y+"; "+ Cast<Int>( _width ) + "x"+ Cast<Int>( _height )+")"
 	End
 	
 

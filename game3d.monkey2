@@ -20,25 +20,28 @@ Using math..
 Using clock..
 Using util..
 
-Class Game Extends Window
+Const smallFont:Font = Font.Load( "font::DejaVuSans.ttf", 10 )
+Global game:SceneView
+
+Class SceneView Extends View
 	
-	Global canvas :Canvas
-	Global currentScene:Scene
-	Global camera:Camera
-	Global camera2D:Area<Double>
-	Global keyLight:Light
-	Global fog:FogEffect
+	Field canvas:Canvas
+	Field currentScene:Scene
+	Field camera:Camera
+	Field camera2D:Area<Double>
+	Field keyLight:Light
+	Field fog:FogEffect
 	
-	Global keyPause := Key.P
-	Global debug:= True
-	Global render3DScene := True
+	Field keyPause := Key.P
+	Field debug:= True
+	Field render3DScene := False
 	
-	Private
-	Global _echoStack:= New Stack<String>		'Contains all the text messages to be displayed
-	Global _echoColorStack:= New Stack<Color>	'Contains all the text messages colors
-	
-	Global _firstFrame := True
-	Global _paused:= False
+	Protected
+'	Field _virtualRes :Vec2i
+	Field _firstFrame := True
+	Field _paused:= False
+	Field _echoStack:= New Stack<String>		'Contains all the text messages to be displayed
+	Field _echoColorStack:= New Stack<Color>	'Contains all the text messages colors
 	
 	Public
 	'********************************* Public Properties *********************************
@@ -51,35 +54,54 @@ Class Game Extends Window
 		Return Double(Height)/camera2D.Height
 	End
 	
+	Property Paused:Bool()
+		Return _paused	
+	End
+	
+	Property WorldMouse:Vec2i()
+		Local _mouse := TransformPointFromView( App.MouseLocation, Null )
+		Return New Vec2i( (_mouse.X/(Width/camera2D.Width)) + camera2D.Left, (_mouse.Y/CanvasScale) + camera2D.Top )
+	End
 	
 	'********************************* Public Methods *********************************
 	
-	Method New( title:String="Simple mojo app",width:Int=1280, height:Int=720, flags:WindowFlags=WindowFlags.Resizable )
-		Super.New( title,width,height,flags )
-		currentScene = Scene.GetCurrent()
-		currentScene.ClearColor = Color.Black'New Color( .1, .1, .1 )
-		currentScene.AmbientLight = Color.Black
-		
-		'Camera
-		camera = New Camera
-		camera.Fov = 60
-		camera.Near = 0.1
-		camera.Far = 100
-		camera.Move( 0, 5, -10 )
-		camera.Rotate( 30, 0, 0 )
-		
+	Method New( width:Int=1280, height:Int=720, create3DScene:Bool )
 		'Camera2D, used for 2D rendering on top of the 3D scene. Sets the virtual resolution.
 		camera2D = New Area<Double>( 0, 0, width, height )
 		
-		'Default Light
-		keyLight = New Light
-		keyLight.Rotate( 45, 45, 0 )
+		If create3DScene
+			render3DScene = True
+			
+			'3D Scene
+			currentScene = Scene.GetCurrent()
+			currentScene.ClearColor = Color.Black'New Color( .1, .1, .1 )
+			currentScene.AmbientLight = Color.Black
+			
+			'Camera
+			camera = New Camera
+			camera.Fov = 60
+			camera.Near = 0.1
+			camera.Far = 100
+			camera.Move( 0, 5, -10 )
+			camera.Rotate( 30, 0, 0 )
+			
+			'Default Light
+			keyLight = New Light
+			keyLight.Rotate( 45, 45, 0 )
+		End
+		
+		game = Self
+		Style.Font = smallFont
+	End
+	
+	
+	Method OnMeasure:Vec2i() Override
+		Return camera2D.Size
 	End
 	
 	
 	Method OnRender( canvas:Canvas ) Override
-		Echo( "Width="+Width+", Height="+Height+", FPS="+App.FPS + ", Clock:" + Truncate( Clock.Now() ) )
-		Echo( "Camera2D: " + camera2D.ToString() )
+		Echo( "Width="+Width+",    Height="+Height+",    Camera2D=" + camera2D.ToString() + ",    FPS="+App.FPS + "    WorldMouse=" + WorldMouse + ",    Clock:" + Truncate( Clock.Now() ) )
 		Self.canvas = canvas
 		App.RequestRender()
 		
@@ -120,7 +142,6 @@ Class Game Extends Window
 			canvas.Flush()
 			Profile.Finish( "drw" )
 			Echo( "Render: " + Profile.GetString( "drw" ) )
-			Echo( "WorldMouse: " + WorldMouse() )
 			DrawEcho()
 
 			'********* Input *********
@@ -142,11 +163,6 @@ Class Game Extends Window
 	End
 	
 	
-	Method WorldMouse:Vec2i()
-		Return New Vec2i( (Mouse.X/(Width/camera2D.Width)) + camera2D.Left, (Mouse.Y/CanvasScale) + camera2D.Top )
-	End
-
-	
 	'********************************* Virtual Methods *********************************
 	
 	
@@ -164,7 +180,7 @@ Class Game Extends Window
 	
 	Private
 	
-	Method DrawEcho( drawRect:Bool = True )
+	Method DrawEcho( drawRect:Bool = False )
 		Local lineY := 2
 		For local n := 0 Until _echoStack.Length
 			local text := _echoStack[ n ]
@@ -185,18 +201,14 @@ Class Game Extends Window
 	
 	Public
 	
-	Function Paused:Bool()
-		Return _paused	
-	End
-	
 End
 
 
 Function Echo( text:String, ignoreDebug:Bool = True, color:Color = Color.White )
-	If Not Game.Paused()
-		If Game.debug Or ignoreDebug
-			Game._echoStack.Push( text )
-			Game._echoColorStack.Push( color )
+	If Not game.Paused
+		If game.debug Or ignoreDebug
+			game._echoStack.Push( text )
+			game._echoColorStack.Push( color )
 		End
 	End
 End

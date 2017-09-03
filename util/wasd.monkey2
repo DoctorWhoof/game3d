@@ -12,13 +12,13 @@ Using mojo3d..
 'The default values work well with delta = 1.0. Adjust if your delta is counted in seconds instead.
 
 
-Function WasdInit( window:Window, showMouse:Bool = False )
+Function WasdInit( window:View, showMouse:Bool = False )
 	Mouse.Location = New Vec2i( window.Width / 2, window.Height / 2 )
 	Mouse.PointerVisible = showMouse
 End
 
 
-Function WasdCameraControl( cam:Entity, window:Window, delta:Double = 1.0, touchStyle:Bool = False ,walkSpeed:Float = 0.1, mouseLookSpeed:Float = 0.2 )
+Function WasdCameraControl( cam:Entity, window:View, delta:Double = 1.0, touchStyle:Bool = False ,walkSpeed:Float = 0.1, mouseLookSpeed:Float = 0.2 )
 	Global prevMouse:= New Vec2f( Float( Mouse.X ), Float( Mouse.Y ) )
 	Global finalWalkSpeed:Float 
 	
@@ -73,7 +73,7 @@ End
 
 
 Private
-Function MouseLook:Vec2f( ent:Entity, window:Window, prevMouse:Vec2f, speed:Float )
+Function MouseLook:Vec2f( ent:Entity, window:View, prevMouse:Vec2f, speed:Float )
 	Local diff:= New Vec2f( Mouse.X - prevMouse.X, prevMouse.Y - Mouse.Y )
 	If Abs( diff.X ) > 0
 		ent.RotateY( diff.X * speed, False )

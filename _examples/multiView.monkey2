@@ -1,47 +1,54 @@
-
 #Import "../game3d"
-#Import "components/donutRenderer"
-#Import "components/spriteRenderer"
-#Import "components/cardRenderer"
-#Import "components/spin"
+#Import "<mojo>"
+#Import "<mojox>"
 
-#Import "images/cats.png"
-#Import "images/cat.png"
-#Import "images/blob.png"
-#Import "images/blob.json"
-
+Using std..
+Using mojo..
+Using mojox..
 Using game3d..
 
 Function Main()
 	New AppInstance
-	New TestWindow
+	New Test
 	App.Run()
 End
 
-
-Class TestWindow Extends Window
-	Method New()
-		Super.New( "Test", 960, 540, WindowFlags.Resizable )
-		ContentView = New GameView( 960, 540 )
-		ClearColor = New Color( 0.4, 0.4, 0.4 )
+Class Test Extends Window
+	Public
+	Method New()					
+		Super.New( "Test", 1680, 1050, WindowFlags.Resizable )
+		Local rgtDock := New GameDock
+		ContentView = rgtDock
 	End
+End
+
+Class GameDock Extends DockingView
+	
+	Method New()
+		Local gameView := New GameView( 320, 180 )
+		gameView.Style.Font = smallFont
+		gameView.Style.BackgroundColor = New Color( 0.4, 0.4, 0.4 )
+		
+		Local toolbar := New ToolBar( Axis.X )
+		toolbar.Style.BackgroundColor = Color.Grey
+		toolbar.MinSize = New Vec2i( 200,32 )
+		AddView( toolbar, "top", "32", False  )
+		
+		Local graph := New ScrollView
+		graph.Style.BackgroundColor = Color.Grey
+		AddView( graph, "right", "400", True  )
+		
+		ContentView = gameView
+	End
+	
 End
 
 
 Class GameView Extends SceneView
 
 	Method New( width:Int, height:Int )
-		Super.New( width, height )
+		Super.New( width, height, False )
 		render3DScene = False
-	End
-	
-
-	Method OnStart() Override
-		currentScene.ClearColor = Color.DarkGrey
-		camera2D.SetSize( 320, 180 )
-		
-'		Local node := New GameObj( "Node" )
-'		node
 	End
 	
 	
@@ -61,6 +68,7 @@ Class GameView Extends SceneView
 	
 	Method OnDraw( canvas:Canvas ) Override
 		'Grid
+'		canvas.Clear( _bgColor )
 		canvas.Color = New Color( 0.37, 0.37, 0.37 )
 		Local spacing := 16
 		Local x0 := Quantize( camera2D.Left, spacing )
