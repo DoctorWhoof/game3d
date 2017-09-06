@@ -71,7 +71,7 @@ End
 
 
 Function Truncate:String( number:Double, decimals:Int = 1 )
-	Local arr:String[] = String(Clock.Now()).Split(".")
+	Local arr:String[] = String(number).Split(".")
 	If arr.Length > 1
 		Return arr[0] + "." + arr[1].Left( decimals )
 	Else

@@ -16,6 +16,7 @@ Class SpriteRenderer Extends Component
 	
 	Method OnStart() Override
 		Entity = sprite
+		sprite.Update( gameObj.Time )
 	End
 	
 	Method OnUpdate() Override

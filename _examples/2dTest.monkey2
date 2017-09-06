@@ -18,8 +18,12 @@ End
 Class TestWindow Extends Window
 	Method New()
 		Super.New( "Test", 960, 540, WindowFlags.Resizable )
-		ContentView = New Game2DView( 320, 180 )
-		ClearColor = New Color( 0.4, 0.4, 0.4 )
+		Local view2D := New Game2dView( 320, 180 )
+		view2D.displayInfo = True
+		view2D.Layout = "letterbox-int"
+		
+		ContentView = view2D
+		ClearColor = Color.Black
 	End
 End
 

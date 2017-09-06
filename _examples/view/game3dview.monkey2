@@ -1,12 +1,11 @@
 Class Game3dView Extends SceneView
-
+	
 	Method New( width:Int, height:Int, enable3D:Bool )
 		Super.New( width, height, enable3D )
-		Layout = "fill"
 	End
 
 	Method OnStart() Override
-		currentScene.ClearColor = Color.Grey
+		CurrentScene.ClearColor = New Color( 0.1, 0.1, 0.1 )
 		
 		Local test1 := New GameObj( "Donut", Self )
 		test1.AddComponent( New DonutRenderer )
@@ -18,14 +17,13 @@ Class Game3dView Extends SceneView
 		
 		test2.entity.Position = New Vec3f( 4, 0, 0 )
 		test2.entity.Scale = New Vec3f( 0.5, 0.5, 0.5 )
-		
-		Local test3 := New GameObj( "Sprite", Self )
+
 		Local spriteComp := New SpriteRenderer( "asset::blob.png", 16, 16, 0, 0, Null )
 		spriteComp.sprite.LoadAnimations( "asset::blob.json" )
 		spriteComp.sprite.Animation = "WalkRight"
+		
+		Local test3 := New GameObj( "Sprite", Self )
 		test3.AddComponent( spriteComp )
-		
-		
 		test3.entity.Position = New Vec3f( -4, 0, 0 )
 		test3.entity.Scale = New Vec3f( 2, 2, 2 )
 		test3.Parent = test1
@@ -34,13 +32,17 @@ Class Game3dView Extends SceneView
 		test4.AddComponent( New CardRenderer( "asset::cats.png", 12, 10, 10, 16, 16, TextureFlags.None ) )
 		test4.Parent = test2
 
-		WasdInit( Self )
-		camera.Position = New Vec3f( 10, 0, 0 )
-		camera.Rotation = New Vec3f( 0, 90, 0 )
+'		WasdInit( Self )
+		Camera.Position = New Vec3f( 10, 0, 0 )
+		Camera.Rotation = New Vec3f( 0, 90, 0 )
+		
+		Local pivot := New Entity
+		Camera.Parent = pivot
+		
 	End
 	
 	Method OnUpdate() Override
-		WasdCameraControl( camera, Self, Clock.Delta() )
+'		WasdCameraControl( camera, Self, Clock.Delta() )
 	End
 	
 End

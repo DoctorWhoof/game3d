@@ -23,7 +23,9 @@ End
 Class TestWindow Extends Window
 	Method New()
 		Super.New( "Test", 1024, 600, WindowFlags.Resizable )
-		ContentView = New Game3dView( 1280, 720, True )
+		Local gameView := New Game3dView( 1280, 720, True )
+		ContentView = gameView
+
 	End
 End
 

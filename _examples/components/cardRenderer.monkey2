@@ -28,12 +28,12 @@ Class CardRenderer Extends Component
 	End
 	
 	Method OnUpdate() Override
-		Local camPos := View.camera.Position
+		Local camPos := View.Camera.Position
 		If alignToCamera
 			If stayUpright
 				Entity.Ry = AngleBetween( camPos.X, camPos.Z, Entity.X, Entity.Z ) - 90
 			Else
-				Entity.PointAt( View.camera )
+				Entity.PointAt( View.Camera )
 				Entity.RotateY( 180 )				
 			End
 		End
