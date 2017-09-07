@@ -5,8 +5,9 @@ Namespace game3d
 #Import "<mojo>"
 #Import "<mojo3d>"
 
-#Import "core/gameobj"
-#Import "core/gamescene"
+'#Import "core/gameobj"
+#Import "core/entity_ext"
+'#Import "core/gamescene"
 #Import "math/math"
 #Import "math/area"
 #Import "math/matrix_ext"
@@ -34,8 +35,7 @@ Class SceneView Extends View
 	Field render3DScene := False				'enable to render Mojo3D scenes
 	
 	Protected
-	Field _current3DScene:Scene
-	Field _gameScene:GameScene
+	Field _scene:Scene
 	Field _canvas:Canvas
 	
 	Field _camera:Camera
@@ -44,6 +44,7 @@ Class SceneView Extends View
 	Field _fog:FogEffect
 	
 	Private
+	Global _currentViewer :SceneView
 	Field _firstFrame := True
 	Field _paused:= False
 	Field _echoStack:= New Stack<String>		'Contains all the text messages to be displayed
@@ -57,13 +58,8 @@ Class SceneView Extends View
 	End
 	
 	
-	Property Current3DScene:Scene()
-		Return _current3DScene
-	End
-	
-
-	Property CurrentGameScene:GameScene()
-		Return _gameScene
+	Property Scene:Scene()
+		Return _scene
 	End
 	
 	
@@ -98,11 +94,12 @@ Class SceneView Extends View
 	
 	
 	Property CanvasScale:Vec2<Double>()
-		Local frameWidth:Double = Double(Frame.Width) + 0.00000001		'prevents some annoying roundng errors
-		Local frameHeight:Double = Double(Frame.Height) + 0.00000001
+		Local frameWidth:Double = Double(Frame.Width) 
+		Local frameHeight:Double = Double(Frame.Height)
 		Local aspect:Double= AspectRatio
 		Local parentAspect:Double = frameWidth / frameHeight
 		Local w:Double, h:Double
+		
 		'Calculates width and height including letterboxing areas 
 		If parentAspect = aspect
 			w = _camera2D.Width
@@ -114,6 +111,14 @@ Class SceneView Extends View
 			w = _camera2D.Width
 			h = _camera2D.Width/parentAspect
 		End
+		
+		'Integer layout hack, prevents some annoying rounding errors
+		Select Layout
+		Case "stretch-int", "letterbox-int","scale-int"
+			frameWidth += 0.00000001
+			frameHeight += 0.00000001
+		End
+		
 		'Handle Layout styles
 		Select Layout
 		Case "stretch"
@@ -125,6 +130,7 @@ Class SceneView Extends View
 		Case "scale","letterbox"
 			Return New Vec2<Double>( frameWidth/w, frameHeight/h )
 		End
+		
 		'All other Layout styles
 		Return New Vec2<Double>( 1.0, 1.0 )
 	End
@@ -143,37 +149,28 @@ Class SceneView Extends View
 	
 	'********************************* Public Methods *********************************
 	
-	Method New( width:Int=1280, height:Int=720, create3DScene:Bool )
-
+	Method New( width:Int=1280, height:Int=720, render3DScene:Bool = True )
+		_currentViewer = Self
+		
 		'Camera2D, used for 2D rendering on top of the 3D scene. Sets the virtual resolution.
 		_camera2D = New Area<Double>( 0, 0, width, height )
-		_gameScene = New GameScene( "Scene01", create3DScene )
 		
-		If create3DScene
-			render3DScene = True
-'			Scene.SetCurrent( _gameScene.Current().scene3D )
-			
-			'3D Scene
-'			_current3DScene = _gameScene.Current().scene3D
-			_current3DScene = Scene.GetCurrent()
-			_current3DScene.ClearColor = Color.Black'New Color( .1, .1, .1 )
-			_current3DScene.AmbientLight = Color.Black
-			
-			'Camera
-			_camera = New Camera
-			_camera.Fov = 60
-			_camera.Near = 0.1
-			_camera.Far = 100
-'			_camera.Move( 0, 5, -10 )
-'			_camera.PointAt( New Vec3f )
-			
-			'Default Light
-			_keyLight = New Light
-			_keyLight.Rotate( 45, 45, 0 )
-			
-			'Add to GameScene
-			_gameScene.scene3D = _current3DScene
-		End
+		Self.render3DScene = render3DScene
+
+		'3D Scene
+		_scene = Scene.GetCurrent()
+		_scene.ClearColor = Color.Black'New Color( .1, .1, .1 )
+		_scene.AmbientLight = Color.Black
+		
+		'Camera
+		_camera = New Camera
+		_camera.Fov = 60
+		_camera.Near = 0.1
+		_camera.Far = 100
+		
+		'Default Light
+		_keyLight = New Light
+		_keyLight.Rotate( 45, 45, 0 )
 		
 		Style.Font = smallFont
 	End
@@ -194,7 +191,7 @@ Class SceneView Extends View
 			'********* Init *********
 			Clock.Reset()
 			OnStart()
-			GameScene.Current().Start()
+			ComponentBox.StartAll()	'Maybe: set Viewer property here?
 			_firstFrame = False
 			App.RequestRender()
 		Else
@@ -207,7 +204,7 @@ Class SceneView Extends View
 			If Not editMode
 				If Not _paused
 					OnUpdate()
-					GameScene.Current().Update()
+					ComponentBox.UpdateAll()
 				End
 			End
 			Profile.Finish( "upd" )
@@ -216,11 +213,11 @@ Class SceneView Extends View
 			'********* Draw *********
 			Profile.Start( "drw" )
 			'3D drawing
-			If render3DScene Then _current3DScene.Render( _canvas, _camera )
+			If render3DScene Then _scene.Render( _canvas, _camera )
 			'2D drawing
 			canvas.PushMatrix()
 			canvas.Translate( -_camera2D.X + (_camera2D.Width/2.0), -_camera2D.Y + (_camera2D.Height/2.0) )
-			GameScene.Current().Draw( canvas )
+			ComponentBox.DrawAll( canvas )
 			OnDraw( canvas )
 			canvas.PopMatrix()			
 			canvas.Flush()
@@ -298,6 +295,10 @@ Class SceneView Extends View
 	'********************************* Static Functions *********************************
 	
 	Public
+	
+	Function Current:SceneView()
+		Return _currentViewer	
+	End
 	
 End
 

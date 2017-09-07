@@ -2,8 +2,8 @@
 #Import "../game3d"
 #Import "view/game3dview"
 
-#Import "components/donutRenderer"
 #Import "components/spriteRenderer"
+#Import "components/donutRenderer"
 #Import "components/cardRenderer"
 #Import "components/spin"
 
@@ -25,8 +25,10 @@ Class TestWindow Extends Window
 		Super.New( "Test", 1024, 600, WindowFlags.Resizable )
 		Local gameView := New Game3dView( 1280, 720, True )
 		gameView.Layout = "letterbox"
+		gameView.displayInfo = True
 		gameView.Camera.Move( 0, 5, -10 )
 		gameView.Camera.PointAt( New Vec3f )
+		gameView.wasdControls = True
 		
 		ContentView = gameView
 		ClearColor = Color.Black

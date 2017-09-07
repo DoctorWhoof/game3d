@@ -14,10 +14,10 @@ Class Grid2D Extends Component
 		'Grid
 		canvas.Color = New Color( 0.37, 0.37, 0.37 )
 		Local spacing := 16
-		Local x0 := Quantize( View.Camera2D.Left, spacing )
-		Local y0 := Quantize( View.Camera2D.Top, spacing )
-		Local x1 := Quantize( View.Camera2D.Right, spacing )
-		Local y1 := Quantize( View.Camera2D.Bottom, spacing )
+		Local x0 := Quantize( Viewer.Camera2D.Left, spacing )
+		Local y0 := Quantize( Viewer.Camera2D.Top, spacing )
+		Local x1 := Quantize( Viewer.Camera2D.Right, spacing )
+		Local y1 := Quantize( Viewer.Camera2D.Bottom, spacing )
 		For Local x :Int = x0 To x1 Step spacing
 			For Local y :Int = y0 To y1 Step spacing
 				canvas.DrawLine( x, y0, x, y1 )

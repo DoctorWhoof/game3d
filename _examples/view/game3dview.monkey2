@@ -1,7 +1,8 @@
-#Import "../components/donutRenderer"
-#Import "../components/spriteRenderer"
-#Import "../components/cardRenderer"
+
+#Import "../components/card"
 #Import "../components/spin"
+#Import "../components/spriteRenderer"
+#Import "../../graphics/animsprite"
 
 #Import "../images/cats.png"
 #Import "../images/cat.png"
@@ -10,47 +11,49 @@
 
 Class Game3dView Extends SceneView
 	
+	Field wasdControls :Bool
+	
 	Method New( width:Int, height:Int, enable3D:Bool )
 		Super.New( width, height, enable3D )
 	End
 
 	Method OnStart() Override
-		Current3DScene.ClearColor = New Color( 0.1, 0.1, 0.1 )
+		Scene.ClearColor = New Color( 0.1, 0.1, 0.1 )
 		
-		Local test1 := New GameObj( "Donut", CurrentGameScene, Self )
-		test1.AddComponent( New DonutRenderer )
+		'traditional mojo3d model creation
+		Local test1 := Model.CreateTorus( 2, .5, 48, 24, New PbrMaterial( Color.Red, 0.1, 0.5 ) )
 		test1.AddComponent( New Spin(0,1,0) )
 
-		Local test2 := New GameObj( "Donut", CurrentGameScene, Self )
-		test2.AddComponent( New DonutRenderer )
+		'component based model creation - the component only "runs" at the start
+		Local test2 := New Model
 		test2.Parent = test1
-		test2.AddComponent( New Spin(1,0,0) )
-		
-		test2.Entity.Position = New Vec3f( 4, 0, 0 )
-		test2.Entity.Scale = New Vec3f( 0.75, 0.75, 0.75 )
-
-		Local spriteComp := New SpriteRenderer( "asset::blob.png", 16, 16, 0, 0, Null )
-		spriteComp.sprite.LoadAnimations( "asset::blob.json" )
-		spriteComp.sprite.Animation = "WalkRight"
-		
-		Local test3 := New GameObj( "Sprite", CurrentGameScene, Self )
-		test3.AddComponent( spriteComp )
-		test3.Entity.Position = New Vec3f( -4, 0, 0 )
-		test3.Entity.Scale = New Vec3f( 2, 2, 2 )
+		test2.Position = New Vec3f( 4, 0, 0 )
+		test2.AddComponent( New Spin(3,0,0) )
+		test2.AddComponent( New DonutRenderer( 1, 0.25 ) )
+'		
+		'I may move a lot of the AnimSprite functionality into the SpriteRenderer component, and use regular Sprites instead
+		Local test3 := New AnimSprite( "asset::blob.png", 16, 16, 0, 0, Null  )
+		test3.LoadAnimations( "asset::blob.json" )
+		test3.Animation = "WalkRight"
+		test3.Position = New Vec3f( -4, 0, 0 )
+		test3.Scale = New Vec3f( 2, 2, 2 )
 		test3.Parent = test1
+		test3.AddComponent( New SpriteRenderer )	'currently does nothing but calling "Update(time)" on AnimSprite on every frame
 		
-		Local test4 := New GameObj( "Cat", CurrentGameScene, Self )
-		test4.AddComponent( New CardRenderer( "asset::cats.png", 12, 2, 2, 16, 16, TextureFlags.None ) )
-		test4.Entity.Position = New Vec3f( 4, 0, 0 )
+		'Another model creation component
+		Local test4 := New Model
+		test4.Name = "CatCard"
+		test4.Position = New Vec3f( 4, 0, 0 )
 		test4.Parent = test1
+		test4.AddComponent( New Card( "asset::cats.png", 12, 2, 2, 16, 16, TextureFlags.None ) )
 
-'		WasdInit( Self )
+		WasdInit( Self )
 		Local pivot := New Entity
 		Camera.Parent = pivot
 	End
 	
 	Method OnUpdate() Override
-'		WasdCameraControl( camera, Self, Clock.Delta() )
+		If wasdControls Then WasdCameraControl( Camera, Self, Clock.Delta() )
 	End
 	
 End

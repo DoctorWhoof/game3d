@@ -9,7 +9,8 @@ Class Game2dView Extends SceneView
 	End
 	
 	Method OnStart() Override
-		Local obj1 := New GameObj( "Test1", CurrentGameScene, Self )
+		Local obj1 := New Entity
+		
 		obj1.AddComponent( New Grid2D )
 		obj1.AddComponent( New CircleRenderer )
 	End

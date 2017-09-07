@@ -35,7 +35,7 @@ Class GameDock Extends DockingView
 		gameView = New Game3dView( 320, 180, True )
 		gameView.Style.Font = smallFont
 		gameView.displayInfo = True
-		gameView.editMode = True
+'		gameView.editMode = True
 '		gameView.autoRender = False
 		gameView.Camera.Move( 0, 5, -10 )
 		gameView.Camera.PointAt( New Vec3f )

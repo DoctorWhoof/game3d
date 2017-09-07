@@ -13,12 +13,14 @@ Using mojo3d..
 
 
 Function WasdInit( window:View, showMouse:Bool = False )
-	Mouse.Location = New Vec2i( window.Width / 2, window.Height / 2 )
+'	Mouse.Location = New Vec2i( window.Width / 2, window.Height / 2 )
 	Mouse.PointerVisible = showMouse
+	'If the mouse is off window, camera freaks out
+	'A way to force the mouse into the window would solve it. Setting Mouse.Location only works when the mouse is over the window.
 End
 
 
-Function WasdCameraControl( cam:Entity, window:View, delta:Double = 1.0, touchStyle:Bool = False ,walkSpeed:Float = 0.1, mouseLookSpeed:Float = 0.2 )
+Function WasdCameraControl( cam:Entity, view:View, delta:Double = 1.0, touchStyle:Bool = False ,walkSpeed:Float = 0.1, mouseLookSpeed:Float = 0.2 )
 	Global prevMouse:= New Vec2f( Float( Mouse.X ), Float( Mouse.Y ) )
 	Global finalWalkSpeed:Float 
 	
@@ -31,15 +33,15 @@ Function WasdCameraControl( cam:Entity, window:View, delta:Double = 1.0, touchSt
 			finalWalkSpeed = walkSpeed * delta
 		End
 		
-		If Keyboard.KeyDown( Key.W )' Or Keyboard.KeyDown( Key.Up )
+		If Keyboard.KeyDown( Key.W )
 			cam.MoveZ( finalWalkSpeed )
-		ElseIf Keyboard.KeyDown( Key.S )' Or Keyboard.KeyDown( Key.Down )
+		ElseIf Keyboard.KeyDown( Key.S )
 			cam.MoveZ( -finalWalkSpeed )
 		End
 		
-		If Keyboard.KeyDown( Key.A )' Or Keyboard.KeyDown( Key.Left )
+		If Keyboard.KeyDown( Key.A )
 			cam.MoveX( -finalWalkSpeed )
-		ElseIf Keyboard.KeyDown( Key.D )' Or Keyboard.KeyDown( Key.Right )
+		ElseIf Keyboard.KeyDown( Key.D )
 			cam.MoveX( finalWalkSpeed )
 		End
 		
@@ -54,14 +56,14 @@ Function WasdCameraControl( cam:Entity, window:View, delta:Double = 1.0, touchSt
 				prevMouse = New Vec2f( Float( Mouse.X ), Float( Mouse.Y ) )
 			End
 			If Mouse.ButtonDown( MouseButton.Left )
-				prevMouse = MouseLook( cam, window, prevMouse, mouseLookSpeed/2.0 )
+				prevMouse = MouseLook( cam, view, prevMouse, mouseLookSpeed/2.0 )
 			End
 		Else
-			prevMouse = MouseLook( cam, window, prevMouse, -mouseLookSpeed )
+			prevMouse = MouseLook( cam, view, prevMouse, -mouseLookSpeed )
 			
 			'limits mouse to center of screen to prevent losing it out of the window
-			Local threshold := window.Height / 10
-			Local center := New Vec2i( window.Width/2, window.Height/2 )
+			Local threshold := view.Height / 10
+			Local center := New Vec2i( view.Width/2, view.Height/2 )
 			Local limit := New Recti( center.X - threshold, center.Y - threshold, center.X + threshold, center.Y + threshold )
 			If Mouse.X < limit.Left Or Mouse.X > limit.Right Or Mouse.Y < limit.Top Or Mouse.Y > limit.Bottom
 				Mouse.Location = New Vec2i( center.X, center.Y )
@@ -73,8 +75,13 @@ End
 
 
 Private
-Function MouseLook:Vec2f( ent:Entity, window:View, prevMouse:Vec2f, speed:Float )
+Function MouseLook:Vec2f( ent:Entity, window:View, prevMouse:Vec2f, speed:Float )', initValue:Vec2f = Null )
 	Local diff:= New Vec2f( Mouse.X - prevMouse.X, prevMouse.Y - Mouse.Y )
+	
+'	If initValue
+'		diff= New Vec2f( Mouse.X - initValue.X, initValue.Y - Mouse.Y )
+'	End	
+	
 	If Abs( diff.X ) > 0
 		ent.RotateY( diff.X * speed, False )
 		prevMouse.X = Mouse.X

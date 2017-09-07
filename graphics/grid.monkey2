@@ -139,7 +139,7 @@ Function LoadTileMap:Mesh( path:String, atlasCoordinates:Rect<Double>[], quadWid
 End
 
 
-Function CreateSprite:Mesh( frame:Int, atlasCoordinates:Rect<Double>[], quadWidth:Float, quadHeight:Float, center:Vec2f = New Vec2f(0.5, 0.5 ) )
+Function CreateCard:Mesh( frame:Int, atlasCoordinates:Rect<Double>[], quadWidth:Float, quadHeight:Float, center:Vec2f = New Vec2f(0.5, 0.5 ) )
 	Local startX := -quadWidth*center.X
 	Local startY := quadHeight*center.Y
 	Local s0 := atlasCoordinates[frame].Left
