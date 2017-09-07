@@ -5,7 +5,7 @@ Namespace game3d
 #Import "<mojo>"
 #Import "<mojo3d>"
 
-#Import "gameobj"
+#Import "core/gameobj"
 #Import "math/math"
 #Import "math/area"
 #Import "math/matrix_ext"
@@ -154,8 +154,8 @@ Class SceneView Extends View
 			_camera.Fov = 60
 			_camera.Near = 0.1
 			_camera.Far = 100
-			_camera.Move( 5, 5, -10 )
-			_camera.Rotate( 30, 45, 0 )
+'			_camera.Move( 0, 5, -10 )
+'			_camera.PointAt( New Vec3f )
 			
 			'Default Light
 			_keyLight = New Light
@@ -210,7 +210,6 @@ Class SceneView Extends View
 			If render3DScene Then _currentScene.Render( _canvas, _camera )
 			'2D drawing
 			canvas.PushMatrix()
-'			canvas.Scale( CanvasScale, CanvasScale )
 			canvas.Translate( -_camera2D.X + (_camera2D.Width/2.0), -_camera2D.Y + (_camera2D.Height/2.0) )
 			OnDraw( canvas )
 			canvas.PopMatrix()			

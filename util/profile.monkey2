@@ -40,9 +40,9 @@ Class Profile
 		End
 	End
 
-	Function GetString:String( name:String )
+	Function GetString:String( name:String, decimals:Int = 3 )
 		If _results.Contains( name )
-			Return Truncate( _results[ name ], 2 ) + " ms"
+			Return Truncate( _results[ name ], decimals ) + " ms"
 		Else
 			Return ""
 		End

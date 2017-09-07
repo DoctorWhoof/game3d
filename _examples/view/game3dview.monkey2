@@ -33,8 +33,8 @@ Class Game3dView Extends SceneView
 		test4.Parent = test2
 
 '		WasdInit( Self )
-		Camera.Position = New Vec3f( 10, 0, 0 )
-		Camera.Rotation = New Vec3f( 0, 90, 0 )
+'		Camera.Position = New Vec3f( 10, 0, 0 )
+'		Camera.Rotation = New Vec3f( 0, 90, 0 )
 		
 		Local pivot := New Entity
 		Camera.Parent = pivot

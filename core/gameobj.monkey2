@@ -24,7 +24,7 @@ Class GameObj
 	
 	'Gameplay
 	Field timeOffset	:Double								'Use this to create offsets when the entity is reset (startTime = current time + timeOffset)
-	Field vulnerable	:= True
+'	Field vulnerable	:= True
 	
 	Protected
 	
@@ -35,6 +35,7 @@ Class GameObj
 	Field _root				:GameObj						'Top parent obj (root of the entire hierarchy)
 	Field _view				:SceneView
 	Field _init				:= False						'Has this entity been initialized?
+'	Field _scene			:GameScene
 
 	Field _time				:Double
 	Field _startTime		:Double

@@ -24,8 +24,9 @@ Class TestWindow Extends Window
 	Method New()
 		Super.New( "Test", 1024, 600, WindowFlags.Resizable )
 		Local gameView := New Game3dView( 1280, 720, True )
+		gameView.Layout = "letterbox"
 		ContentView = gameView
-
+		ClearColor = Color.Black
 	End
 End
 

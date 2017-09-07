@@ -69,14 +69,13 @@ Class GameDock Extends DockingView
 		If Mouse.ButtonDown( MouseButton.Left )
 			If Keyboard.KeyDown( Key.LeftAlt ) 
 				Local diff := New Vec2i( gameView.ViewMouse.X - click.X, gameView.ViewMouse.Y - click.Y )
-				gameView.Camera.Parent.Rotate( 0, -diff.X/2.0, diff.Y/2.0, True )
-				gameView.Camera.Parent.Rx = 0
+				gameView.Camera.Parent.Rotate( diff.Y/2.0, -diff.X/2.0, 0, True )
+				gameView.Camera.Parent.Rz = 0
 				click.X = gameView.ViewMouse.X
 				click.Y = gameView.ViewMouse.Y
 				App.RequestRender()
 			End
 		End
-		
 		Select event.Type
 		Case EventType.MouseClick
 			click.X = gameView.ViewMouse.X
@@ -84,11 +83,11 @@ Class GameDock Extends DockingView
 		Case EventType.MouseWheel
 			If event.Modifiers = Modifier.LeftAlt
 				'Zoom with alt + wheel
-				gameView.Camera.LocalX += ( ( Exp( event.Wheel.Y/100.0 ) - 1.0 ) * panSpeed )
-				gameView.Camera.LocalZ -= ( ( Exp( event.Wheel.X/100.0 ) - 1.0 ) * panSpeed )
+				gameView.Camera.LocalZ += ( ( Exp( event.Wheel.Y/100.0 ) - 1.0 ) * panSpeed )
+				gameView.Camera.LocalX += ( ( Exp( event.Wheel.X/100.0 ) - 1.0 ) * panSpeed )
 			Else
 				'Pan with wheel (two fingers on touchpad)
-				gameView.Camera.LocalZ += ( ( Exp( event.Wheel.X/100.0 ) - 1.0 ) * panSpeed )
+				gameView.Camera.LocalX += ( ( Exp( event.Wheel.X/100.0 ) - 1.0 ) * panSpeed )
 				gameView.Camera.LocalY += ( ( Exp( event.Wheel.Y/100.0 ) - 1.0 ) * panSpeed )
 			End
 			App.RequestRender()
