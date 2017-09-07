@@ -3,16 +3,6 @@
 #Import "<mojo>"
 #Import "<mojox>"
 
-#Import "components/donutRenderer"
-#Import "components/spriteRenderer"
-#Import "components/cardRenderer"
-#Import "components/spin"
-
-#Import "images/cats.png"
-#Import "images/cat.png"
-#Import "images/blob.png"
-#Import "images/blob.json"
-
 Using std..
 Using mojo..
 Using mojox..
@@ -47,6 +37,8 @@ Class GameDock Extends DockingView
 		gameView.displayInfo = True
 		gameView.editMode = True
 '		gameView.autoRender = False
+		gameView.Camera.Move( 0, 5, -10 )
+		gameView.Camera.PointAt( New Vec3f )
 		gameView.Layout = "fill"
 		
 		Local toolbar := New ToolBar( Axis.X )

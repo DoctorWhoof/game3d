@@ -1,3 +1,4 @@
+Namespace game3d
 
 Class DonutRenderer Extends Component
 	Field material := New PbrMaterial( New Color( Rnd(0.3, 1.0), Rnd(0.3, 1.0), Rnd(0.3, 1.0) ), 0.1, 0.5 )

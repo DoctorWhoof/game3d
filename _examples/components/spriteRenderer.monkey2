@@ -21,6 +21,7 @@ Class SpriteRenderer Extends Component
 	
 	Method OnUpdate() Override
 		sprite.Update( gameObj.Time )
+		Print( "oy" )
 	End
 	
 End

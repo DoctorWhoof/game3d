@@ -30,9 +30,9 @@ Class Component
 	End
 	
 	Property Entity:Entity()
-		Return gameObj.entity
+		Return gameObj.Entity
 	Setter( ent:Entity )
-		gameObj.entity = ent
+		gameObj.Entity = ent
 	End
 	
 	Property View:SceneView()
@@ -57,6 +57,12 @@ Class Component
 		End
 		If enabled
 			OnUpdate()
+		End
+	End
+	
+	Method Draw( canvas:Canvas )
+		If enabled
+			OnDraw( canvas )
 		End
 	End
 	

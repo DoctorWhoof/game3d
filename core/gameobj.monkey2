@@ -16,8 +16,6 @@ Class GameObj
 	Global all			:= New StringMap<GameObj>
 	Global rootObjs		:= New StringMap<GameObj>
 	
-	Field entity		:Entity								'Mojo3D entity
-	
 	Field enabled		:= True
 	Field children		:= New Stack<GameObj>
 	Field components	:= New Stack<Component>				'Main component list, they can be reordered
@@ -29,7 +27,8 @@ Class GameObj
 	Protected
 	
 	Field _componentsByName	:= New StringMap<Component>		'allows fast access indexed by name
-
+	
+	Field _entity			:Entity							'Mojo3D entity
 	Field _name				:= "entity"
 	Field _parent			:GameObj						'Parent obj directly above this one
 	Field _root				:GameObj						'Top parent obj (root of the entire hierarchy)
@@ -81,9 +80,9 @@ Class GameObj
 '				layer = _parent.layer
 				_root = SearchRoot()
 				Print( Name + " parented to " + dad.Name )
-				If entity <> Null
-					entity.Parent = dad.entity
-					If entity Then Print( Name + ".MeshRenderer parented" )
+				If _entity <> Null
+					_entity.Parent = dad.Entity
+					If _entity Then Print( Name + ".MeshRenderer parented" )
 				End
 '				_parent.transform.AttachChild( Self.transform )
 				OnParent( dad )
@@ -94,7 +93,7 @@ Class GameObj
 			If Not rootObjs.Contains( Self.Name )
 				If _parent
 					_parent.children.RemoveEach( Self )
-					entity.Parent = Null
+					_entity.Parent = Null
 				End
 '				_parent.transform.RemoveChild( Self.transform )
 				OnParent( Null )
@@ -110,6 +109,17 @@ Class GameObj
 '   	Setter( value:Player )
 '   		_player = value
 '   	End
+
+	Property Entity:Entity()
+		Return _entity
+	Setter( e:Entity )
+		_entity = e
+		If _parent
+			If _parent.Entity
+				_entity.Parent = Parent.Entity	
+			End	
+		End	
+	End
 	
 	Property Root:GameObj()
 		Return _root
@@ -131,10 +141,11 @@ Class GameObj
 	'************************************* Public Methods *************************************
 	
 	
-	Method New( name:String, view:SceneView )
+	Method New( name:String, gameScene:GameScene, view:SceneView )
 		SetUniqueName( name )
 		all.Add( name, Self )
 		rootObjs.Add( name, Self )
+		gameScene.root.Push( Self )
 		_root = Self
 		_view = view
 '   		Self.layer = layer
@@ -168,9 +179,9 @@ Class GameObj
 	Method Destroy( removeFromParent:Bool = True )
 		OnDestroy()
 		
-		If entity <> Null
-			entity.Destroy()
-			entity = Null
+		If _entity <> Null
+			_entity.Destroy()
+			_entity = Null
 		End
 		
 		all.Remove( _name )
@@ -198,7 +209,7 @@ Class GameObj
 	Method Update() Final
 '   		transform.SetOldPosition( transform.WorldPosition )
 		If Not _init
-			Init()
+			Start()
 			Return
 		End
 		_time = Clock.Now() - _startTime
@@ -235,16 +246,24 @@ Class GameObj
 			Next
 		End
 	End
+	
+	
+	Method Draw( canvas:Canvas )
+		For Local c := Eachin components
+			c.gameObj = Self
+			c.Draw( canvas )
+		End
+	End
 
 
-	Method Init() Final
+	Method Start() Final
 		_init = True
 		ResetTime()
 		OnStart()
 		'Ensures entities are parented if they were created during OnStart()
 		If Parent
-			If Parent.entity
-				entity.Parent = Parent.entity
+			If Parent.Entity
+				_entity.Parent = Parent.Entity
 			End
 		End
 		'To do: Store initial state
@@ -299,7 +318,7 @@ Class GameObj
 
 
 	Method Reset() Virtual
-		If Not _init Then Init()
+		If Not _init Then Start()
 		enabled = _initialEnabled
 '   		visible = _initialVisible
 		OnReset()

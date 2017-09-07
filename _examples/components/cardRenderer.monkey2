@@ -1,3 +1,4 @@
+Namespace game3d
 
 #Import "../../graphics/grid"
 #Import "../../graphics/atlas"

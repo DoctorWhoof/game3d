@@ -6,6 +6,7 @@ Namespace game3d
 #Import "<mojo3d>"
 
 #Import "core/gameobj"
+#Import "core/gamescene"
 #Import "math/math"
 #Import "math/area"
 #Import "math/matrix_ext"
@@ -13,7 +14,6 @@ Namespace game3d
 #Import "util/wasd"
 #Import "util/profile"
 #Import "graphics/canvas_ext"
-
 
 Using std..
 Using mojo..
@@ -34,8 +34,10 @@ Class SceneView Extends View
 	Field render3DScene := False				'enable to render Mojo3D scenes
 	
 	Protected
+	Field _current3DScene:Scene
+	Field _gameScene:GameScene
 	Field _canvas:Canvas
-	Field _currentScene:Scene
+	
 	Field _camera:Camera
 	Field _camera2D:Area<Double>
 	Field _keyLight:Light
@@ -55,8 +57,13 @@ Class SceneView Extends View
 	End
 	
 	
-	Property CurrentScene:Scene()
-		Return _currentScene
+	Property Current3DScene:Scene()
+		Return _current3DScene
+	End
+	
+
+	Property CurrentGameScene:GameScene()
+		Return _gameScene
 	End
 	
 	
@@ -137,17 +144,20 @@ Class SceneView Extends View
 	'********************************* Public Methods *********************************
 	
 	Method New( width:Int=1280, height:Int=720, create3DScene:Bool )
+
 		'Camera2D, used for 2D rendering on top of the 3D scene. Sets the virtual resolution.
 		_camera2D = New Area<Double>( 0, 0, width, height )
-		Style.BorderColor = Color.Black
+		_gameScene = New GameScene( "Scene01", create3DScene )
 		
 		If create3DScene
 			render3DScene = True
+'			Scene.SetCurrent( _gameScene.Current().scene3D )
 			
 			'3D Scene
-			_currentScene = Scene.GetCurrent()
-			_currentScene.ClearColor = Color.Black'New Color( .1, .1, .1 )
-			_currentScene.AmbientLight = Color.Black
+'			_current3DScene = _gameScene.Current().scene3D
+			_current3DScene = Scene.GetCurrent()
+			_current3DScene.ClearColor = Color.Black'New Color( .1, .1, .1 )
+			_current3DScene.AmbientLight = Color.Black
 			
 			'Camera
 			_camera = New Camera
@@ -160,6 +170,9 @@ Class SceneView Extends View
 			'Default Light
 			_keyLight = New Light
 			_keyLight.Rotate( 45, 45, 0 )
+			
+			'Add to GameScene
+			_gameScene.scene3D = _current3DScene
 		End
 		
 		Style.Font = smallFont
@@ -181,9 +194,7 @@ Class SceneView Extends View
 			'********* Init *********
 			Clock.Reset()
 			OnStart()
-			For Local obj := Eachin GameObj.all.Values
-				obj.Init()
-			Next
+			GameScene.Current().Start()
 			_firstFrame = False
 			App.RequestRender()
 		Else
@@ -196,9 +207,7 @@ Class SceneView Extends View
 			If Not editMode
 				If Not _paused
 					OnUpdate()
-					For Local obj := Eachin GameObj.rootObjs.Values
-						obj.Update()
-					Next
+					GameScene.Current().Update()
 				End
 			End
 			Profile.Finish( "upd" )
@@ -207,10 +216,11 @@ Class SceneView Extends View
 			'********* Draw *********
 			Profile.Start( "drw" )
 			'3D drawing
-			If render3DScene Then _currentScene.Render( _canvas, _camera )
+			If render3DScene Then _current3DScene.Render( _canvas, _camera )
 			'2D drawing
 			canvas.PushMatrix()
 			canvas.Translate( -_camera2D.X + (_camera2D.Width/2.0), -_camera2D.Y + (_camera2D.Height/2.0) )
+			GameScene.Current().Draw( canvas )
 			OnDraw( canvas )
 			canvas.PopMatrix()			
 			canvas.Flush()

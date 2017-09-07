@@ -1,9 +1,18 @@
+Namespace game3d
+
+
 Class Spin Extends Component
-	Method New()
-		Super.New( "Spin" )	
+	
+	Field x:Double, y:Double, z:Double
+	
+	Method New( x:Double, y:Double, z:Double )
+		Super.New( "Spin" )
+		Self.x = x
+		Self.y = y
+		Self.z = z
 	End
 
 	Method OnUpdate() Override
-		Entity.Rotate( 0, 1, 0, True )
+		Entity.Rotate( x, y, z, True )
 	End
 End
