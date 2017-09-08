@@ -4,7 +4,7 @@ Namespace game3d
 
 Class SpriteRenderer Extends Component
 	
-	'To do: move some of the AnimSprite functionality into this component? maybe all of it, and just use regular Sprites?
+	'To do: move some of the AnimSprite functionality into this component? Maybe all of it, and just use regular Sprites?
 	
 	Public
 	Method New()

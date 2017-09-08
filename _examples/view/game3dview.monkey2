@@ -2,6 +2,7 @@
 #Import "../components/card"
 #Import "../components/spin"
 #Import "../components/spriteRenderer"
+#Import "../components/donutRenderer"
 #Import "../../graphics/animsprite"
 
 #Import "../images/cats.png"
@@ -47,13 +48,8 @@ Class Game3dView Extends SceneView
 		test4.Parent = test1
 		test4.AddComponent( New Card( "asset::cats.png", 12, 2, 2, 16, 16, TextureFlags.None ) )
 
-		WasdInit( Self )
 		Local pivot := New Entity
 		Camera.Parent = pivot
-	End
-	
-	Method OnUpdate() Override
-		If wasdControls Then WasdCameraControl( Camera, Self, Clock.Delta() )
 	End
 	
 End

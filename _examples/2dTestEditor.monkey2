@@ -1,7 +1,9 @@
 #Import "../game3d"
-#Import "view/game2dview"
 #Import "<mojo>"
 #Import "<mojox>"
+
+#Import "view/game2dview"
+#Import "../util/navigation"
 
 Using std..
 Using mojo..
@@ -27,12 +29,15 @@ End
 
 
 Class GameDock Extends DockingView
+	
+	Field gameView:Game2dView
+	
 	Method New()
-		Local gameView := New Game2dView( 320, 180 )
+		gameView = New Game2dView( 320, 180 )
 		gameView.Style.Font = smallFont
 		gameView.displayInfo = True
-		gameView.editMode = True
-		gameView.Layout = "letterbox-int"
+		gameView.editMode = False
+		gameView.Layout = "fill-x"
 		
 		Local toolbar := New ToolBar( Axis.X )
 		toolbar.Style = Self.Style.Copy()
@@ -47,4 +52,9 @@ Class GameDock Extends DockingView
 		
 		ContentView = gameView
 	End
+	
+	Method OnMouseEvent( event:MouseEvent ) Override
+		Navigate2D( gameView, event,,400 )
+	End
+	
 End

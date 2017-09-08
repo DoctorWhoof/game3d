@@ -1,13 +1,11 @@
 Namespace game3d
 
-#Import "componentbox"
-
 Class Component
 
 	Field enabled			:= True
 	
 	Protected
-	Field _box				:ComponentBox
+	Field _box				:EntityBox
 	Field _entity 			:Entity
 	Field _name 			:= "noName"
 	Field _superClass		:= "Component"	'normally set by Name, override it to be able to GetComponent by superclass (i.e. items)
@@ -32,7 +30,7 @@ Class Component
 		Return _box.Viewer
 	End
 	
-	Property Box:ComponentBox()
+	Property Box:EntityBox()
 		Return _box	
 	End
 	
@@ -46,7 +44,7 @@ Class Component
 		Name = name
 	End
 	
-	Method SetBox( box:ComponentBox )
+	Method SetBox( box:EntityBox )
 		_box = box	
 	End
 

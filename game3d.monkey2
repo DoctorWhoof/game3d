@@ -5,9 +5,8 @@ Namespace game3d
 #Import "<mojo>"
 #Import "<mojo3d>"
 
-'#Import "core/gameobj"
-#Import "core/entity_ext"
-'#Import "core/gamescene"
+#Import "core/entityExtension"
+#Import "core/entityBox"
 #Import "math/math"
 #Import "math/area"
 #Import "math/matrix_ext"
@@ -27,12 +26,13 @@ Using util..
 Const smallFont:Font = Font.Load( "font::DejaVuSans.ttf", 10 )
 
 Class SceneView Extends View
-
 	Field keyPause := Key.P						'shortcut used to pause
 	Field displayInfo:= False					'displays feedback info
 	Field editMode:= False						'allows content editing
 	Field autoRender := True					'if on, events need to call RequestRender(), app style
 	Field render3DScene := False				'enable to render Mojo3D scenes
+	
+'	Field postLayoutScale:Double = 1.0			'Ugly! Necessary for "fill" layout zooming...
 	
 	Protected
 	Field _scene:Scene
@@ -40,11 +40,13 @@ Class SceneView Extends View
 	
 	Field _camera:Camera
 	Field _camera2D:Area<Double>
+	Field _virtualRes:Rect<Double>
 	Field _keyLight:Light
 	Field _fog:FogEffect
 	
 	Private
-	Global _currentViewer :SceneView
+	Global _currentViewer:SceneView
+
 	Field _firstFrame := True
 	Field _paused:= False
 	Field _echoStack:= New Stack<String>		'Contains all the text messages to be displayed
@@ -89,7 +91,9 @@ Class SceneView Extends View
 	
 	
 	Property AspectRatio:Double()
-		Return Double(Width)/Double(Height)
+		Return _camera2D.Width/_camera2D.Height
+	Setter( ratio:Double )
+		_camera2D.Width = _camera2D.Height * ratio
 	End
 	
 	
@@ -189,9 +193,10 @@ Class SceneView Extends View
 		
 		If _firstFrame
 			'********* Init *********
+			If Layout = "fill" Then _camera2D.SetSize( Width, Height )
 			Clock.Reset()
 			OnStart()
-			ComponentBox.StartAll()	'Maybe: set Viewer property here?
+			EntityBox.StartAll()	'Maybe: set Viewer property here?
 			_firstFrame = False
 			App.RequestRender()
 		Else
@@ -200,11 +205,11 @@ Class SceneView Extends View
 			
 			'********* Update *********
 			Profile.Start( "upd" )
-			_camera2D.SetSize( Width, Height )
+			
 			If Not editMode
 				If Not _paused
 					OnUpdate()
-					ComponentBox.UpdateAll()
+					EntityBox.UpdateAll()
 				End
 			End
 			Profile.Finish( "upd" )
@@ -216,8 +221,20 @@ Class SceneView Extends View
 			If render3DScene Then _scene.Render( _canvas, _camera )
 			'2D drawing
 			canvas.PushMatrix()
+			
+			_camera2D.Width = Clamp<Double>( _camera2D.Width, 8.0 * AspectRatio, 2160.0 * AspectRatio )
+			_camera2D.Height = Clamp<Double>( _camera2D.Height, 8.0, 2160.0 )
+			
+			Select Layout
+			Case "fill", "resize"
+				Local frameAspect := Double(Frame.Width)/Double(Frame.Height)
+				AspectRatio = frameAspect
+				Local scale := Double(Frame.Height)/_camera2D.Height
+				canvas.Scale( scale, scale )
+			End
 			canvas.Translate( -_camera2D.X + (_camera2D.Width/2.0), -_camera2D.Y + (_camera2D.Height/2.0) )
-			ComponentBox.DrawAll( canvas )
+
+			EntityBox.DrawAll( canvas )
 			OnDraw( canvas )
 			canvas.PopMatrix()			
 			canvas.Flush()

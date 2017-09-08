@@ -3,9 +3,9 @@
 Class Entity Extension
 	
 	Method 	AddComponent( comp:Component )
-		Local box:= ComponentBox.GetFromEntity( Self )
+		Local box:= EntityBox.GetFromEntity( Self )
 		If Not box
-			box = New ComponentBox( Self )
+			box = New EntityBox( Self )
 			Print( "Entity '" + Name + "': Created new component box" )
 		End
 		box.AddComponent( comp )
@@ -13,19 +13,19 @@ Class Entity Extension
 	End
 	
 	Method GetComponent<T>:T( name:String )
-		Local box:= ComponentBox.GetFromEntity( Self )
+		Local box:= EntityBox.GetFromEntity( Self )
 		Return box.GetComponent<T>( name )
 	End
 	
 	
 	Method GetComponentBySuperClass<T>:T( sup:String )
-		Local box:= ComponentBox.GetFromEntity( Self )
+		Local box:= EntityBox.GetFromEntity( Self )
 		Return box.GetComponentBySuperClass<T>( name )
 	End
 	
 	
-	Method GetComponentBox:ComponentBox()
-		Return ComponentBox.GetFromEntity( Self )
+	Method GetComponentBox:EntityBox()
+		Return EntityBox.GetFromEntity( Self )
 	End
 	
 End

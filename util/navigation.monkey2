@@ -1,4 +1,4 @@
-Namespace util
+Namespace game3d
 
 #Import "<std>"
 #Import "<mojo>"
@@ -7,9 +7,55 @@ Using std..
 Using mojo..
 Using mojo3d..
 
-'Works better in full screen! In windowed mode the mouse cursor seems to be "lost" sometimes
-'Call WASDInit a single time on start, then WASDCameraControl on every frame.
-'The default values work well with delta = 1.0. Adjust if your delta is counted in seconds instead.
+
+Function Navigate2D( viewer:SceneView, event:MouseEvent, panSpeed:Double = 100.0, zoomSpeed:Double = 100.0 )
+	Select event.Type
+	Case EventType.MouseWheel
+		If event.Modifiers = Modifier.LeftAlt
+			'Zoom with alt + wheel
+			Local aspect := viewer.AspectRatio
+			viewer.Camera2D.Height += ( ( Exp( event.Wheel.Y/100.0)-1.0 ) * zoomSpeed )
+			viewer.Camera2D.Width = viewer.Camera2D.Height * aspect
+		Else
+			'Pan with wheel (two fingers on touchpad)
+			viewer.Camera2D.X += ( ( Exp( event.Wheel.X/100.0)-1.0 ) * panSpeed )
+			viewer.Camera2D.Y -= ( ( Exp( event.Wheel.Y/100.0)-1.0 ) * panSpeed )
+		End
+		App.RequestRender()
+	End
+End
+
+
+Function Navigate3D( viewer:SceneView, event:MouseEvent, panSpeed:Double = 20.0, zoomSpeed:Double = 20.0 )
+	'To do: instead of pivot entity, rotate around target using Translation based on sin/cos, then PointAt( target )
+	Global click := New Vec2i
+	If Mouse.ButtonDown( MouseButton.Left )
+		If Keyboard.KeyDown( Key.LeftAlt ) 
+			Local diff := New Vec2i( viewer.ViewMouse.X - click.X, viewer.ViewMouse.Y - click.Y )
+			viewer.Camera.Parent.Rotate( diff.Y/2.0, -diff.X/2.0, 0, True )
+			viewer.Camera.Parent.Rz = 0
+			click.X = viewer.ViewMouse.X
+			click.Y = viewer.ViewMouse.Y
+			App.RequestRender()
+		End
+	End
+	Select event.Type
+	Case EventType.MouseClick
+		click.X = viewer.ViewMouse.X
+		click.Y = viewer.ViewMouse.Y
+	Case EventType.MouseWheel
+		If event.Modifiers = Modifier.LeftAlt
+			'Zoom with alt + wheel
+			viewer.Camera.LocalZ += ( ( Exp( event.Wheel.Y/100.0 ) - 1.0 ) * panSpeed )
+			viewer.Camera.LocalX += ( ( Exp( event.Wheel.X/100.0 ) - 1.0 ) * panSpeed )
+		Else
+			'Pan with wheel (two fingers on touchpad)
+			viewer.Camera.LocalX += ( ( Exp( event.Wheel.X/100.0 ) - 1.0 ) * panSpeed )
+			viewer.Camera.LocalY += ( ( Exp( event.Wheel.Y/100.0 ) - 1.0 ) * panSpeed )
+		End
+		App.RequestRender()
+	End
+End
 
 
 Function WasdInit( window:View, showMouse:Bool = False )
@@ -19,7 +65,9 @@ Function WasdInit( window:View, showMouse:Bool = False )
 	'A way to force the mouse into the window would solve it. Setting Mouse.Location only works when the mouse is over the window.
 End
 
-
+'Works better in full screen! In windowed mode the mouse cursor seems to be "lost" sometimes
+'Call WASDInit a single time on start, then WASDCameraControl on every frame.
+'The default values work well with delta = 1.0. Adjust if your delta is counted in seconds instead.
 Function WasdCameraControl( cam:Entity, view:View, delta:Double = 1.0, touchStyle:Bool = False ,walkSpeed:Float = 0.1, mouseLookSpeed:Float = 0.2 )
 	Global prevMouse:= New Vec2f( Float( Mouse.X ), Float( Mouse.Y ) )
 	Global finalWalkSpeed:Float 
@@ -94,3 +142,4 @@ Function MouseLook:Vec2f( ent:Entity, window:View, prevMouse:Vec2f, speed:Float 
 	
 	Return prevMouse
 End
+

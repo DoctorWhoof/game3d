@@ -1,6 +1,7 @@
 
 #Import "../game3d"
 #Import "view/game3dview"
+#Import "../util/navigation"
 
 #Import "components/spriteRenderer"
 #Import "components/donutRenderer"
@@ -21,9 +22,12 @@ Function Main()
 End
 
 Class TestWindow Extends Window
+	
+	Field gameView:Game3dView
+	
 	Method New()
 		Super.New( "Test", 1024, 600, WindowFlags.Resizable )
-		Local gameView := New Game3dView( 1280, 720, True )
+		gameView = New Game3dView( 1280, 720, True )
 		gameView.Layout = "letterbox"
 		gameView.displayInfo = True
 		gameView.Camera.Move( 0, 5, -10 )
@@ -32,6 +36,11 @@ Class TestWindow Extends Window
 		
 		ContentView = gameView
 		ClearColor = Color.Black
+		WasdInit( gameView )
+	End
+	
+	Method OnRender( canvas:Canvas ) Override
+		WasdCameraControl( gameView.Camera, gameView, Clock.Delta() )
 	End
 End
 

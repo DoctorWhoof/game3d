@@ -2,12 +2,12 @@ Namespace game3d
 
 #Import "component"
 
-Class ComponentBox
+Class EntityBox
 	
 	Field timeOffset:Double = 0.0
 	
 	Private
-	Global _all:= New Map< Entity,ComponentBox >
+	Global _all:= New Map< Entity,EntityBox >
 	
 	Field _entity:Entity
 	Field _viewer:SceneView
@@ -38,19 +38,19 @@ Class ComponentBox
 
 	Method AddComponent( c:Component )
 		If _componentsByName.Contains( c.Name )
-			Print( "ComponentBox: Component	" + c.Name + " already exists." )
+			Print( "EntityBox: Component	" + c.Name + " already exists." )
 			Return
 		End
 		_componentsByName.Add( c.Name, c )
 		_components.Push( c )
 		c.SetBox( Self )
-		Print( "ComponentBox '" + _entity.Name + "': Added Component " + c.Name )
+		Print( "EntityBox '" + _entity.Name + "': Added Component " + c.Name )
 	End
 	
 	Method GetComponent<T>:T( name:String )
 		Local c := _componentsByName.Get( name )
 		If c <> Null Then Return Cast<T>( c )
-		Print( "ComponentBox: Warning, no component named " + name + " found in entity " + _entity.Name + "." )
+		Print( "EntityBox: Warning, no component named " + name + " found in entity " + _entity.Name + "." )
 		Return Null
 	End
 	
@@ -114,7 +114,7 @@ Class ComponentBox
 	End
 	'************************************* Static Functions *************************************
 
-	Function  GetFromEntity:ComponentBox( e:Entity )
+	Function  GetFromEntity:EntityBox( e:Entity )
 		Return _all[ e ]
 	End
 	
