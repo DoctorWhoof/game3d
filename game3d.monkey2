@@ -32,7 +32,7 @@ Class SceneView Extends View
 	Field autoRender := True					'if on, events need to call RequestRender(), app style
 	Field render3DScene := False				'enable to render Mojo3D scenes
 	
-'	Field postLayoutScale:Double = 1.0			'Ugly! Necessary for "fill" layout zooming...
+	Field StartDone: Void()
 	
 	Protected
 	Field _scene:Scene
@@ -171,6 +171,7 @@ Class SceneView Extends View
 		_camera.Fov = 60
 		_camera.Near = 0.1
 		_camera.Far = 100
+		_camera.Name = "Camera"
 		
 		'Default Light
 		_keyLight = New Light
@@ -198,6 +199,10 @@ Class SceneView Extends View
 			OnStart()
 			EntityBox.StartAll()	'Maybe: set Viewer property here?
 			_firstFrame = False
+			StartDone()
+			EntityBox.UpdateAll()
+			_echoStack.Clear()
+			_echoColorStack.Clear()
 			App.RequestRender()
 		Else
 			'********* Update necessary modules *********
@@ -212,6 +217,7 @@ Class SceneView Extends View
 					EntityBox.UpdateAll()
 				End
 			End
+			
 			Profile.Finish( "upd" )
 			Echo( "Update: " + Profile.GetString( "upd" ) )
 			

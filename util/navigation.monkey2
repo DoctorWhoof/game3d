@@ -26,23 +26,41 @@ Function Navigate2D( viewer:SceneView, event:MouseEvent, panSpeed:Double = 100.0
 End
 
 
-Function Navigate3D( viewer:SceneView, event:MouseEvent, panSpeed:Double = 20.0, zoomSpeed:Double = 20.0 )
+Function Navigate3D( viewer:SceneView, event:MouseEvent, target:Entity, panSpeed:Double = 20.0, zoomSpeed:Double = 20.0, orbitSpeed:Double = 0.5 )
 	'To do: instead of pivot entity, rotate around target using Translation based on sin/cos, then PointAt( target )
 	Global click := New Vec2i
-	If Mouse.ButtonDown( MouseButton.Left )
-		If Keyboard.KeyDown( Key.LeftAlt ) 
+	
+	If Mouse.ButtonPressed( MouseButton.Left ) Or Mouse.ButtonPressed( MouseButton.Middle ) Or Mouse.ButtonPressed( MouseButton.Right )
+		click.X = viewer.ViewMouse.X
+		click.Y = viewer.ViewMouse.Y
+	End
+	
+	If Keyboard.KeyDown( Key.LeftAlt )
+		If Mouse.ButtonDown( MouseButton.Left )
 			Local diff := New Vec2i( viewer.ViewMouse.X - click.X, viewer.ViewMouse.Y - click.Y )
-			viewer.Camera.Parent.Rotate( diff.Y/2.0, -diff.X/2.0, 0, True )
+			viewer.Camera.Parent.Rotate( diff.Y*orbitSpeed, -diff.X*orbitSpeed, 0, True )
 			viewer.Camera.Parent.Rz = 0
+			click.X = viewer.ViewMouse.X
+			click.Y = viewer.ViewMouse.Y
+			App.RequestRender()
+		Else If Mouse.ButtonDown( MouseButton.Middle )
+			Local diff := New Vec2i( viewer.ViewMouse.X - click.X, viewer.ViewMouse.Y - click.Y )
+			viewer.Camera.LocalX -= ( diff.X * (0.5/panSpeed) )
+			viewer.Camera.LocalY += ( diff.Y * (0.5/panSpeed) )
+			click.X = viewer.ViewMouse.X
+			click.Y = viewer.ViewMouse.Y
+			App.RequestRender()
+		Else If Mouse.ButtonDown( MouseButton.Right )
+			Local diff := New Vec2i( viewer.ViewMouse.X - click.X, viewer.ViewMouse.Y - click.Y )
+'			viewer.Camera.LocalX -= ( diff.X * (0.5/panSpeed) )	'shold be optional
+			viewer.Camera.LocalZ += ( diff.Y * (0.5/panSpeed) )
 			click.X = viewer.ViewMouse.X
 			click.Y = viewer.ViewMouse.Y
 			App.RequestRender()
 		End
 	End
+	
 	Select event.Type
-	Case EventType.MouseClick
-		click.X = viewer.ViewMouse.X
-		click.Y = viewer.ViewMouse.Y
 	Case EventType.MouseWheel
 		If event.Modifiers = Modifier.LeftAlt
 			'Zoom with alt + wheel
@@ -57,7 +75,7 @@ Function Navigate3D( viewer:SceneView, event:MouseEvent, panSpeed:Double = 20.0,
 	End
 End
 
-
+Public
 Function WasdInit( window:View, showMouse:Bool = False )
 '	Mouse.Location = New Vec2i( window.Width / 2, window.Height / 2 )
 	Mouse.PointerVisible = showMouse
@@ -123,12 +141,8 @@ End
 
 
 Private
-Function MouseLook:Vec2f( ent:Entity, window:View, prevMouse:Vec2f, speed:Float )', initValue:Vec2f = Null )
+Function MouseLook:Vec2f( ent:Entity, window:View, prevMouse:Vec2f, speed:Float )
 	Local diff:= New Vec2f( Mouse.X - prevMouse.X, prevMouse.Y - Mouse.Y )
-	
-'	If initValue
-'		diff= New Vec2f( Mouse.X - initValue.X, initValue.Y - Mouse.Y )
-'	End	
 	
 	If Abs( diff.X ) > 0
 		ent.RotateY( diff.X * speed, False )

@@ -24,8 +24,16 @@ Class Entity Extension
 	End
 	
 	
-	Method GetComponentBox:EntityBox()
+	Method GetEntityBox:EntityBox()
 		Return EntityBox.GetFromEntity( Self )
+	End
+	
+	
+	Method SwitchParent( newParent:Entity )
+		Local pos := Position
+		Local rot := Rotation
+		Local scl := Scale
+		
 	End
 	
 End

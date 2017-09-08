@@ -1,71 +1,26 @@
 Class SceneTreeView Extends TreeView
 	
-	Method New()
-		For Local o:=Eachin LoadDir( path )
+	Method Refresh( scene:Scene )
+		RootNode.Text = "Scene"
+		RootNode.Expanded = True
+		For Local e:= EachIn scene.GetRootEntities()
+			AddToTree( e, RootNode )
+		Next
 		
-			Local p:=path+"/"+f
-			
-			Local node:=New TreeView.Node( f,parent )
-			
-			If GetFileType( p )=FileType.Directory CreateTree( p,node )
+		NodeClicked = Lambda( node:TreeView.Node )
+			Print( node.Text + " selected" )
+		End
+	End 
+	
+	Private
+	Method AddToTree( e:Entity, parent:TreeView.Node )
+		Local node:=New TreeView.Node( e.Name, parent )
+		node.Expanded = True
+		
+		For Local c := Eachin e.Children
+			AddToTree( c, node )
 		Next
 	End
-
-	
 	
 End
 
-
-
-'Class MyWindow Extends Window
-'
-'	Method New()
-'		Super.New( "TreeView Demo",640,480,WindowFlags.Resizable )
-'
-'		Local treeView:=New TreeView
-'		
-'		treeView.NodeClicked+=Lambda( node:TreeView.Node )
-'
-'			Alert( "Node clicked: node.Text=~q"+node.Text+"~q" )
-'		End
-'		
-'		treeView.NodeExpanded+=Lambda( node:TreeView.Node )
-'		
-''			Alert( "Node expanded: node.Text=~q"+node.Text+"~q" )
-'		End
-'		
-'		treeView.NodeCollapsed+=Lambda( node:TreeView.Node )
-'		
-''			Alert( "Node collapsed: node.Text=~q"+node.Text+"~q" )
-'		End
-'		
-'		treeView.RootNode.Text=CurrentDir()
-'		
-'		CreateTree( CurrentDir(),treeView.RootNode )
-'		
-'		ContentView=treeView
-'	End
-'	
-'	Method CreateTree( path:String,parent:TreeView.Node )
-'	
-'		For Local f:=Eachin LoadDir( path )
-'		
-'			Local p:=path+"/"+f
-'			
-'			Local node:=New TreeView.Node( f,parent )
-'			
-'			If GetFileType( p )=FileType.Directory CreateTree( p,node )
-'		Next
-'	End
-'
-'End
-'
-'
-'Function Main()
-'
-'	New AppInstance
-'	
-'	New MyWindow
-'	
-'	App.Run()
-'End

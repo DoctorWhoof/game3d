@@ -120,32 +120,32 @@ Class EntityBox
 	
 		
 	Function StartAll()
-		For Local cBox:= Eachin _all.Values
-			cBox.Start()
+		For Local eBox:= Eachin _all.Values
+			eBox.Start()
 		Next
 	End
 		
 	Function UpdateAll()
-		For Local cBox:= Eachin _all.Values
-			cBox.Update()
+		For Local eBox:= Eachin _all.Values
+			eBox.Update()
 		Next
 	End
 	
 	Function DrawAll( canvas:Canvas )
-		For Local cBox:= Eachin _all.Values
-			cBox.Draw( canvas )
+		For Local eBox:= Eachin _all.Values
+			eBox.Draw( canvas )
 		Next
 	End
 	
 	Function LateUpdateAll()
-		For Local cBox:= Eachin _all.Values
-			cBox.LateUpdate()
+		For Local eBox:= Eachin _all.Values
+			eBox.LateUpdate()
 		Next
 	End
 	
 	Function ResetAll()
-		For Local cBox:= Eachin _all.Values
-			cBox.Reset()
+		For Local eBox:= Eachin _all.Values
+			eBox.Reset()
 		Next
 	End
 	
