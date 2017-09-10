@@ -2,13 +2,14 @@
 
 Class Entity Extension
 	
-	Method 	AddComponent( comp:Component )
+	Method 	AddComponent<T>:T( comp:T ) Where T Extends Component
 		Local box:= EntityBox.GetFromEntity( Self )
 		If Not box
 			box = New EntityBox( Self )
 			Print( "Entity '" + Name + "': Created new component box" )
 		End
 		box.AddComponent( comp )
+		Return comp
 		'To do: Add listeners for destroyed, hidden and shown
 	End
 	
@@ -23,17 +24,20 @@ Class Entity Extension
 		Return box.GetComponentBySuperClass<T>( name )
 	End
 	
-	
-	Method GetEntityBox:EntityBox()
-		Return EntityBox.GetFromEntity( Self )
-	End
-	
-	
+'	'Marked for removal if not proven necessary
+'	Method GetEntityBox:EntityBox()
+'		Return EntityBox.GetFromEntity( Self )
+'	End
+'	
+	'Preserves current world space transform when changing parent
 	Method SwitchParent( newParent:Entity )
-		Local pos := Position
-		Local rot := Rotation
-		Local scl := Scale
-		
+		Local oldPos := Position
+		Local oldRot := Rotation
+		Local oldScl := Scale
+		Parent = newParent
+		Position = oldPos
+		Rotation = oldRot
+		Scale = oldScl
 	End
 	
 End

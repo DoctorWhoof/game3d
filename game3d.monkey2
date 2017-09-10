@@ -192,71 +192,67 @@ Class SceneView Extends View
 		If autoRender Then App.RequestRender()		
 		Self._canvas = canvas
 		
+		'********* Init *********
 		If _firstFrame
-			'********* Init *********
 			If Layout = "fill" Then _camera2D.SetSize( Width, Height )
 			Clock.Reset()
 			OnStart()
 			EntityBox.StartAll()	'Maybe: set Viewer property here?
 			_firstFrame = False
 			StartDone()
-			EntityBox.UpdateAll()
+		End
+		
+		'********* Update necessary modules *********
+		Clock.Update()
+		
+		'********* Update loop *********
+		Profile.Start( "upd" )
+		
+		If Not editMode
+			If Not _paused
+				OnUpdate()
+				EntityBox.UpdateAll()
+			End
+		End
+		
+		Profile.Finish( "upd" )
+		Echo( "Update: " + Profile.GetString( "upd" ) )
+		
+		'********* Draw loop *********
+		Profile.Start( "drw" )
+		
+		'3D drawing
+		If render3DScene Then _scene.Render( _canvas, _camera )
+		'2D drawing
+		canvas.PushMatrix()
+		
+		_camera2D.Width = Clamp<Double>( _camera2D.Width, 8.0 * AspectRatio, 2160.0 * AspectRatio )
+		_camera2D.Height = Clamp<Double>( _camera2D.Height, 8.0, 2160.0 )
+		
+		Select Layout
+		Case "fill", "resize"
+			Local frameAspect := Double(Frame.Width)/Double(Frame.Height)
+			AspectRatio = frameAspect
+			Local scale := Double(Frame.Height)/_camera2D.Height
+			canvas.Scale( scale, scale )
+		End
+		canvas.Translate( -_camera2D.X + (_camera2D.Width/2.0), -_camera2D.Y + (_camera2D.Height/2.0) )
+		EntityBox.DrawAll( canvas )
+		OnDraw( canvas )
+		canvas.PopMatrix()			
+		canvas.Flush()
+		
+		Profile.Finish( "drw" )
+		Echo( "Render: " + Profile.GetString( "drw" ) )
+		If displayInfo Then DrawEcho( canvas )
+
+		'********* Input *********
+		If Keyboard.KeyHit( keyPause ) Then PauseToggle()		'Needs to happen after DrawEcho()
+		
+		'********* Clean up *********
+		If Not _paused
 			_echoStack.Clear()
 			_echoColorStack.Clear()
-			App.RequestRender()
-		Else
-			'********* Update necessary modules *********
-			Clock.Update()
-			
-			'********* Update *********
-			Profile.Start( "upd" )
-			
-			If Not editMode
-				If Not _paused
-					OnUpdate()
-					EntityBox.UpdateAll()
-				End
-			End
-			
-			Profile.Finish( "upd" )
-			Echo( "Update: " + Profile.GetString( "upd" ) )
-			
-			'********* Draw *********
-			Profile.Start( "drw" )
-			'3D drawing
-			If render3DScene Then _scene.Render( _canvas, _camera )
-			'2D drawing
-			canvas.PushMatrix()
-			
-			_camera2D.Width = Clamp<Double>( _camera2D.Width, 8.0 * AspectRatio, 2160.0 * AspectRatio )
-			_camera2D.Height = Clamp<Double>( _camera2D.Height, 8.0, 2160.0 )
-			
-			Select Layout
-			Case "fill", "resize"
-				Local frameAspect := Double(Frame.Width)/Double(Frame.Height)
-				AspectRatio = frameAspect
-				Local scale := Double(Frame.Height)/_camera2D.Height
-				canvas.Scale( scale, scale )
-			End
-			canvas.Translate( -_camera2D.X + (_camera2D.Width/2.0), -_camera2D.Y + (_camera2D.Height/2.0) )
-
-			EntityBox.DrawAll( canvas )
-			OnDraw( canvas )
-			canvas.PopMatrix()			
-			canvas.Flush()
-			Profile.Finish( "drw" )
-			Echo( "Render: " + Profile.GetString( "drw" ) )
-			If displayInfo Then DrawEcho( canvas )
-
-			'********* Input *********
-			If Keyboard.KeyHit( keyPause ) Then PauseToggle()		'Needs to happen after DrawEcho()
-			
-			'********* Clean up *********
-			If Not _paused
-				_echoStack.Clear()
-				_echoColorStack.Clear()
-			End
-
 		End
 	End
 	

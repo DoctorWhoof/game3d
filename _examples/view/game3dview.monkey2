@@ -48,28 +48,24 @@ Class Game3dView Extends SceneView
 		'Another model creation component
 		Local test4 := New Model
 		test4.Name = "CatCard"
-		test4.Position = New Vec3f( 4, 0, 0 )
-		test4.Parent = test1
-		test4.AddComponent( New Card( "asset::cats.png", 12, 2, 2, 16, 16, TextureFlags.None ) )
+		test4.Position = New Vec3f( 0, 0, 0 )
 
-		Camera.Move( 0, 2, -10 )
-		Camera.PointAt( New Vec3f )
+		'You can store a component in a variable when creating it, AddComponent returns the new component.		
+		Local card:= test4.AddComponent( New Card( "asset::cats.png", 12, 2, 2, 16, 16, TextureFlags.None ) )
+		Print( card.Name )
+		Print( card.alignToCamera? "True" Else "False"  )
 
-		pivot = Model.CreateSphere( 1, 12, 12, New PbrMaterial( Color.Red ) )
-		pivot.Name = "Pivot"
-		pivot.LocalRotation = Camera.LocalRotation
-		
-		Local zeroOut := New Entity
-		zeroOut.Position = Camera.Position
-		zeroOut.Rotation = Camera.Rotation
-		
-		Camera.Parent = pivot
-		Camera.Position = zeroOut.Position
-		Camera.Rotation = zeroOut.Rotation
+		'Camera pivot is used in editMode for "Alt Key Navigation" (orbit, track and dolly)
+		If editMode
+			pivot = New Entity
+			pivot.Name = "Pivot"
+			pivot.LocalRotation = Camera.LocalRotation
+			Camera.SwitchParent( pivot )
+		End
 	End
 	
-	Method OnDraw( canvas:Canvas ) Override
-		Echo( Camera.Rotation )
+	Method OnUpdate() Override
+'		Echo( Camera.Rotation )
 	End
 	
 	Method OnMouseEvent( event:MouseEvent ) Override

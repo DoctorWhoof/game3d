@@ -1,6 +1,7 @@
 Class SceneTreeView Extends TreeView
 	
 	Method Refresh( scene:Scene )
+		RootNode.RemoveAllChildren()	'clear tree
 		RootNode.Text = "Scene"
 		RootNode.Expanded = True
 		For Local e:= EachIn scene.GetRootEntities()
@@ -11,6 +12,7 @@ Class SceneTreeView Extends TreeView
 			Print( node.Text + " selected" )
 		End
 	End 
+	
 	
 	Private
 	Method AddToTree( e:Entity, parent:TreeView.Node )

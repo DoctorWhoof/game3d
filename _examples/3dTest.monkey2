@@ -26,7 +26,7 @@ Class TestWindow Extends Window
 	Field gameView:Game3dView
 	
 	Method New()
-		Super.New( "Test", 1024, 600, WindowFlags.Resizable )
+		Super.New( "Test", 1024, 600, WindowFlags.Resizable | WindowFlags.Maximized )
 		gameView = New Game3dView( 1280, 720, True )
 		gameView.Layout = "letterbox"
 		gameView.displayInfo = True
@@ -40,8 +40,9 @@ Class TestWindow Extends Window
 	End
 	
 	Method OnRender( canvas:Canvas ) Override
-		WasdCameraControl( gameView.Camera, gameView, Clock.Delta() )
+		WasdCameraControl( gameView.Camera, gameView, Clock.Delta() )	
 	End
+	
 End
 
 

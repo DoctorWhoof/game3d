@@ -30,6 +30,10 @@ Function Navigate3D( viewer:SceneView, event:MouseEvent, target:Entity, panSpeed
 	'To do: instead of pivot entity, rotate around target using Translation based on sin/cos, then PointAt( target )
 	Global click := New Vec2i
 	
+	Local  camera := viewer.Camera
+	Local parent := viewer.Camera.Parent
+	Assert( parent <> Null, "Navigate3D: Camera needs a parent entity (orbit pivot)" )
+	
 	If Mouse.ButtonPressed( MouseButton.Left ) Or Mouse.ButtonPressed( MouseButton.Middle ) Or Mouse.ButtonPressed( MouseButton.Right )
 		click.X = viewer.ViewMouse.X
 		click.Y = viewer.ViewMouse.Y
@@ -38,22 +42,22 @@ Function Navigate3D( viewer:SceneView, event:MouseEvent, target:Entity, panSpeed
 	If Keyboard.KeyDown( Key.LeftAlt )
 		If Mouse.ButtonDown( MouseButton.Left )
 			Local diff := New Vec2i( viewer.ViewMouse.X - click.X, viewer.ViewMouse.Y - click.Y )
-			viewer.Camera.Parent.Rotate( diff.Y*orbitSpeed, -diff.X*orbitSpeed, 0, True )
-			viewer.Camera.Parent.Rz = 0
+			parent.Rotate( diff.Y*orbitSpeed, -diff.X*orbitSpeed, 0, True )
+			parent.Rz = 0
 			click.X = viewer.ViewMouse.X
 			click.Y = viewer.ViewMouse.Y
 			App.RequestRender()
 		Else If Mouse.ButtonDown( MouseButton.Middle )
 			Local diff := New Vec2i( viewer.ViewMouse.X - click.X, viewer.ViewMouse.Y - click.Y )
-			viewer.Camera.LocalX -= ( diff.X * (0.5/panSpeed) )
-			viewer.Camera.LocalY += ( diff.Y * (0.5/panSpeed) )
+			camera.LocalX -= ( diff.X * (0.5/panSpeed) )
+			camera.LocalY += ( diff.Y * (0.5/panSpeed) )
 			click.X = viewer.ViewMouse.X
 			click.Y = viewer.ViewMouse.Y
 			App.RequestRender()
 		Else If Mouse.ButtonDown( MouseButton.Right )
 			Local diff := New Vec2i( viewer.ViewMouse.X - click.X, viewer.ViewMouse.Y - click.Y )
-'			viewer.Camera.LocalX -= ( diff.X * (0.5/panSpeed) )	'shold be optional
-			viewer.Camera.LocalZ += ( diff.Y * (0.5/panSpeed) )
+'			camera.LocalX -= ( diff.X * (0.5/panSpeed) )	'shold be optional
+			camera.LocalZ += ( diff.Y * (0.5/panSpeed) )
 			click.X = viewer.ViewMouse.X
 			click.Y = viewer.ViewMouse.Y
 			App.RequestRender()

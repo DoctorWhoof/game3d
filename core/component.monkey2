@@ -30,8 +30,13 @@ Class Component
 		Return _box.Viewer
 	End
 	
-	Property Box:EntityBox()
-		Return _box	
+'	Marked for removal
+'	Property Box:EntityBox()
+'		Return _box	
+'	End
+	
+	Property Camera:Camera()
+		Return _box.Viewer.Camera
 	End
 	
 	Property Time:Double()
