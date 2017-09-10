@@ -37,7 +37,7 @@ Class GameDock Extends DockingView
 		gameView.Style.Font = smallFont
 		gameView.displayInfo = True
 		gameView.editMode = False
-		gameView.Layout = "fill-x"
+		gameView.Layout = "fill"
 		
 		Local toolbar := New ToolBar( Axis.X )
 		toolbar.Style = Self.Style.Copy()

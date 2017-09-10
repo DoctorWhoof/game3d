@@ -39,6 +39,9 @@ Class GameDock Extends DockingView
 		gameView.autoRender = False
 		gameView.Layout = "fill"
 		
+		gameView.Camera.Move( 0, 3, -8 )
+		gameView.Camera.PointAt( New Vec3f )
+		
 		Local toolbar := New ToolBar( Axis.X )
 		toolbar.Style.BackgroundColor = Color.Grey
 		toolbar.MinSize = New Vec2i( 200,32 )
