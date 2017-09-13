@@ -6,7 +6,6 @@ Class Entity Extension
 		Local box:= EntityBox.GetFromEntity( Self )
 		If Not box
 			box = New EntityBox( Self )
-			Print( "Entity '" + Name + "': Created new component box" )
 		End
 		box.AddComponent( comp )
 		Return comp
@@ -24,7 +23,7 @@ Class Entity Extension
 		Return box.GetComponentBySuperClass<T>( name )
 	End
 	
-'	'Marked for removal if not proven necessary
+'	'Marked for removal
 '	Method GetEntityBox:EntityBox()
 '		Return EntityBox.GetFromEntity( Self )
 '	End

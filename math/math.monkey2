@@ -75,8 +75,12 @@ Function Truncate:String( number:Double, decimals:Int = 1 )
 	If arr.Length > 1
 		Return arr[0] + "." + arr[1].Left( decimals )
 	Else
-		Return "Nothing to truncate"
+		Return arr[0]
 	End
+End
+
+Function Truncate:String( vec:Vec3<Float>, decimals:Int = 1 )
+	Return Truncate( vec.X, decimals ) + ", " + Truncate( vec.Y, decimals ) + ", " + Truncate( vec.Z, decimals )
 End
 
 

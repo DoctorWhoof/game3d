@@ -4,6 +4,8 @@ Namespace game3d
 #Import "<std>"
 #Import "<mojo>"
 #Import "<mojo3d>"
+#Import "<mojo3d-loaders>"
+#Import "<mojo3d-physics>"
 
 #Import "core/entityExtension"
 #Import "core/entityBox"
@@ -23,7 +25,7 @@ Using math..
 Using clock..
 Using util..
 
-Const smallFont:Font = Font.Load( "font::DejaVuSans.ttf", 10 )
+Const smallFont:Font = Font.Load( "font::DejaVuSans.ttf", 12 )
 
 Class SceneView Extends View
 	Field keyPause := Key.P						'shortcut used to pause
@@ -168,7 +170,7 @@ Class SceneView Extends View
 		
 		'Camera
 		_camera = New Camera
-		_camera.Fov = 60
+		_camera.FOV = 60
 		_camera.Near = 0.1
 		_camera.Far = 100
 		_camera.Name = "Camera"
@@ -214,6 +216,7 @@ Class SceneView Extends View
 				EntityBox.UpdateAll()
 			End
 		End
+		_scene.World.Update()
 		
 		Profile.Finish( "upd" )
 		Echo( "Update: " + Profile.GetString( "upd" ) )
