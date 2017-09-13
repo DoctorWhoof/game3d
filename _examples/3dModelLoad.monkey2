@@ -32,7 +32,7 @@ Class TestWindow Extends Window
 	End
 	
 	Method OnRender( canvas:Canvas ) Override
-		WasdCameraControl( gameView.Camera, gameView, Clock.Delta(), False )	
+		WasdCameraControl( gameView.Camera, gameView, Clock.Delta(), True )	
 	End
 End
 
