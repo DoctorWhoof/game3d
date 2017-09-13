@@ -1,12 +1,16 @@
 #Import "../game3d"
 #Import "<mojo3d-physics>"
+
 #Import "../util/navigation"
 #Import "components/spin"
 
 #Import "models/asteroidLow.obj"
 #Import "images/stars.png"
+#Import "images/wire.png"
+#Import "images/black.png"
 
 Using game3d..
+Using assimp..
 Using mojo3d.physics
 
 Function Main()
@@ -20,7 +24,7 @@ Class TestWindow Extends Window
 	Field gameView:GameView
 	
 	Method New()
-		Super.New( "Test", 1280, 720, WindowFlags.Resizable | WindowFlags.Maximized )
+		Super.New( "Test", 1280, 720, WindowFlags.Resizable )' | WindowFlags.Maximized )
 		gameView = New GameView( 1280, 720 )
 		ContentView = gameView
 		ClearColor = Color.Black
@@ -28,7 +32,7 @@ Class TestWindow Extends Window
 	End
 	
 	Method OnRender( canvas:Canvas ) Override
-		WasdCameraControl( gameView.Camera, gameView, Clock.Delta() )	
+		WasdCameraControl( gameView.Camera, gameView, Clock.Delta(), False )	
 	End
 End
 
@@ -46,22 +50,46 @@ Class GameView Extends SceneView
 		Layout = "fill"
 		displayInfo = True
 		
-'		asteroid = Model.Load( "asset::asteroidLow.obj" )
-		asteroid = Model.CreateBox( New Boxf( -1,-1,-1,1,1,1 ), 1, 1, 1, New PbrMaterial( Color.Orange, 0, 1.0 )  )
+		Scene.SkyTexture = New Texture( Pixmap.Load( "asset::stars.png"), TextureFlags.Cubemap )
+		Scene.EnvTexture = New Texture( Pixmap.Load( "asset::black.png"), TextureFlags.Cubemap )
+		Scene.AmbientLight = Color.Black
+		Scene.ClearColor = Color.Black
+		
+		Local bloom := New BloomEffect( 4 )
+		Scene.AddPostEffect( bloom )
+		
+		Local mat :=  New PbrMaterial( True, False, False )
+		Local texture := New Texture( Pixmap.Load( "asset::wire.png" ), TextureFlags.FilterMipmap )
+		mat.ColorFactor = Color.Red
+		mat.EmissiveFactor = Color.Red
+		mat.ColorTexture = texture
+		mat.EmissiveTexture = texture
+		
+		
+		Local temp := Model.Load( "asset::asteroidLow.obj" )
 		Print assimp.aiGetErrorString()
-		asteroid.Material = New PbrMaterial( Color.Orange, 0, 1.0 )
+		temp.Visible = False
+
+'		Local asteroid := Model.Load( "asset::asteroidLow.obj" )
+'		Print assimp.aiGetErrorString()
+		asteroid = Model.CreateBox( New Boxf( -1,-1,-1,1,1,1 ), 1, 1, 1, mat  )
+		asteroid.Mesh = temp.Mesh
+		asteroid.Material = mat
+		
 		asteroid.AddComponent( New Spin( Rnd(0,0.1), Rnd(0,0.2), Rnd(0,0.1) ) )
-'		asteroid.Mesh.FitVertices( New Boxf(-10,-10,-10,10,10,10) )
+		asteroid.Mesh.FitVertices( New Boxf(-10,-10,-10,10,10,10) )
 '		asteroid.Visible = False
 
-		Camera.Move( 0, 0, -5 )
-		Camera.Near = 1.0
+		Camera.Move( 0, 0, -15 )
+		Camera.Near = 0.2
 		Camera.Far = 100.0
+		
+'		KeyLight.Visible = False
 		
 		world = New World( Scene )
 		Local collider := New MeshCollider( asteroid.Mesh )
 		Local body := New DynamicBody( collider, asteroid )
-		New KinematicBody( New SphereCollider( 2 ), Camera )
+		New KinematicBody( New SphereCollider( 1 ), Camera )
 		
 		world.Gravity = New Vec3f( 0,0,0 )
 	End
@@ -82,7 +110,7 @@ Class GameView Extends SceneView
 		
 		Local v1 := New Vec3f(0,-1,0)
 		Local v2 := New Vec3f(0,1,0)
-		DrawWireframe( canvas, Camera, asteroid, Width/2.0, Height/2.0 )
+'		DrawWireframe( canvas, Camera, asteroid, Width/2.0, Height/2.0 )
 	End
 	
 	

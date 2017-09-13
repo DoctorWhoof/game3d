@@ -214,9 +214,10 @@ Class SceneView Extends View
 			If Not _paused
 				OnUpdate()
 				EntityBox.UpdateAll()
+				_scene.World.Update()
 			End
 		End
-		_scene.World.Update()
+		
 		
 		Profile.Finish( "upd" )
 		Echo( "Update: " + Profile.GetString( "upd" ) )

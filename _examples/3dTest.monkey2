@@ -32,7 +32,6 @@ Class TestWindow Extends Window
 		gameView.displayInfo = True
 		gameView.Camera.Move( 0, 5, -10 )
 		gameView.Camera.PointAt( New Vec3f )
-		gameView.wasdControls = True
 		
 		ContentView = gameView
 		ClearColor = Color.Black
