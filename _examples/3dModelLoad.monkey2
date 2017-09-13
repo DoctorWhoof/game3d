@@ -4,9 +4,9 @@
 #Import "../util/navigation"
 #Import "components/spin"
 
-#Import "models/asteroidLow.obj"
+#Import "models/asteroidLow.fbx"
 #Import "images/stars.png"
-#Import "images/wire.png"
+#Import "images/wireTriangle.png"
 #Import "images/black.png"
 
 Using game3d..
@@ -59,24 +59,24 @@ Class GameView Extends SceneView
 		Scene.AddPostEffect( bloom )
 		
 		Local mat :=  New PbrMaterial( True, False, False )
-		Local texture := New Texture( Pixmap.Load( "asset::wire.png" ), TextureFlags.FilterMipmap )
+		Local texture := New Texture( Pixmap.Load( "asset::wireTriangle.png" ), TextureFlags.FilterMipmap )
 		mat.ColorFactor = Color.Red
 		mat.EmissiveFactor = Color.Red
 		mat.ColorTexture = texture
 		mat.EmissiveTexture = texture
 		
 		
-		Local temp := Model.Load( "asset::asteroidLow.obj" )
+		Local temp := Model.Load( "asset::asteroidLow.fbx" )
 		Print assimp.aiGetErrorString()
 		temp.Visible = False
 
-'		Local asteroid := Model.Load( "asset::asteroidLow.obj" )
+'		Local asteroid := Model.Load( "asset::asteroidLow.fbx" )
 '		Print assimp.aiGetErrorString()
 		asteroid = Model.CreateBox( New Boxf( -1,-1,-1,1,1,1 ), 1, 1, 1, mat  )
 		asteroid.Mesh = temp.Mesh
 		asteroid.Material = mat
 		
-		asteroid.AddComponent( New Spin( Rnd(0,0.1), Rnd(0,0.2), Rnd(0,0.1) ) )
+'		asteroid.AddComponent( New Spin( Rnd(0,0.1), Rnd(0,0.2), Rnd(0,0.1) ) )
 		asteroid.Mesh.FitVertices( New Boxf(-10,-10,-10,10,10,10) )
 '		asteroid.Visible = False
 
@@ -88,7 +88,7 @@ Class GameView Extends SceneView
 		
 		world = New World( Scene )
 		Local collider := New MeshCollider( asteroid.Mesh )
-		Local body := New DynamicBody( collider, asteroid )
+'		Local body := New DynamicBody( collider, asteroid )
 		New KinematicBody( New SphereCollider( 1 ), Camera )
 		
 		world.Gravity = New Vec3f( 0,0,0 )
