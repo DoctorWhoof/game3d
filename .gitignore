@@ -1,3 +1,4 @@
 *.products
 *.build*
 *.DS_Store
+*backup*
