@@ -67,6 +67,25 @@ Class Game3dView Extends SceneView
 '		Echo( Camera.Rotation )
 	End
 	
+	Method OnDraw( canvas:Canvas ) Override
+		If editMode
+			Local gridSpacing := 1.0
+			Local gridSize := 20.0
+			Local offsetX := Width / 2.0
+			Local offsetY := Height / 2.0
+			Local gridHalf := gridSize / 2.0
+
+			For Local x := -gridSize/2.0 To gridSize/2.0 Step gridSpacing
+				canvas.Draw3DLine( Camera, New Vec3f( x,0,-gridHalf ), New Vec3f( x,0,gridHalf ), offsetX, offsetY )
+			Next
+			
+			For Local z := -gridSize/2.0 To gridSize/2.0 Step gridSpacing
+				canvas.Draw3DLine( Camera, New Vec3f( -gridHalf,0,z ), New Vec3f( gridHalf,0,z ), offsetX, offsetY )
+			Next
+			Echo( Camera.Viewport )
+		End	
+	End
+	
 	Method OnMouseEvent( event:MouseEvent ) Override
 		If editMode
 			Navigate3D( Self, event, pivot )

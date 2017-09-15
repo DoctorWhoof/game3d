@@ -12,6 +12,7 @@ Namespace game3d
 #Import "math/math"
 #Import "math/area"
 #Import "math/matrix_ext"
+#Import "math/rect_ext"
 #Import "clock/clock"
 #Import "util/wasd"
 #Import "util/profile"
@@ -88,7 +89,10 @@ Class SceneView Extends View
 	
 	
 	Property Paused:Bool()
-		Return _paused	
+		Return _paused
+	Setter( state:Bool )
+		_paused = state
+		Clock.Pause( state )	
 	End
 	
 	
@@ -251,7 +255,7 @@ Class SceneView Extends View
 		If displayInfo Then DrawEcho( canvas )
 
 		'********* Input *********
-		If Keyboard.KeyHit( keyPause ) Then PauseToggle()		'Needs to happen after DrawEcho()
+'		If Keyboard.KeyHit( keyPause ) Then PauseToggle()		'Needs to happen after DrawEcho()
 		
 		'********* Clean up *********
 		If Not _paused
@@ -259,13 +263,6 @@ Class SceneView Extends View
 			_echoColorStack.Clear()
 		End
 	End
-	
-	
-	Method PauseToggle()
-		_paused = Not _paused
-		Clock.PauseToggle()	
-	End
-	
 	
 	Method Echo( text:String, alwaysDisplay:Bool = True, color:Color = Color.White )
 		If Not Paused

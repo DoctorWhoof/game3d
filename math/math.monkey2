@@ -79,9 +79,15 @@ Function Truncate:String( number:Double, decimals:Int = 1 )
 	End
 End
 
+Function Truncate:String( vec:Vec2<Float>, decimals:Int = 1 )
+	Return Truncate( vec.X, decimals ) + ", " + Truncate( vec.Y, decimals )
+End
+
 Function Truncate:String( vec:Vec3<Float>, decimals:Int = 1 )
 	Return Truncate( vec.X, decimals ) + ", " + Truncate( vec.Y, decimals ) + ", " + Truncate( vec.Z, decimals )
 End
+
+
 
 
 '*********************** Array functions ***********************

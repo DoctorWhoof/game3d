@@ -60,8 +60,8 @@ Class Clock
 	End
 	
 	
-	Function PauseToggle()
-		_paused = Not _paused
+	Function Pause( state:Bool )
+		_paused = state
 	End
 	
 	
