@@ -1,21 +1,26 @@
-
 Namespace game3d
 
 #Import "<std>"
+#Import "<reflection>"
 #Import "<mojo>"
 #Import "<mojo3d>"
 #Import "<mojo3d-loaders>"
-#Import "<mojo3d-physics>"
+'#Import "<mojo3d-physics>"
 
 #Import "core/entityExtension"
 #Import "core/entityBox"
+#Import "materialLibrary/materialLibrary"
+
 #Import "math/math"
 #Import "math/area"
 #Import "math/matrix_ext"
 #Import "math/rect_ext"
+
 #Import "clock/clock"
+
 #Import "util/wasd"
 #Import "util/profile"
+
 #Import "graphics/canvas_ext"
 
 Using std..
@@ -27,6 +32,8 @@ Using clock..
 Using util..
 
 Const smallFont:Font = Font.Load( "font::DejaVuSans.ttf", 12 )
+
+Global developmentPath:String = Null
 
 Class SceneView Extends View
 	Field keyPause := Key.P						'shortcut used to pause
@@ -45,7 +52,6 @@ Class SceneView Extends View
 	Field _camera2D:Area<Double>
 	Field _virtualRes:Rect<Double>
 	Field _keyLight:Light
-	Field _fog:FogEffect
 	
 	Private
 	Global _currentViewer:SceneView
@@ -80,11 +86,6 @@ Class SceneView Extends View
 	
 	Property KeyLight:Light()
 		Return _keyLight
-	End
-	
-	
-	Property Fog:FogEffect()
-		Return _fog
 	End
 	
 	
@@ -193,7 +194,7 @@ Class SceneView Extends View
 	
 	
 	Method OnRender( canvas:Canvas ) Override Final
-		Echo( "Width="+Width+",Height="+Height+",    Camera2D=" + Camera2D.ToString() + ",    FPS="+App.FPS + ",    WorldMouse=" + WorldMouse + ",    Clock:" + Truncate( Clock.Now() ) )
+		Echo( "Width="+Frame.Width+",Height="+Frame.Height+",    Camera2D=" + Camera2D.ToString() + ",    FPS="+App.FPS + ",    WorldMouse=" + WorldMouse + ",    Clock:" + Truncate( Clock.Now() ) )
 
 		If autoRender Then App.RequestRender()		
 		Self._canvas = canvas
@@ -218,7 +219,7 @@ Class SceneView Extends View
 			If Not _paused
 				OnUpdate()
 				EntityBox.UpdateAll()
-				_scene.World.Update()
+'				_scene.World.Update()
 			End
 		End
 		
@@ -320,6 +321,16 @@ Class SceneView Extends View
 		Return _currentViewer	
 	End
 	
+End
+
+Function Asset:String( folder:String, file:String )
+	Local path := ""
+	If developmentPath
+		path = developmentPath + folder + "/" + file
+	Else
+		path = "asset::" + file
+	End
+	Return path
 End
 
 

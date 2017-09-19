@@ -16,7 +16,7 @@ Class Canvas Extension
 		game3d.SceneView.Current().Echo( Truncate(s0) + ",   " + Truncate(s1) )
 	End
 	
-
+	#rem
 	'Needs serious optimizing! how about casting a ray only once per vertex?...	
 	Method DrawWireframe( world:World, camera:Camera, model:Model, offsetX:Float=0, offsetY:Float=0, push:Float = 0.1 )
 		Local vertices := model.Mesh.GetVertices()
@@ -55,6 +55,7 @@ Class Canvas Extension
 '			End
 		Next
 	End
+	#end
 	
 
 	'Draws the same image repeatedly

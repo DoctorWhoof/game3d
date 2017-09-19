@@ -2,6 +2,14 @@
 
 Class Entity Extension
 	
+	Property Components:Component[]()
+		Local box:= EntityBox.GetFromEntity( Self )
+		Return box.Components	
+	End
+	
+	'************************************* Public Methods *************************************
+	
+	
 	Method 	AddComponent<T>:T( comp:T ) Where T Extends Component
 		Local box:= EntityBox.GetFromEntity( Self )
 		If Not box

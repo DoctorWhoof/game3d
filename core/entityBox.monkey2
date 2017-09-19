@@ -8,7 +8,7 @@ Class EntityBox
 	
 	Private
 	Global _all:= New Map< Entity,EntityBox >
-	
+
 	Field _entity:Entity
 	Field _viewer:SceneView
 	Field _time:Double
@@ -28,6 +28,10 @@ Class EntityBox
 		Return _time	
 	End
 	
+	Property Components:Component[]()
+		Return _components.ToArray()
+	End
+	
 	'************************************* Public Methods *************************************
 	
 	Method New( e:Entity )
@@ -38,13 +42,13 @@ Class EntityBox
 
 	Method AddComponent( c:Component )
 		If _componentsByName.Contains( c.Name )
-			Print( "EntityBox: Component	" + c.Name + " already exists." )
+'			Print( "EntityBox: Component	" + c.Name + " already exists." )
 			Return
 		End
 		_componentsByName.Add( c.Name, c )
 		_components.Push( c )
 		c.SetBox( Self )
-		Print( "EntityBox '" + _entity.Name + "': Added Component " + c.Name )
+'		Print( "EntityBox '" + _entity.Name + "': Added Component " + c.Name )
 	End
 	
 	Method GetComponent<T>:T( name:String )
@@ -111,6 +115,7 @@ Class EntityBox
 		_components.Clear()
 		_componentsByName.Clear()
 		_all.Remove( _entity )
+		_entity = Null
 	End
 	'************************************* Static Functions *************************************
 

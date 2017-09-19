@@ -44,15 +44,45 @@ Class Component
 	End
 	
 	'************************************* Public methods *************************************
+	
+	Method List()
+		Local info :TypeInfo = Self.InstanceType
+		
+'		Print info.Name	'class name
+		
+		For Local decl:DeclInfo = Eachin info.GetDecls()	'all fields
+	
+			If( ( decl.Kind = "Field" ) Or ( decl.Kind = "Global" ) ) And decl.Settable
+'				Print "    " + decl.Name + ": " + decl.Type + " = "' + StringFromDecl( decl )
+			End
+			
+		Next
+	End
+	
+	Method StringFromDecl:String( d:DeclInfo )
+		Select d.Type.Name
+		Case "Double" Return String( Cast<Double>( d.Get( d ) ) )
+		Case "Float" Return String( Cast<Float>( d.Get( d ) ) )
+		Case "String" Return String( Cast<String>( d.Get( d ) ) )
+		Case "Bool" Return ( Cast<Bool>( d.Get( d ) )? "True" Else "False"  )
+		Case "Float[]" Return "[]"
+		Case "String[]" Return "[]"
+		End
+		Return "invalid type"
+	End
+'	
+'	Method FromJson( json:JsonObject )
+'	End
 		
 	Method New( name:String )
 		Name = name
 	End
 	
+	
 	Method SetBox( box:EntityBox )
 		_box = box	
 	End
-
+	
 	Method Start()
 		_init = True
 		OnStart()	
@@ -88,11 +118,14 @@ Class Component
 
 	Method Destroy()
 		OnDestroy()
-		_box.RemoveComponent( Self )
+		_entity = Null
+		_box = Null
 	End
+	
 
 	'************************************* Virtual methods *************************************
-	
+
+	Protected
 	Method OnStart() Virtual
 	End
 	

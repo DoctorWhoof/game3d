@@ -1,6 +1,6 @@
 Namespace game3d
 
-Class CircleRenderer Extends Component
+Class Circle Extends Component
 	
 	Field radius:Double = 32.0
 	

@@ -19,7 +19,7 @@ Class AnimSprite Extends Sprite
 	Field _animations := New StringMap< AnimationClip >		'List of available animation clips
 	Field _offset :Int										'Current frame offset
 	Field _framerate:Double	= 15.0							'Frame rate, if a clip is not provided
-	
+
 	'Misc
 	Field _firstFrame := True
 	Field _hasReachedEnd := False

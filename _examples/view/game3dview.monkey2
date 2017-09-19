@@ -1,8 +1,8 @@
 
 #Import "../components/card"
 #Import "../components/spin"
-#Import "../components/spriteRenderer"
-#Import "../components/donutRenderer"
+#Import "../components/spriteAnim"
+#Import "../components/donut"
 #Import "../../graphics/animsprite"
 
 #Import "../images/cats.png"
@@ -32,7 +32,7 @@ Class Game3dView Extends SceneView
 		test2.Parent = test1
 		test2.Position = New Vec3f( 4, 0, 0 )
 		test2.AddComponent( New Spin( 3, 0 ,0 ) )
-		test2.AddComponent( New DonutRenderer( 1, 0.25 ) )
+		test2.AddComponent( New Donut( 1, 0.25 ) )
 		
 		'I may move a lot of the AnimSprite functionality into the SpriteRenderer component, and use regular Sprites instead
 		Local test3 := New AnimSprite( "asset::blob.png", 16, 16, 0, 0, Null  )
@@ -42,7 +42,7 @@ Class Game3dView Extends SceneView
 		test3.Position = New Vec3f( -4, 0, 0 )
 		test3.Scale = New Vec3f( 2, 2, 2 )
 		test3.Parent = test1
-		test3.AddComponent( New SpriteRenderer )	'currently does nothing but calling "Update(time)" on AnimSprite on every frame
+		test3.AddComponent( New SpriteAnim )	'currently does nothing but calling "Update(time)" on AnimSprite on every frame
 		
 		'Another model creation component
 		Local test4 := New Model

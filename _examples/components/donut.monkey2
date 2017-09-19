@@ -1,6 +1,6 @@
 Namespace game3d
 
-Class DonutRenderer Extends Component
+Class Donut Extends Component
 	
 	Private
 	Field radius:Double, sectionRadius:Double

@@ -1,0 +1,13 @@
+{
+	"Controls":{
+		"Up":"Key.Up",
+		"Down":"Key.Down",
+		"Left":"Key.Left",
+		"Right":"Key.Right",
+		"Use":"Key.Z"
+	},
+	"Preferences":{
+		"Volume":75,
+		"FullScreen":true
+	}
+}

@@ -1,4 +1,4 @@
-#Import "../components/circleRenderer"
+#Import "../components/circle"
 #Import "../components/sinePosition"
 #Import "../components/grid2d"
 
@@ -13,7 +13,7 @@ Class Game2dView Extends SceneView
 	Method OnStart() Override
 		Local obj1 := New Entity	'Look Ma! No 3d renderer! :-)
 		obj1.AddComponent( New Grid2D )
-		obj1.AddComponent( New CircleRenderer( 20 ) )
+		obj1.AddComponent( New Circle( 20 ) )
 		obj1.AddComponent( New SinePosition( 0.5, 20, 20, 0 ) )
 	End
 	
