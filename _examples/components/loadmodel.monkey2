@@ -3,7 +3,8 @@ Namespace game3d
 
 Class LoadModel Extends Component
 	
-	Field path:= ""
+	Private
+	Field _path:= ""
 	
 	Public
 	Method New()
@@ -12,12 +13,11 @@ Class LoadModel Extends Component
 	
 	Method New( path:String )
 		Super.New( "LoadModel" )
-		Self.path = path
+		Self._path = path
 	End
 	
 	Method OnStart() Override
-		Local model := Cast<Model>( Entity )
-		Assert( model, "LoadModel: Entity needs to be of 'Model' class" )
-		model.Mesh = Mesh.Load( path )
+		GameObject.SetEntity( Model.Load( _path ) )
 	End
+	
 End

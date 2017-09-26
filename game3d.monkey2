@@ -7,7 +7,8 @@ Namespace game3d
 #Import "<mojo3d-loaders>"
 '#Import "<mojo3d-physics>"
 
-#Import "core/entityBox"
+'#Import "core/entityBox"
+#Import "core/gameobject"
 #Import "core/serialize"
 #Import "materialLibrary/materialLibrary"
 
@@ -16,6 +17,7 @@ Namespace game3d
 #Import "extensions/rect"
 #Import "extensions/canvas"
 #Import "extensions/vector"
+#Import "extensions/scene"
 
 #Import "math/math"
 #Import "math/area"
@@ -61,6 +63,7 @@ Class SceneView Extends View
 	Global _currentViewer:SceneView
 
 	Field _firstFrame := True
+	Field _init := False
 	Field _paused:= False
 	Field _echoStack:= New Stack<String>		'Contains all the text messages to be displayed
 	Field _echoColorStack:= New Stack<Color>	'Contains all the text messages colors
@@ -80,6 +83,8 @@ Class SceneView Extends View
 	
 	Property Camera:Camera()
 		Return _camera
+	Setter( cam:Camera )
+		_camera = cam
 	End
 	
 	
@@ -178,16 +183,14 @@ Class SceneView Extends View
 		_scene.AmbientLight = Color.Black
 		
 		'Camera
-		_camera = New Camera
-		_camera.FOV = 60
-		_camera.Near = 0.1
-		_camera.Far = 100
-		_camera.AddComponent( New BaseObject( "Camera" ) )
+'		_camera = New Camera
+'		_camera.FOV = 60
+'		_camera.Near = 0.1
+'		_camera.Far = 100
 		
 		'Default Light
-		_keyLight = New Light
-		_keyLight.Rotate( 45, 45, 0 )
-		_keyLight.AddComponent( New BaseObject( "LightKey" ) )
+'		_keyLight = New Light
+'		_keyLight.Rotate( 45, 45, 0 )
 		
 		Style.Font = smallFont
 	End
@@ -205,13 +208,19 @@ Class SceneView Extends View
 		Self._canvas = canvas
 		
 		'********* Init *********
-		If _firstFrame
+		If Not _init
 			If Layout = "fill" Then _camera2D.SetSize( Width, Height )
 			Clock.Reset()
 			OnStart()
-			EntityBox.StartAll()	'Maybe: set Viewer property here?
-			_firstFrame = False
+			_init = True
+			Return
+		End
+		
+		'********* First frame *********
+		If _firstFrame
+			Scene.Start()	'Maybe: set Viewer property here?
 			StartDone()
+			_firstFrame = False
 		End
 		
 		'********* Update necessary modules *********
@@ -223,11 +232,10 @@ Class SceneView Extends View
 		If Not editMode
 			If Not _paused
 				OnUpdate()
-				EntityBox.UpdateAll()
+				Scene.Update()
 '				_scene.World.Update()
 			End
 		End
-		
 		
 		Profile.Finish( "upd" )
 		Echo( "Update: " + Profile.GetString( "upd" ) )
@@ -236,7 +244,13 @@ Class SceneView Extends View
 		Profile.Start( "drw" )
 		
 		'3D drawing
-		If render3DScene Then _scene.Render( _canvas, _camera )
+		If render3DScene And _camera
+			Echo( "rendering 3d scene...")
+			_scene.Render( _canvas, _camera )
+		Else
+			Echo( "No camera!")
+		End
+		
 		'2D drawing
 		canvas.PushMatrix()
 		
@@ -251,7 +265,7 @@ Class SceneView Extends View
 			canvas.Scale( scale, scale )
 		End
 		canvas.Translate( -_camera2D.X + (_camera2D.Width/2.0), -_camera2D.Y + (_camera2D.Height/2.0) )
-		EntityBox.DrawAll( canvas )
+		Scene.Draw( canvas )
 		OnDraw( canvas )
 		canvas.PopMatrix()			
 		canvas.Flush()

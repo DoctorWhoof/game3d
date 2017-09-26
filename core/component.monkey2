@@ -3,9 +3,9 @@ Namespace game3d
 Class Component
 	
 	Protected
-	Field _box				:EntityBox
-	Field _entity 			:Entity
-	Field _name 			:= "noName"
+	Field _gameObj			:GameObject
+	Field _entity			:Entity
+	Field _name				:= "noName"
 	Field _superClass		:= "Component"	'normally set by Name, override it to be able to GetComponent by superclass (i.e. items)
 	Field _init				:= False
 	Field _enabled			:= True
@@ -21,6 +21,16 @@ Class Component
 		_superClass = name
 	End
 	
+	Property GameObjectByName:String()
+		Return _gameObj.Name
+	Setter( name:String )
+		_gameObj = GameObject.Find( name )
+	End
+	
+	Property GameObject:GameObject()
+		Return _gameObj
+	End
+	
 	Property Enabled:Bool()
 		Return _enabled
 	Setter( isEnabled:Bool )
@@ -28,19 +38,19 @@ Class Component
 	End
 	
 	Property Entity:Entity()
-		Return _box.Entity
+		Return _gameObj.Entity
 	End
 	
 	Property Viewer:SceneView()
-		Return _box.Viewer
+		Return _gameObj.Viewer
 	End
 	
 	Property Camera:Camera()
-		Return _box.Viewer.Camera
+		Return _gameObj.Viewer.Camera
 	End
 	
 	Property Time:Double()
-		Return _box.Time
+		Return _gameObj.Time
 	End
 	
 	'************************************* Public methods *************************************
@@ -56,13 +66,15 @@ Class Component
 		Name = name
 	End
 	
-	
-	Method SetBox( box:EntityBox )
-		_box = box	
+'	
+	Method SetGameObject( obj:GameObject )
+		_gameObj = obj
+'		Print "    " + Name + " gameObject:" + obj.Name
 	End
 	
 	Method Start()
 		_init = True
+		Print ( "	Starting " + Name )
 		OnStart()	
 	End
 		
@@ -97,13 +109,19 @@ Class Component
 	Method Destroy()
 		OnDestroy()
 		_entity = Null
-		_box = Null
+		_gameObj = Null
+	End
+	
+	'Called right after component is added (and already knows its gameobject)
+	Method OnCreate( viewer:SceneView ) Virtual
 	End
 	
 
 	'************************************* Virtual methods *************************************
 
 	Protected
+
+	'Called before the first frame update
 	Method OnStart() Virtual
 	End
 	
