@@ -92,7 +92,7 @@ Class Area<T>
 	
 	Property Handle:Vec2<T>()
 		Return _handle
-	Setter( vec:Vec2f )
+	Setter( vec:Vec2<T> )
 		_handle.X = vec.X
 		_handle.Y = vec.Y
 		_pivotX = vec.X * _width

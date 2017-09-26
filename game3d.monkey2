@@ -7,21 +7,25 @@ Namespace game3d
 #Import "<mojo3d-loaders>"
 '#Import "<mojo3d-physics>"
 
-#Import "core/entityExtension"
 #Import "core/entityBox"
+#Import "core/serialize"
 #Import "materialLibrary/materialLibrary"
+
+#Import "extensions/entity"
+#Import "extensions/matrix"
+#Import "extensions/rect"
+#Import "extensions/canvas"
+#Import "extensions/vector"
 
 #Import "math/math"
 #Import "math/area"
-#Import "math/matrix_ext"
-#Import "math/rect_ext"
 
 #Import "clock/clock"
 
 #Import "util/wasd"
 #Import "util/profile"
 
-#Import "graphics/canvas_ext"
+
 
 Using std..
 Using mojo..
@@ -178,11 +182,12 @@ Class SceneView Extends View
 		_camera.FOV = 60
 		_camera.Near = 0.1
 		_camera.Far = 100
-		_camera.Name = "Camera"
+		_camera.AddComponent( New BaseObject( "Camera" ) )
 		
 		'Default Light
 		_keyLight = New Light
 		_keyLight.Rotate( 45, 45, 0 )
+		_keyLight.AddComponent( New BaseObject( "LightKey" ) )
 		
 		Style.Font = smallFont
 	End

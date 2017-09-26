@@ -1,8 +1,8 @@
 Namespace game3d
 
-#Import "material_ext"
-#Import "texture_ext"
-#Import "model_ext"
+#Import "../extensions/material"
+#Import "../extensions/texture"
+#Import "../extensions/model"
 
 Class MaterialLibrary
 	
@@ -66,14 +66,16 @@ Class MaterialLibrary
 		'textures!
 		For Local name := Eachin _allTextures.Keys
 			Local tex := GetTexture( name )
-			texturesJson.SetObject( name, tex.ToJson().ToObject() )
+'			texturesJson.Serialize( name, _allTextures[ name ] )
+'			texturesJson.SetObject( name, tex.ToJson().ToObject() )
 		End
 		
 		'materials!
-		For Local name := Eachin _allMaterials.Keys
-			Local mat := GetMaterial( name )
-			materialsJson.SetObject( name, mat.ToJson().ToObject() )
-		End
+'		For Local name := Eachin _allMaterials.Keys
+'			Local mat := GetMaterial( name )
+''			materialsJson.SetObject( name, mat.ToJson().ToObject() )
+'			materialsJson.SetObject( name, GetJson( mat ).ToObject() )
+'		End
 		
 		'combine!
 		json.SetObject( "Textures", texturesJson.ToObject() )

@@ -29,11 +29,11 @@ Class Texture Extension
 	End
 	
 	
-	Method ToJson:JsonObject()
-		Local json := New JsonObject
-		json.SetString( "Path", Path )
-		json.SetNumber( "Flags", Int(Flags) )
-		Return json
-	End
+'	Method ToJson:JsonObject()
+'		Local json := New JsonObject
+'		json.SetString( "Path", Path )
+'		json.SetNumber( "Flags", Int(Flags) )
+'		Return json
+'	End
 	
 End

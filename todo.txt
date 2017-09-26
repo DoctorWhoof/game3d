@@ -1,6 +1,8 @@
 To do:
 
-- Component .json Load/Save
+- Component .json
+	- Load
+	- Save
 
 - Material lookup by name? Would allow sharing of materials, no need for material components.
 	- Another solution: material component that looks up a material by name... :-)

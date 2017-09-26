@@ -1,10 +1,15 @@
 Namespace game3d
 
+
 Class LoadModel Extends Component
 	
 	Field path:= ""
 	
 	Public
+	Method New()
+		Super.New( "LoadModel" )
+	End
+	
 	Method New( path:String )
 		Super.New( "LoadModel" )
 		Self.path = path

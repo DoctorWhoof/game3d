@@ -1,9 +1,15 @@
+Namespace mojo3d.graphics
+
 #Import "component"
+
 
 Class Entity Extension
 	
 	Property Components:Component[]()
 		Local box:= EntityBox.GetFromEntity( Self )
+		If Not box
+			box = New EntityBox( Self )
+		End
 		Return box.Components	
 	End
 	
@@ -20,15 +26,15 @@ Class Entity Extension
 		'To do: Add listeners for destroyed, hidden and shown
 	End
 	
-	Method GetComponent<T>:T( name:String )
-		Local box:= EntityBox.GetFromEntity( Self )
-		Return box.GetComponent<T>( name )
+	
+	Method GetComponent<T>:T( name:String ) Where T Extends Component
+		Return EntityBox.GetFromEntity( Self ).GetComponent<T>( name )
 	End
+
 	
 	
-	Method GetComponentBySuperClass<T>:T( sup:String )
-		Local box:= EntityBox.GetFromEntity( Self )
-		Return box.GetComponentBySuperClass<T>( name )
+	Method GetComponentBySuperClass<T>:T( sup:String ) Where T Extends Component
+		Return EntityBox.GetFromEntity( Self ).GetComponentBySuperClass<T>( name )
 	End
 	
 '	'Marked for removal
@@ -47,4 +53,21 @@ Class Entity Extension
 		Scale = oldScl
 	End
 	
+	Method ToJson:JsonObject()
+		Local json:= New JsonObject
+		For Local c := Eachin Components
+			json.SetObject( c.Name, c.ToJsonValue().ToObject() )
+		Next
+		Return json
+	End
+	
+	'************************************* Public Functions *************************************
+	
+Function Find:Entity( name:String )
+'		Return EntityBox
+	Return Null
 End
+	
+End
+
+

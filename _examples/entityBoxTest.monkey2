@@ -50,14 +50,14 @@ Class GameView Extends SceneView
 		Local wireTex := Texture.Load( "asset::wire.png", "TexWire", TextureFlags.FilterMipmap )
 		Local catTex := Texture.Load( "asset::cat.png", "TexCat", TextureFlags.FilterMipmap )
 	
-		Local mat := New PbrMaterial( True, False, False )
+		Local mat := New PbrMaterial
 		mat.Name = "MatWire"
 		mat.ColorTexture = wireTex
 		mat.ColorFactor = New Color( 0, 1, 1.5 )
 		mat.EmissiveTexture = wireTex
 		mat.EmissiveFactor = New Color( 0, 1, 1.5 )
 		
-		Local matGlow := New PbrMaterial( True, False, False )
+		Local matGlow := New PbrMaterial
 		matGlow.Name = "MatGlow"
 		matGlow.ColorFactor = New Color( 4, .7, 0.2 )
 		matGlow.EmissiveFactor = matGlow.ColorFactor
@@ -87,12 +87,9 @@ Class GameView Extends SceneView
 		test2.AddComponent( New ChangeColor )
 	
 		KeyLight.Visible = False
-	
-		For Local c := Eachin test1.Components
-			c.List()
-		Next
 		
 		MaterialLibrary.Save( "" )
+
 	End
 End
 

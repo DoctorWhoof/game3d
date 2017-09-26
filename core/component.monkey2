@@ -1,8 +1,6 @@
 Namespace game3d
 
 Class Component
-
-	Field enabled			:= True
 	
 	Protected
 	Field _box				:EntityBox
@@ -10,6 +8,7 @@ Class Component
 	Field _name 			:= "noName"
 	Field _superClass		:= "Component"	'normally set by Name, override it to be able to GetComponent by superclass (i.e. items)
 	Field _init				:= False
+	Field _enabled			:= True
 
 
 	'************************************* Public properties *************************************
@@ -22,6 +21,12 @@ Class Component
 		_superClass = name
 	End
 	
+	Property Enabled:Bool()
+		Return _enabled
+	Setter( isEnabled:Bool )
+		_enabled = isEnabled
+	End
+	
 	Property Entity:Entity()
 		Return _box.Entity
 	End
@@ -29,11 +34,6 @@ Class Component
 	Property Viewer:SceneView()
 		Return _box.Viewer
 	End
-	
-'	Marked for removal
-'	Property Box:EntityBox()
-'		Return _box	
-'	End
 	
 	Property Camera:Camera()
 		Return _box.Viewer.Camera
@@ -45,30 +45,8 @@ Class Component
 	
 	'************************************* Public methods *************************************
 	
-	Method List()
-		Local info :TypeInfo = Self.InstanceType
-		
-'		Print info.Name	'class name
-		
-		For Local decl:DeclInfo = Eachin info.GetDecls()	'all fields
-	
-			If( ( decl.Kind = "Field" ) Or ( decl.Kind = "Global" ) ) And decl.Settable
-'				Print "    " + decl.Name + ": " + decl.Type + " = "' + StringFromDecl( decl )
-			End
-			
-		Next
-	End
-	
-	Method StringFromDecl:String( d:DeclInfo )
-		Select d.Type.Name
-		Case "Double" Return String( Cast<Double>( d.Get( d ) ) )
-		Case "Float" Return String( Cast<Float>( d.Get( d ) ) )
-		Case "String" Return String( Cast<String>( d.Get( d ) ) )
-		Case "Bool" Return ( Cast<Bool>( d.Get( d ) )? "True" Else "False"  )
-		Case "Float[]" Return "[]"
-		Case "String[]" Return "[]"
-		End
-		Return "invalid type"
+	Method ToJsonValue:JsonValue()
+		Return Serialize( Self )
 	End
 '	
 '	Method FromJson( json:JsonObject )
@@ -92,19 +70,19 @@ Class Component
 		If Not _init
 			Start()
 		End
-		If enabled
+		If _enabled
 			OnUpdate()
 		End
 	End
 	
 	Method Draw( canvas:Canvas )
-		If enabled
+		If _enabled
 			OnDraw( canvas )
 		End
 	End
 	
 	Method LateUpdate()
-		If enabled
+		If _enabled
 			OnLateUpdate()
 		End
 	End

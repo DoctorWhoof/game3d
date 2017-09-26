@@ -58,6 +58,13 @@ Class EntityBox
 		Return Null
 	End
 	
+'	Method GetComponent:Component( name:String )
+'		Local c := _componentsByName.Get( name )
+'		If c <> Null Then Return c
+'		Print( "EntityBox: Warning, no component named " + name + " found in entity " + _entity.Name + "." )
+'		Return Null
+'	End
+	
 	Method GetComponentBySuperClass<T>:T( sup:String )
 		For Local c := Eachin _components
 			If c.superClass = sup
@@ -85,19 +92,19 @@ Class EntityBox
 	Method Update()
 		_time = Clock.Now() + timeOffset
 		For Local c:= Eachin _components
-			If c.enabled Then c.Update()
+			If c.Enabled Then c.Update()
 		Next
 	End
 	
 	Method Draw( canvas:Canvas )
 		For Local c:= Eachin _components
-			If c.enabled Then c.Draw( canvas )
+			If c.Enabled Then c.Draw( canvas )
 		Next
 	End
 	
 	Method LateUpdate()
 		For Local c:= Eachin _components
-			If c.enabled Then c.LateUpdate()
+			If c.Enabled Then c.LateUpdate()
 		Next
 	End
 	
