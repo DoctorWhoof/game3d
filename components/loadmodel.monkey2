@@ -16,7 +16,7 @@ Class LoadModel Extends Component
 		Self._path = path
 	End
 	
-	Method OnStart() Override
+	Method OnCreate() Override
 		GameObject.SetEntity( Model.Load( _path ) )
 	End
 	

@@ -12,12 +12,21 @@ Namespace game3d
 #Import "core/serialize"
 #Import "materialLibrary/materialLibrary"
 
+#Import "components/cameracomponent"
+#Import "components/lightcomponent"
+#Import "components/loadmodel"
+#Import "components/loadmaterial"
+
 #Import "extensions/entity"
 #Import "extensions/matrix"
 #Import "extensions/rect"
 #Import "extensions/canvas"
 #Import "extensions/vector"
+#Import "extensions/color"
 #Import "extensions/scene"
+#Import "extensions/material"
+#Import "extensions/texture"
+#Import "extensions/model"
 
 #Import "math/math"
 #Import "math/area"
@@ -179,18 +188,6 @@ Class SceneView Extends View
 
 		'3D Scene
 		_scene = Scene.GetCurrent()
-		_scene.ClearColor = Color.Black'New Color( .1, .1, .1 )
-		_scene.AmbientLight = Color.Black
-		
-		'Camera
-'		_camera = New Camera
-'		_camera.FOV = 60
-'		_camera.Near = 0.1
-'		_camera.Far = 100
-		
-		'Default Light
-'		_keyLight = New Light
-'		_keyLight.Rotate( 45, 45, 0 )
 		
 		Style.Font = smallFont
 	End
@@ -244,11 +241,12 @@ Class SceneView Extends View
 		Profile.Start( "drw" )
 		
 		'3D drawing
-		If render3DScene And _camera
-			Echo( "rendering 3d scene...")
-			_scene.Render( _canvas, _camera )
-		Else
-			Echo( "No camera!")
+		If render3DScene
+			If Camera
+				_scene.Render( _canvas, _camera )
+			Else
+				Echo( "No Camera!")
+			End
 		End
 		
 		'2D drawing

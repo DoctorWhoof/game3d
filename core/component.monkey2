@@ -21,11 +21,11 @@ Class Component
 		_superClass = name
 	End
 	
-	Property GameObjectByName:String()
-		Return _gameObj.Name
-	Setter( name:String )
-		_gameObj = GameObject.Find( name )
-	End
+'	Property GameObjectByName:String()
+'		Return _gameObj.Name
+'	Setter( name:String )
+'		_gameObj = GameObject.Find( name )
+'	End
 	
 	Property GameObject:GameObject()
 		Return _gameObj
@@ -55,9 +55,9 @@ Class Component
 	
 	'************************************* Public methods *************************************
 	
-	Method ToJsonValue:JsonValue()
-		Return Serialize( Self )
-	End
+'	Method ToJsonValue:JsonValue()
+'		Return Serialize( Self )
+'	End
 '	
 '	Method FromJson( json:JsonObject )
 '	End
@@ -74,7 +74,6 @@ Class Component
 	
 	Method Start()
 		_init = True
-		Print ( "	Starting " + Name )
 		OnStart()	
 	End
 		
@@ -113,7 +112,7 @@ Class Component
 	End
 	
 	'Called right after component is added (and already knows its gameobject)
-	Method OnCreate( viewer:SceneView ) Virtual
+	Method OnCreate() Virtual
 	End
 	
 

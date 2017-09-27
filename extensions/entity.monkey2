@@ -42,16 +42,16 @@ Class Entity Extension
 ''		Return EntityBox.GetFromEntity( Self )
 ''	End
 ''	
-'	'Preserves current world space transform when changing parent
-'	Method SwitchParent( newParent:Entity )
-'		Local oldPos := Position
-'		Local oldRot := Rotation
-'		Local oldScl := Scale
-'		Parent = newParent
-'		Position = oldPos
-'		Rotation = oldRot
-'		Scale = oldScl
-'	End
+	'Preserves current world space transform when changing parent
+	Method SwitchParent( newParent:Entity )
+		Local oldPos := Position
+		Local oldRot := Rotation
+		Local oldScl := Scale
+		Parent = newParent
+		Position = oldPos
+		Rotation = oldRot
+		Scale = oldScl
+	End
 '	
 '	Method ToJson:JsonObject()
 '		Local json:= New JsonObject
@@ -62,7 +62,6 @@ Class Entity Extension
 '	End
 
 	Method Start()
-		Print "-------------------- Starting entity " + Name + "----------------------"
 		Local obj := GameObject.GetFromEntity( Self )
 		obj.Start()
 		For Local c := Eachin Children

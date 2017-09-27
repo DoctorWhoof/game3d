@@ -27,6 +27,38 @@ Class GameObject
 		_name = name
 	End
 	
+	Property Position:Float[]()
+		Return Entity.Position.ToArray()
+	Setter( p:Float[] )
+		Entity.Position = Vec3f.FromArray( p )
+	End
+	
+	Property Rotation:Float[]()
+		Return Entity.Rotation.ToArray()
+	Setter( r:Float[] )
+		Entity.Scale = Vec3f.FromArray( r )
+	End
+	
+	Property Scale:Float[]()
+		Return Entity.Scale.ToArray()
+	Setter( s:Float[] )
+		Entity.Scale = Vec3f.FromArray( s )
+	End
+	
+	Property Parent:String()
+		If Entity.Parent
+			Return GetFromEntity( Entity.Parent ).Name
+		Else
+			Return Null
+		End
+	Setter( pName:String )
+		If pName <> ""
+			Entity.Parent = Find( pName ).Entity
+		Else
+			Entity.Parent = Null
+		End
+	End
+	
 	Property Entity:Entity()
 		Return _entity
 	End
@@ -37,8 +69,6 @@ Class GameObject
 	
 	Property Viewer:SceneView()
 		Return _viewer
-	Setter( v:SceneView )
-		_viewer = v
 	End
 	
 	Property Time:Double()
@@ -47,24 +77,22 @@ Class GameObject
 	
 	Property Components:Component[]()
 		Return _components.ToArray()
+	Setter( c:Component[] )
+		'dummy setter for proper serialization!
 	End
 	
 	'************************************* Public Methods *************************************
 	
 	Method New( name:String )
-		Name = name
-		_viewer = SceneView.Current()
+		_viewer = SceneView.Current()		'May need rethinking. Do we need it to be assigned more specifically?
 		_all.Push( Self )
-		
-'		Local ent := New Entity
-'		ent.Name = name + "DefaultEntity"
-'		SetEntity( ent)
+		Name = name
 	End
 	
 	
 	Method SetEntity( ent:Entity )
 		If _entity
-			Print ( "Removing entity: " + _entity.Name + " from GameObject " + Name)
+'			Print ( "Removing entity: " + _entity.Name + " from GameObject " + Name)
 			ent.Parent = _entity.Parent
 			ent.Position = _entity.Position
 			ent.Rotation = _entity.Rotation
@@ -74,27 +102,25 @@ Class GameObject
 			_entity.Destroy()
 		End
 		_entity = ent
-		_entity.Destroyed = Lambda()
-			Self.Destroy()
-		End
 		_allByEntity.Add( _entity, Self )
-		Print ( "Added entity: " + _entity.Name + " to GameObject " + Name + "~n")
+'		Print ( "Added entity: " + _entity.Name + " to GameObject " + Name )
 	End
 	
 
-	Method AddComponent( c:Component )
+	Method AddComponent<T>:T( c:T ) Where T Extends Component
 		If _componentsByName.Contains( c.Name )
 			Print( "GameObject: Component	" + c.Name + " already exists." )
-			Return
+			Return Null
 		End
 		_componentsByName.Add( c.Name, c )
 		_components.Push( c )
 		c.SetGameObject( Self )
-		c.OnCreate( Viewer )
+		c.OnCreate()
+		Return c
 	End
 	
 	
-	Method GetComponent<T>:T( name:String )
+	Method GetComponent<T>:T( name:String ) Where T Extends Component
 		Local c := _componentsByName.Get( name )
 		If c <> Null Then Return Cast<T>( c )
 		Print( "GameObject: Warning, no component named " + name + " found in entity " + _entity.Name + "." )
@@ -102,7 +128,7 @@ Class GameObject
 	End
 	
 	
-	Method GetComponentBySuperClass<T>:T( sup:String )
+	Method GetComponentBySuperClass<T>:T( sup:String ) Where T Extends Component
 		For Local c := Eachin _components
 			If c.superClass = sup
 				Local castComp := Cast<T>( c )
@@ -119,10 +145,16 @@ Class GameObject
 	End
 	
 	
+	Method AddComponentsToJson( json:JsonObject )
+		For Local c := Eachin Components
+			json.Serialize( c.Name, c )
+		Next
+	End
+	
+	
 	'************************************* Component events *************************************
 		
 	Method Start()
-		Print ( "Starting " + Name )
 		For Local c:= Eachin _components
 			c.Start()
 		Next
@@ -167,16 +199,52 @@ Class GameObject
 		_all.Remove( Self )
 		_allByName.Remove( Name )
 		_allByEntity.Remove( _entity )
-		_entity = Null
+		If _entity
+			_entity.Destroy()
+			_entity = Null
+		End
 	End
 	'************************************* Static Functions *************************************
 
 	Function  GetFromEntity:GameObject( e:Entity )
 		Return _allByEntity[ e ]
 	End
+	
+	Function  GetFromEntityWithChildren:GameObject[]( e:Entity )
+		Local stack := New Stack<GameObject>
+		stack.Push( _allByEntity[ e ] )
+		For Local c := Eachin e.Children
+			stack.AddAll( GetFromEntityWithChildren( c ) )
+		Next
+		Return stack.ToArray()
+	End
 
 	Function  Find:GameObject( name:String )
 		Return _allByName[ name ]
 	End
 	
+	Function GetFromScene:GameObject[]( scene:Scene )
+		Local stack := New Stack<GameObject>
+		For Local e:= Eachin scene.GetRootEntities()
+			stack.AddAll( GetFromEntityWithChildren( e ) )
+		End
+		Return stack.ToArray()
+	End
+	
 End
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

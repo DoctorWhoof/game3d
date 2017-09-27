@@ -1,9 +1,5 @@
 Namespace game3d
 
-#Import "../extensions/material"
-#Import "../extensions/texture"
-#Import "../extensions/model"
-
 Class MaterialLibrary
 	
 	Private
