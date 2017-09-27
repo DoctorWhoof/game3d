@@ -8,11 +8,27 @@ Using std..
 Using mojo..
 
 Class JsonObject Extension 
+	
+	Method Merge( key:String, json:JsonObject )
+		If Contains( key )
+			Local map := ToObject()[ key ].ToObject()
+			Local otherMap := json.ToObject()
+			
+			For Local k := Eachin otherMap.Keys
+				map[ k ] = otherMap[ k ]
+			Next
+			SetObject( key, map )
+		Else
+			SetObject( key, json.ToObject() )
+		End
+	End
+	
+
 	Method Serialize( key:String, v:Variant )
 		
 		Local typeName := v.Type.Name
 		
-		If typeName.Right(2) = "[]"
+		If v.Type.Kind = "Array"
 			Local arrayType := typeName.Slice(0, typeName.Length - 2)
 			Select arrayType
 			Case "Float"
@@ -26,7 +42,8 @@ Class JsonObject Extension
 			Case "game3d.Component"
 				Local arr := Cast<game3d.Component[]>( v )
 				For Local c := Eachin arr
-					Serialize( c.Name, c )
+					Merge( c.Name, SerializeDecls( c.InstanceType.SuperType, c ) )
+					Merge( c.Name, SerializeDecls( c.InstanceType, c ) )
 				Next
 			Default
 				Print( "Serialize warning: Unrecognized array type" )
@@ -46,34 +63,34 @@ Class JsonObject Extension
 			Case "UInt"
 				SetNumber( key, Cast<UInt>( v ) )
 			Default
-				Local newObj:= New JsonObject
-				
-				Local type:TypeInfo
-				If v.Type.ExtendsType( TypeInfo.GetType( "Object" ) )	'was getting crashes getting DynamicType on some structs...
-					type = v.DynamicType
+				If v.Type.Kind="Class" or v.Type.Kind="Interface"
+					Merge( key, SerializeDecls( v.Type.SuperType, v ) )
+					Merge( key, SerializeDecls( v.DynamicType, v ) )
 				Else
-					type = v.Type
+					Merge( key, SerializeDecls( v.Type, v ) )
 				End
-'				Local type:= TypeInfo.GetType( typeName )
-				
-				newObj.SetString( "Class", type.Name )
-				For Local decl:DeclInfo = Eachin type.GetDecls()
-					
-					If ( decl.Kind = "Property" And decl.Settable ) Or ( decl.Kind = "Field" And Not decl.Name.StartsWith("_") )
-						If decl.Type.Name.Slice( 0, 7 ) = "Unknown"
-							Print( "Warning: Property " + decl.Name + " cannot be reflected and can't be serialized." )
-						Else
-							newObj.Serialize( decl.Name, decl.Get( v ) )
-						End
-					End
-				Next
-				SetObject( key, newObj.ToObject() )
+			
 			End
 		End	
 	End
 End
 
+Function SerializeDecls:JsonObject( type:TypeInfo, instance:Variant )
+	Local newObj:= New JsonObject
+	newObj.SetString( "Class", type.Name )
+	For Local decl:DeclInfo = Eachin type.GetDecls()
+		If ( decl.Kind = "Property" And decl.Settable ) Or ( decl.Kind = "Field" And Not decl.Name.StartsWith("_") )
+			If decl.Type.Name.Slice( 0, 7 ) = "Unknown"
+				Print( "Warning: Property " + decl.Name + " cannot be reflected and can't be serialized." )
+			Else
+				newObj.Serialize( decl.Name, decl.Get( instance ) )
+			End
+		End
+	Next
+	Return newObj
+End
 
+Private
 Function GetJsonStack<T,V>:Stack<JsonValue>( v:Variant )
 	Assert( ( v.Type.Kind = "Array" ), "GetJsonStack: Variant " + v.Type.Name + " is not an array" )
 	Local stack := New Stack<JsonValue>
@@ -131,6 +148,7 @@ End
 
 #Rem
 
+Public
 Function Main()
 	Local json := New JsonObject()
 	json.Serialize( "text","Just a little text" )
@@ -146,7 +164,7 @@ End
 
 
 Class KnightWhoSaysNi
-	Private
+	Protected
 	Field _name := "Ni!"
 	Field _value:Float = 1000.0
 	Field _schroob:= New Schruberry
@@ -156,6 +174,9 @@ Class KnightWhoSaysNi
 	Field _style := FightStyle.Full
 	
 	Public
+	Method New()
+	End
+	
 	Property Value:Float()
 		Return _value
 	Setter( v:Float )
@@ -192,15 +213,20 @@ Class KnightWhoSaysNi
 		_color = c
 	End
 	
-	Property Style:FightStyle()
-		Return _style
-	Setter( f:FightStyle )
-		_style = f
-	End
+'	Property Style:FightStyle()
+'		Return _style
+'	Setter( f:FightStyle )
+'		_style = f
+'	End
 		
 End
 
 Class AnotherKnight Extends KnightWhoSaysNi
+	
+	Method New()
+		Super.New()
+		_name = "AnotherNi!"
+	End
 	
 	Property Ni:String()
 		Return "ninininininini"

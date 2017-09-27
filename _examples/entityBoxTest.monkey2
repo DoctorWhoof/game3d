@@ -86,7 +86,7 @@ Class GameView Extends SceneView
 		test1.Transform.Move( New Vec3f( 0, 0.5, 0 ) )
 		
 		Local test2:= New GameObject( "test2" )
-		test2.AddComponent( New LoadModel( "asset::teapotLow.fbx" ) )
+		test2.AddComponent( New DonutModel )
 		test2.AddComponent( New LoadMaterial( "matYellow" ) )
 		test2.AddComponent( New Spin(2,0,0) )
 		test2.Transform.Move( New Vec3f( 1.0, 0, 0 ) )

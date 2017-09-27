@@ -66,6 +66,13 @@ Class Component
 		Name = name
 	End
 	
+'	Method Init()
+'		'Call this after deserializing, to ensure all fields values are applied, and before OnCreate()
+'		Local type := Self.DynamicType	
+'		For Local d := Eachin type.GetDecls()
+'			Print Name + ":" + d.Name
+'		Next
+'	End
 '	
 	Method SetGameObject( obj:GameObject )
 		_gameObj = obj

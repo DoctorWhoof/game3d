@@ -16,6 +16,7 @@ Namespace game3d
 #Import "components/lightcomponent"
 #Import "components/loadmodel"
 #Import "components/loadmaterial"
+#Import "components/donutmodel"
 
 #Import "extensions/entity"
 #Import "extensions/matrix"
