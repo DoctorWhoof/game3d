@@ -99,7 +99,7 @@ Class GameObject
 	Method New()
 		_viewer = SceneView.Current()		'May need rethinking. Do we need it to be assigned more specifically?
 		_all.Push( Self )
-		SetEntity( New Entity )
+'		SetEntity( New Entity )
 	End
 	
 	
@@ -159,7 +159,7 @@ Class GameObject
 	Method List()
 		Local info := InstanceType
 		Local v:= Variant( Self )
-		Print "~n" + Name + ", " + info
+		Print "~n" + Name
 		For Local d := Eachin info.GetDecls()
 			If( d.Kind = "Field" And Not d.Name.StartsWith( "_" ) ) Or ( d.Kind = "Property" And d.Settable )
 				Print "    " + d.Name + ": " + VariantToString( d.Get( v ))
@@ -167,13 +167,6 @@ Class GameObject
 		End
 		
 	End
-	
-	
-'	Method AddComponentsToJson( json:JsonObject )
-'		For Local c := Eachin Components
-'			json.Serialize( c.Name, c )
-'		Next
-'	End
 	
 	
 	'************************************* Component events *************************************

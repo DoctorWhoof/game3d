@@ -113,6 +113,38 @@
 		},
 		"Name":"test2",
 		"Parent":"test1",
+		"Position":[0,0.5,-1],
+		"Rotation":[-0,-0,0],
+		"Scale":[0.25,0.25,0.25],
+		"Spin":{
+			"Class":"game3d.Spin",
+			"Enabled":true,
+			"Name":"Spin",
+			"x":4,
+			"y":0,
+			"z":0
+		},
+		"timeOffset":0
+	},
+	"test3":{
+		"Class":"game3d.GameObject",
+		"DonutModel":{
+			"Class":"game3d.DonutModel",
+			"Enabled":true,
+			"Name":"DonutModel",
+			"innerRadius":0.20000000298023224,
+			"innerSegs":12,
+			"outerRadius":0.5,
+			"outerSegs":24
+		},
+		"LoadMaterial":{
+			"Class":"game3d.LoadMaterial",
+			"Enabled":true,
+			"Material":"matYellow",
+			"Name":"LoadMaterial"
+		},
+		"Name":"test3",
+		"Parent":"test1",
 		"Position":[0,0.5,1],
 		"Rotation":[-0,-0,0],
 		"Scale":[0.25,0.25,0.25],

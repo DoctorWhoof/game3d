@@ -40,21 +40,23 @@ Class GameView Extends SceneView
 		Scene.EnvColor = Color.Black
 		Scene.AmbientLight = Color.Black
 		
-		Local  fog := New FogEffect( Color.Black, 1.0, 5.0 )
+		Local  fog := New FogEffect( Color.Black, 0.1, 5.0 )
 		Scene.AddPostEffect( fog )
 		
-		Local light := New GameObject( "light" )
+		Local light := New GameObject
+		light.Name = "light"
 		Local lightComp := light.AddComponent( New LightComponent )
 		lightComp.CastsShadow = True
 		lightComp.Range = 30.0
 		light.Transform.Move( 10, 10, 0 )
 		light.Transform.PointAt( New Vec3f )
 		
-		Local bounceLight := New GameObject( "bounceLight" )
+		Local bounceLight := New GameObject
 		Local bounceLightComp := bounceLight.AddComponent( New LightComponent )
 		bounceLightComp.Color = New Float[]( 0, 0.4, 0.75, 1.0 )
 		bounceLight.Transform.Move( 0, -10, 0 )
 		bounceLight.Transform.Rotate( -90, 0, 0 )
+		bounceLight.Name = "bounceLight"
 	
 		Local wireTex := Texture.Load( "asset::wire.png", "TexWire", TextureFlags.FilterMipmap )
 		Local catTex := Texture.Load( "asset::cat.png", "TexCat", TextureFlags.FilterMipmap )
@@ -73,14 +75,15 @@ Class GameView Extends SceneView
 		Local matYellow := New PbrMaterial( Color.Yellow, 0.1, 0.5 )
 		matYellow.Name = "matYellow"
 		
-		Local test1 := New GameObject( "test1" )
+		Local test1 := New GameObject
 		test1.AddComponent( New LoadModel( "asset::teapotLow.fbx" ) )
 		test1.AddComponent( New LoadMaterial( "MatRed" ) )
 		test1.AddComponent( New Spin(0,1,0) )
 		test1.AddComponent( New ChangeColor )
 		test1.Transform.Move( New Vec3f( 0, 0.5, 0 ) )
+		test1.Name = "test1"
 		
-		Local test2:= New GameObject( "test2" )
+		Local test2:= New GameObject
 		Local donut1 := New DonutModel
 		donut1.outerRadius = 0.5
 		test2.AddComponent( donut1 )
@@ -88,9 +91,10 @@ Class GameView Extends SceneView
 		test2.AddComponent( New Spin(4,0,0) )
 		test2.Transform.Move( New Vec3f( 0, 0, -1.0 ) )
 		test2.Transform.Scale = New Vec3f( 0.25 )
+		test2.Name = "test2"
 		test2.Parent = "test1"
 		
-		Local test3:= New GameObject( "test2" )
+		Local test3:= New GameObject
 		Local donut2 := New DonutModel
 		donut2.outerRadius = 0.5
 		test3.AddComponent( donut2 )
@@ -98,6 +102,7 @@ Class GameView Extends SceneView
 		test3.AddComponent( New Spin(4,0,0) )
 		test3.Transform.Move( New Vec3f( 0, 0, 1.0 ) )
 		test3.Transform.Scale = New Vec3f( 0.25 )
+		test3.Name = "test3"
 		test3.Parent = "test1"
 
 		Local gridModel := New Model
@@ -105,11 +110,13 @@ Class GameView Extends SceneView
 		gridModel.AssignMaterial( "MatWire" )
 		gridModel.Rotate( 90,0,0)
 				
-		Local grid := New GameObject( "grid" )
+		Local grid := New GameObject
 		grid.SetEntity( gridModel )
+		grid.Name = "grid"
 		
-		Local camera := New GameObject( "camera" )
+		Local camera := New GameObject
 		Local cam := camera.AddComponent( New CameraComponent )
+		camera.Name = "camera"
 		cam.Near = 0.1
 		cam.Far = 5.0
 		cam.FOV = 45
