@@ -28,34 +28,47 @@ Class GameObject
 	End
 	
 	Property Position:Float[]()
-		Return Entity.Position.ToArray()
-	Setter( p:Float[] )
-		Entity.Position = Vec3f.FromArray( p )
-	End
-	
-	Property Rotation:Float[]()
-		Return Entity.Rotation.ToArray()
-	Setter( r:Float[] )
-		Entity.Scale = Vec3f.FromArray( r )
-	End
-	
-	Property Scale:Float[]()
-		Return Entity.Scale.ToArray()
-	Setter( s:Float[] )
-		Entity.Scale = Vec3f.FromArray( s )
-	End
-	
-	Property Parent:String()
-		If Entity.Parent
-			Return GetFromEntity( Entity.Parent ).Name
+		If _entity
+			Return Entity.Position.ToArray()
 		Else
 			Return Null
 		End
-	Setter( pName:String )
-		If pName <> ""
-			Entity.Parent = Find( pName ).Entity
+	Setter( p:Float[] )
+		If _entity Then Entity.Position = Vec3f.FromArray( p )
+	End
+	
+	Property Rotation:Float[]()
+		If _entity
+			Return Entity.Rotation.ToArray()
 		Else
-			Entity.Parent = Null
+			Return Null
+		End
+	Setter( r:Float[] )
+		If _entity Then Entity.Scale = Vec3f.FromArray( r )
+	End
+	
+	Property Scale:Float[]()
+		If _entity
+			Return Entity.Scale.ToArray()
+		Else
+			Return Null
+		End
+	Setter( s:Float[] )
+		If _entity Then Entity.Scale = Vec3f.FromArray( s )
+	End
+	
+	Property Parent:String()
+		If _entity
+			If _entity.Parent Return GetFromEntity( _entity.Parent ).Name
+		End
+		Return Null
+	Setter( pName:String )
+		If _entity
+			If pName <> ""
+				_entity.Parent = Find( pName ).Entity
+			Else
+				_entity.Parent = Null
+			End
 		End
 	End
 	
@@ -82,17 +95,16 @@ Class GameObject
 	End
 	
 	'************************************* Public Methods *************************************
-	
-	Method New( name:String )
+
+	Method New()
 		_viewer = SceneView.Current()		'May need rethinking. Do we need it to be assigned more specifically?
 		_all.Push( Self )
-		Name = name
+		SetEntity( New Entity )
 	End
 	
 	
 	Method SetEntity( ent:Entity )
 		If _entity
-'			Print ( "Removing entity: " + _entity.Name + " from GameObject " + Name)
 			ent.Parent = _entity.Parent
 			ent.Position = _entity.Position
 			ent.Rotation = _entity.Rotation
@@ -103,7 +115,6 @@ Class GameObject
 		End
 		_entity = ent
 		_allByEntity.Add( _entity, Self )
-'		Print ( "Added entity: " + _entity.Name + " to GameObject " + Name )
 	End
 	
 
@@ -145,11 +156,24 @@ Class GameObject
 	End
 	
 	
-	Method AddComponentsToJson( json:JsonObject )
-		For Local c := Eachin Components
-			json.Serialize( c.Name, c )
-		Next
+	Method List()
+		Local info := InstanceType
+		Local v:= Variant( Self )
+		Print "~n" + Name + ", " + info
+		For Local d := Eachin info.GetDecls()
+			If( d.Kind = "Field" And Not d.Name.StartsWith( "_" ) ) Or ( d.Kind = "Property" And d.Settable )
+				Print "    " + d.Name + ": " + VariantToString( d.Get( v ))
+			End
+		End
+		
 	End
+	
+	
+'	Method AddComponentsToJson( json:JsonObject )
+'		For Local c := Eachin Components
+'			json.Serialize( c.Name, c )
+'		Next
+'	End
 	
 	
 	'************************************* Component events *************************************
@@ -229,6 +253,10 @@ Class GameObject
 			stack.AddAll( GetFromEntityWithChildren( e ) )
 		End
 		Return stack.ToArray()
+	End
+	
+	Function All:GameObject[]()
+		Return _all.ToArray()
 	End
 	
 End

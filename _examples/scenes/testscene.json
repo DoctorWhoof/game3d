@@ -2,9 +2,13 @@
 	"bounceLight":{
 		"Class":"game3d.GameObject",
 		"LightComponent":{
-			"Class":"game3d.Component",
+			"CastsShadow":true,
+			"Class":"game3d.LightComponent",
+			"Color":[0,0.40000000596046448,0.75,1],
 			"Enabled":true,
-			"Name":"LightComponent"
+			"Name":"LightComponent",
+			"Range":10,
+			"Type":1
 		},
 		"Name":"bounceLight",
 		"Parent":"",
@@ -15,15 +19,18 @@
 	},
 	"camera":{
 		"CameraComponent":{
-			"Class":"game3d.Component",
+			"Class":"game3d.CameraComponent",
 			"Enabled":true,
-			"Name":"CameraComponent"
+			"FOV":45,
+			"Far":5,
+			"Name":"CameraComponent",
+			"Near":0.10000000149011612
 		},
 		"Class":"game3d.GameObject",
 		"Name":"camera",
 		"Parent":"",
-		"Position":[0,1,-2],
-		"Rotation":[26.56505012512207,-0,0],
+		"Position":[0,1.5,3],
+		"Rotation":[18.434947967529297,-180,0],
 		"Scale":[1,1,1],
 		"timeOffset":0
 	},
@@ -39,9 +46,13 @@
 	"light":{
 		"Class":"game3d.GameObject",
 		"LightComponent":{
-			"Class":"game3d.Component",
+			"CastsShadow":true,
+			"Class":"game3d.LightComponent",
+			"Color":[1,1,1,1],
 			"Enabled":true,
-			"Name":"LightComponent"
+			"Name":"LightComponent",
+			"Range":30,
+			"Type":1
 		},
 		"Name":"light",
 		"Parent":"",
@@ -52,18 +63,19 @@
 	},
 	"test1":{
 		"ChangeColor":{
-			"Class":"game3d.Component",
+			"Class":"game3d.ChangeColor",
 			"Enabled":true,
 			"Name":"ChangeColor"
 		},
 		"Class":"game3d.GameObject",
 		"LoadMaterial":{
-			"Class":"game3d.Component",
+			"Class":"game3d.LoadMaterial",
 			"Enabled":true,
+			"Material":"MatRed",
 			"Name":"LoadMaterial"
 		},
 		"LoadModel":{
-			"Class":"game3d.Component",
+			"Class":"game3d.LoadModel",
 			"Enabled":true,
 			"Name":"LoadModel"
 		},
@@ -73,33 +85,44 @@
 		"Rotation":[-0,-0,0],
 		"Scale":[1,1,1],
 		"Spin":{
-			"Class":"game3d.Component",
+			"Class":"game3d.Spin",
 			"Enabled":true,
-			"Name":"Spin"
+			"Name":"Spin",
+			"x":0,
+			"y":1,
+			"z":0
 		},
 		"timeOffset":0
 	},
 	"test2":{
 		"Class":"game3d.GameObject",
-		"LoadMaterial":{
-			"Class":"game3d.Component",
+		"DonutModel":{
+			"Class":"game3d.DonutModel",
 			"Enabled":true,
-			"Name":"LoadMaterial"
+			"Name":"DonutModel",
+			"innerRadius":0.20000000298023224,
+			"innerSegs":12,
+			"outerRadius":0.5,
+			"outerSegs":24
 		},
-		"LoadModel":{
-			"Class":"game3d.Component",
+		"LoadMaterial":{
+			"Class":"game3d.LoadMaterial",
 			"Enabled":true,
-			"Name":"LoadModel"
+			"Material":"matYellow",
+			"Name":"LoadMaterial"
 		},
 		"Name":"test2",
 		"Parent":"test1",
-		"Position":[1,0.5,0],
+		"Position":[0,0.5,1],
 		"Rotation":[-0,-0,0],
 		"Scale":[0.25,0.25,0.25],
 		"Spin":{
-			"Class":"game3d.Component",
+			"Class":"game3d.Spin",
 			"Enabled":true,
-			"Name":"Spin"
+			"Name":"Spin",
+			"x":4,
+			"y":0,
+			"z":0
 		},
 		"timeOffset":0
 	}

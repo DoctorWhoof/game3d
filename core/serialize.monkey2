@@ -75,6 +75,7 @@ Class JsonObject Extension
 	End
 End
 
+
 Function SerializeDecls:JsonObject( type:TypeInfo, instance:Variant )
 	Local newObj:= New JsonObject
 	newObj.SetString( "Class", type.Name )
@@ -90,6 +91,53 @@ Function SerializeDecls:JsonObject( type:TypeInfo, instance:Variant )
 	Return newObj
 End
 
+
+Function VariantToString:String( v:Variant )
+	Local typeName := v.Type.Name
+	If v.Type.Kind = "Array"
+		Select typeName
+		Case "Float[]"
+			Return VariantArrayToString<Float>( v )
+		Case "Int[]"
+			Return VariantArrayToString<Int>( v )
+		Case "String[]"
+			Return VariantArrayToString<String>( v )
+		End
+	Else
+		Select typeName
+		Case "Double"
+			Return String( Cast<Double>( v ) )
+		Case "Float"
+			Return String( Cast<Float>( v ) )
+		Case "String"
+			Return String( Cast<String>( v ) )
+		Case "Bool"
+			Local b := Cast<Bool>( v ) 
+			If b
+				Return "True"
+			Else
+				Return "False"
+			End
+		Case "Int"
+			Return String( Cast<Int>( v ) )
+		Case "UInt"
+			Return String( Cast<UInt>( v ) )
+		End
+	End
+	Return typeName
+End
+
+
+Function Deserialize( json:JsonObject )
+	If json
+		For Local entry := EachIn json.ToObject().Keys
+			LoadFromMap( entry, json[ entry ].ToObject() )
+		Next
+	End
+	json = Null
+End
+
+
 Private
 Function GetJsonStack<T,V>:Stack<JsonValue>( v:Variant )
 	Assert( ( v.Type.Kind = "Array" ), "GetJsonStack: Variant " + v.Type.Name + " is not an array" )
@@ -101,50 +149,93 @@ Function GetJsonStack<T,V>:Stack<JsonValue>( v:Variant )
 	Return stack
 End
 
+
+Function VariantArrayToString<T>:String( v:Variant )
+	Assert( ( v.Type.Kind = "Array" ), "Variant " + v.Type.Name + " is not an array" )
+	Local arr := Cast<T[]>( v )
+	Local text := "[ "
+	For Local n := 0 Until arr.Length
+		text += arr[n]
+		If n < arr.Length - 1
+			text += ", "
+		Else
+			text += " ]"	
+		End
+	Next
+	Return text
+End
+
+
+Function LoadFromMap:Variant( objName:String, obj:StringMap<JsonValue> )
+	Local v:Variant
+	
+	If obj["Class"]
+	 	Local objClass:= obj["Class"].ToString()
+		Local info := TypeInfo.GetType( objClass )
+		
+		If info
+			Local constructor := info.GetDecl( "New" )
+			'This is the variant we'll assign the field values to.
+			v = constructor.Invoke( Null, Null )
+	
+			For Local key := EachIn obj.Keys
+				If key = "Class" Then Continue
+				
+				Local d:= info.GetDecl( key )
+				Local value:= obj[key]
+				
+				'If the field is an object, recursively call LoadFromMap.
+				If value.IsObject
+					Local o := LoadFromMap( key, value.ToObject() )
+					If o Then d.Set( v, o )
+				End
+				'Now let's try to set the other fields.
+				If value.IsString Then d.Set( v, value.ToString() )
+				If value.IsNumber Then d.Set( v, value.ToNumber() )
+				If value.IsBool   Then d.Set( v, value.ToBool() )
+				If value.IsArray
+					Local arr := value.ToArray()
+					Local newArr := New Float[arr.Length]
+					
+					For Local n := 0 Until arr.Length
+						newArr[n] = arr[n].ToNumber()
+					Next
+					
+					d.Set( v, Variant( newArr ) )
+				End
+			Next
+	
+		Else
+			Print( "Error: Class " + objClass + " not found" )
+		End
+	End
+	
+	If v = Null Then Print( "Deserialize Error: Nothing to return" )
+	Return v
+End
+
+
+'Function SetFromJsonValue( value:JsonValue, key:String, d:DeclInfo, v:Variant )
+'	'If the field is an object, recursively call LoadFromMap.
+'	If value.IsObject
+'		Local o := LoadFromMap( key, value.ToObject() )
+'		If o Then d.Set( v, o )
+'	End
+'	'Now let's try to set the other fields.
+'	If value.IsString Then d.Set( v, value.ToString() )
+'	If value.IsNumber Then d.Set( v, value.ToNumber() )
+'	If value.IsBool   Then d.Set( v, value.ToBool() )
+'	If value.IsArray
+'		Local arr := value.ToArray()
+'		For Local n := 0 Until arr.Length
+'			Local newArr := New Float[arr.Length]
+''			newArr[n] = arr[n]
 '
-'Function Deserialize( json:JsonObject )
-'	If json
-'		For Local entry := EachIn json.ToObject().Keys
-'			LoadFromMap( json[ entry ].ToObject(), entry )
 '		Next
 '	End
-'	json = Null
+'	
 'End
-'
-'Function LoadFromMap:Variant( obj:StringMap<JsonValue>, objName:String )
-'	Local inst:Variant
-'	If obj["Class"]
-'	 	Local objClass:= obj["Class"].ToString()
-'	
-'		Local newObj := TypeInfo.GetType( objClass )
-'		If newObj
-'	
-'			Local ctor := newObj.GetDecl( "New" )
-'			inst = ctor.Invoke( Null, Null )	'This is the instance we'll assign the field values to.
-'	
-'			For Local key := EachIn obj.Keys
-'				If key = "class" Then Continue
-'				Local d:= newObj.GetDecl( key )
-'	
-'				'If the field is an object, recursively call LoadFromMap.
-'				If obj[key].IsObject
-'					Local o := LoadFromMap( obj[key].ToObject(), key )
-'					If o Then d.Set( inst, o )
-'				End
-'				'Now let's try to set the other fields.
-'				If obj[key].IsString Then d.Set( inst, obj[key].ToString() )
-'				If obj[key].IsNumber Then d.Set( inst, obj[key].ToNumber() )
-'				If obj[key].IsBool   Then d.Set( inst, obj[key].ToBool() )
-'			Next
-'	
-'		Else
-'			Print( "Error: Class " + objClass + " not found" )
-'		End
-'	End
-'	
-'	If inst = Null Then Print( "Deserialize Error: Nothing to return" )
-'	Return inst
-'End
+
 
 #Rem
 

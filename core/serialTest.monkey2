@@ -1,49 +1,8 @@
 #Import "<std>"
 #Import "<reflection>"
+#Import "serialize"
 
 Using std..
-
-'************************ json extension '************************
-
-Class JsonObject Extension 
-	Method Serialize( key:String, v:Variant )
-		Select v.Type.Name
-		Case "Double"
-			SetNumber( key, Cast<Double>( v ) )
-		Case "Float"
-			SetNumber( key, Cast<Float>( v ) )
-		Case "String"
-			SetString( key, Cast<String>( v ) )
-		Case "Bool"
-			SetBool( key, Cast<Bool>( v ) )
-		Default
-			Local newObj:= New JsonObject
-			Local type:=DynamicType( v )
-			
-			newObj.SetString( "Class", type.Name )
-			For Local decl:DeclInfo = Eachin type.GetDecls()
-				If ( decl.Kind = "Property" And decl.Settable )' Or ( decl.Kind = "Field" )
-					If decl.Type.Name.Slice( 0, 7 ) = "Unknown"
-						Print( "Warning: Property " + decl.Name + " cannot be reflected and can't be serialized." )
-					Else
-						newObj.Serialize( decl.Name, decl.Get( v ) )
-					End
-				End
-			Next
-			SetObject( key, newObj.ToObject() )
-		End		
-	End
-End
-
-
-Function DynamicType:TypeInfo( v:Variant )
-   If v.Type.Kind="Class" or v.Type.Kind="Interface"
-      Local inst:=Cast<Object>( v )
-      If inst Return inst.InstanceType
-   Endif
-   Return v.Type
-End
-
 
 '************************ main function '************************
 
@@ -61,6 +20,7 @@ Function Main()
 	json.Serialize( "test3", New ExtendedClass( "test3", "NiNiNi!" ) )
 	
 	Print json.ToJson()
+
 End
 
 

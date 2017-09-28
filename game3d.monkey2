@@ -7,7 +7,6 @@ Namespace game3d
 #Import "<mojo3d-loaders>"
 '#Import "<mojo3d-physics>"
 
-'#Import "core/entityBox"
 #Import "core/gameobject"
 #Import "core/serialize"
 #Import "materialLibrary/materialLibrary"
