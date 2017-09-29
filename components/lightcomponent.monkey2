@@ -8,15 +8,15 @@ Class LightComponent Extends Component
 		_light.CastsShadow = c
 	End
 	
-	Property Color:Float[]()
+	Property Color:Double[]()
 		Return _light.Color.ToArray()
-	Setter( c:Float[] )
+	Setter( c:Double[] )
 		_light.Color = std.graphics.Color.FromArray( c )
 	End
 	
-	Property Range:Float()
+	Property Range:Double()
 		Return _light.Range
-	Setter( r:Float )
+	Setter( r:Double )
 		_light.Range = r
 	End
 	
@@ -41,6 +41,7 @@ Class LightComponent Extends Component
 	Method OnCreate() Override
 		_light = New Light
 		_light.Name  = "EntityLight"
-		GameObject.SetEntity( _light )		
+		GameObject.SetEntity( _light )
+		Print "Creating light!"	
 	End
 End

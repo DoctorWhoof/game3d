@@ -39,7 +39,8 @@ Class GameView Extends SceneView
 		Scene.ClearColor = Color.Black
 		Scene.EnvTexture = Texture.Load( "asset::black.png", Null )
 
-		Local json := JsonObject.Load( "/Users/Leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testsceneTemp.json" ) 
+'		Local json := JsonObject.Load( "/Users/Leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testsceneTemp.json" ) 
+		Local json := JsonObject.Load( "/home/leosantos/dev/game3d/_examples/scenes/testscene.json" ) 
 		Deserialize( json )
 		
 		For Local g := Eachin GameObject.All()

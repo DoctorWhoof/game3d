@@ -2,8 +2,8 @@ Namespace std.geom
 
 Struct Vec2<T> Extension
 	
-	Method ToArray:T[]()
-		Return New T[]( X, Y )
+	Method ToArray:Double[]()
+		Return New Double[]( X, Y )
 	End
 	
 	Function FromArray:Vec2<T>( arr:T[] )
@@ -15,8 +15,8 @@ End
 
 Struct Vec3<T> Extension
 	
-	Method ToArray:T[]()
-		Return New T[]( X, Y, Z )
+	Method ToArray:Double[]()
+		Return New Double[]( X, Y, Z )
 	End
 	
 	Function FromArray:Vec3<T>( arr:T[] )
@@ -27,8 +27,8 @@ End
 
 Struct Vec4<T> Extension
 	
-	Method ToArray:T[]()
-		Return New T[]( X, Y, Z, W )
+	Method ToArray:Double[]()
+		Return New Double[]( X, Y, Z, W )
 	End
 	
 	Function FromArray:Vec4<T>( arr:T[] )

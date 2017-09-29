@@ -7,6 +7,7 @@
 			"Color":[0,0.40000000596046448,0.75,1],
 			"Enabled":true,
 			"Name":"LightComponent",
+			"Owner":"bounceLight",
 			"Range":10,
 			"Type":1
 		},
@@ -22,9 +23,10 @@
 			"Class":"game3d.CameraComponent",
 			"Enabled":true,
 			"FOV":45,
-			"Far":5,
+			"Far":15,
 			"Name":"CameraComponent",
-			"Near":0.10000000149011612
+			"Near":0.10000000149011612,
+			"Owner":"camera"
 		},
 		"Class":"game3d.GameObject",
 		"Name":"camera",
@@ -43,41 +45,26 @@
 		"Scale":[1,1,1],
 		"timeOffset":0
 	},
-	"light":{
-		"Class":"game3d.GameObject",
-		"LightComponent":{
-			"CastsShadow":true,
-			"Class":"game3d.LightComponent",
-			"Color":[1,1,1,1],
-			"Enabled":true,
-			"Name":"LightComponent",
-			"Range":30,
-			"Type":1
-		},
-		"Name":"light",
-		"Parent":"",
-		"Position":[10,10,0],
-		"Rotation":[45,90,-0],
-		"Scale":[1,1,1],
-		"timeOffset":0
-	},
 	"test1":{
 		"ChangeColor":{
 			"Class":"game3d.ChangeColor",
 			"Enabled":true,
-			"Name":"ChangeColor"
+			"Name":"ChangeColor",
+			"Owner":"test1"
 		},
 		"Class":"game3d.GameObject",
 		"LoadMaterial":{
 			"Class":"game3d.LoadMaterial",
 			"Enabled":true,
 			"Material":"MatRed",
-			"Name":"LoadMaterial"
+			"Name":"LoadMaterial",
+			"Owner":"test1"
 		},
 		"LoadModel":{
 			"Class":"game3d.LoadModel",
 			"Enabled":true,
-			"Name":"LoadModel"
+			"Name":"LoadModel",
+			"Owner":"test1"
 		},
 		"Name":"test1",
 		"Parent":"",
@@ -88,6 +75,7 @@
 			"Class":"game3d.Spin",
 			"Enabled":true,
 			"Name":"Spin",
+			"Owner":"test1",
 			"x":0,
 			"y":1,
 			"z":0
@@ -100,6 +88,7 @@
 			"Class":"game3d.DonutModel",
 			"Enabled":true,
 			"Name":"DonutModel",
+			"Owner":"test2",
 			"innerRadius":0.20000000298023224,
 			"innerSegs":12,
 			"outerRadius":0.5,
@@ -109,7 +98,8 @@
 			"Class":"game3d.LoadMaterial",
 			"Enabled":true,
 			"Material":"matYellow",
-			"Name":"LoadMaterial"
+			"Name":"LoadMaterial",
+			"Owner":"test2"
 		},
 		"Name":"test2",
 		"Parent":"test1",
@@ -120,6 +110,7 @@
 			"Class":"game3d.Spin",
 			"Enabled":true,
 			"Name":"Spin",
+			"Owner":"test2",
 			"x":4,
 			"y":0,
 			"z":0
@@ -132,6 +123,7 @@
 			"Class":"game3d.DonutModel",
 			"Enabled":true,
 			"Name":"DonutModel",
+			"Owner":"test3",
 			"innerRadius":0.20000000298023224,
 			"innerSegs":12,
 			"outerRadius":0.5,
@@ -141,7 +133,8 @@
 			"Class":"game3d.LoadMaterial",
 			"Enabled":true,
 			"Material":"matYellow",
-			"Name":"LoadMaterial"
+			"Name":"LoadMaterial",
+			"Owner":"test3"
 		},
 		"Name":"test3",
 		"Parent":"test1",
@@ -152,6 +145,7 @@
 			"Class":"game3d.Spin",
 			"Enabled":true,
 			"Name":"Spin",
+			"Owner":"test3",
 			"x":4,
 			"y":0,
 			"z":0

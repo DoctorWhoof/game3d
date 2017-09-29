@@ -7,6 +7,15 @@ Namespace std.Json
 Using std..
 Using mojo..
 
+Class JsonValue Extension
+	
+	Method ToFloat:Float()
+		Return Float( ToNumber() )
+	End
+		
+End
+
+
 Class JsonObject Extension 
 	
 	Method Merge( key:String, json:JsonObject )
@@ -98,6 +107,8 @@ Function VariantToString:String( v:Variant )
 		Select typeName
 		Case "Float[]"
 			Return VariantArrayToString<Float>( v )
+		Case "Double[]"
+			Return VariantArrayToString<Double>( v )
 		Case "Int[]"
 			Return VariantArrayToString<Int>( v )
 		Case "String[]"
@@ -131,7 +142,7 @@ End
 Function Deserialize( json:JsonObject )
 	If json
 		For Local entry := EachIn json.ToObject().Keys
-			LoadFromMap( entry, json[ entry ].ToObject() )
+			LoadFromJsonObject( entry, json[ entry ].ToObject() )
 		Next
 	End
 	json = Null
@@ -139,6 +150,123 @@ End
 
 
 Private
+Function LoadFromJsonObject:Variant( objName:String, obj:StringMap<JsonValue> )
+	Local v:Variant
+	
+	If obj["Class"]
+	 	Local objClass:= obj["Class"].ToString()
+		Local info := TypeInfo.GetType( objClass )
+		
+		If info
+			Local constructor := info.GetDecl( "New" )
+			
+			'This is the variant we'll assign the field values to.
+			v = constructor.Invoke( Null, Null )
+			
+			'hack!
+			Local priorities := New StringStack( New String[]( "Name", "Owner" ) )
+			If info.SuperType.Name = "game3d.Component"
+				For Local key := EachIn priorities
+					Local onCreate := info.GetDecl( key )
+					Print( "Loading " + key )
+					LoadFromJsonValue( obj[key], v, onCreate, key )
+				Next
+			End
+			
+			'Set remaining properties
+			For Local key := EachIn obj.Keys
+				If key = "Class" Continue
+				If priorities.Contains( key ) Continue
+				Local d:= info.GetDecl( key )
+				Print( "Loading " + key )
+				LoadFromJsonValue( obj[key], v, d, key )
+			Next
+	
+		Else
+			Print( "Error: Class " + objClass + " not found" )
+		End
+	End
+	
+	If v = Null Then Print( "Deserialize Error: Nothing to return" )
+	Return v
+End
+
+
+Function LoadFromJsonValue:Variant( value:JsonValue , v:Variant, d:DeclInfo, key:String )
+	'If the field is an object, recursively call LoadFromMap.
+	Local rVar :Variant
+	
+	If value.IsObject
+		Local obj := LoadFromJsonObject( key, value.ToObject() )
+		If obj
+			If d And v Then d.Set( v, obj )
+			rVar = Variant( obj )
+		End
+		Print "Setting value " + ( key? ( key + "= " ) Else "" ) + value.ToJson()
+	ElseIf value.IsString
+		If d And v Then d.Set( v, Variant(value.ToString()) )
+		rVar = Variant( value.ToString() )
+		Print "Setting value " + ( key? ( key + "= " ) Else "" ) + value.ToJson()
+	Elseif value.IsNumber
+		'Need to figure out how to pass the decl/array type down here... for now, only use Double! ;-)
+'		Select ??????
+'		Case "Int"
+'			If d And v Then d.Set( v, Variant( Int(value.ToNumber() ) ) )
+'			rVar = Variant( Int(value.ToNumber() ) )
+'		Case "UInt"
+'			If d And v Then d.Set( v, Variant( UInt(value.ToNumber() ) ) )
+'			rVar = Variant( UInt(value.ToNumber() ) )
+'		Case "Float"
+'			If d And v Then d.Set( v, Variant( value.ToFloat() ) )
+'			rVar = Variant( value.ToFloat() )
+'		Default
+			If d And v Then d.Set( v, Variant( value.ToNumber() ) )
+			rVar = Variant( value.ToNumber() )
+'		End
+		Print "Setting value " + ( key? ( key + "= " ) Else "" ) + value.ToJson()
+	ElseIf value.IsBool
+		If d And v Then d.Set( v, Variant(value.ToBool()) )
+		rVar = Variant( value.ToBool() )
+		Print "Setting value " + ( key? ( key + "= " ) Else "" ) + value.ToJson()
+	ElseIf value.IsArray
+		Local arr := value.ToArray()
+		If Not arr.Empty
+			Local first := arr[0]
+			Local varArray:Variant
+			
+			If first.IsNumber Then varArray = JsonArrayToVariantArray<Double>( arr ) 
+			If first.IsString Then varArray = JsonArrayToVariantArray<String>( arr )
+			If first.IsBool Then varArray = JsonArrayToVariantArray<Bool>( arr )
+
+			d.Set( v, varArray )
+			rVar = varArray
+		End
+	End	
+
+'	Print "Returning value: " + ( key? ( key + "= " ) Else "" ) + value.ToJson() + ":" + rVar.Type
+	Return rVar
+End
+
+Function JsonArrayToVariantArray<T>:Variant( jsonArr:Stack<JsonValue> )
+	Local arr := New T[ jsonArr.Length ]
+	Local v := Variant( arr )
+	For Local n := 0 Until jsonArr.Length
+		arr[n] = Cast<T>( LoadFromJsonValue( jsonArr[n], Null, Null, Null ) ) 
+	Next
+	Return v
+End
+
+
+Function CastJsonArray<T>:T[]( jsonArr:Stack<JsonValue> )
+	Local newArr := New T[ jsonArr.Length ]
+	For Local n := 0 Until jsonArr.Length
+		Local first := jsonArr[0]
+		newArr[n] = jsonArr[n].ToFloat()
+	Next
+	Return newArr
+End
+
+
 Function GetJsonStack<T,V>:Stack<JsonValue>( v:Variant )
 	Assert( ( v.Type.Kind = "Array" ), "GetJsonStack: Variant " + v.Type.Name + " is not an array" )
 	Local stack := New Stack<JsonValue>
@@ -166,53 +294,7 @@ Function VariantArrayToString<T>:String( v:Variant )
 End
 
 
-Function LoadFromMap:Variant( objName:String, obj:StringMap<JsonValue> )
-	Local v:Variant
-	
-	If obj["Class"]
-	 	Local objClass:= obj["Class"].ToString()
-		Local info := TypeInfo.GetType( objClass )
-		
-		If info
-			Local constructor := info.GetDecl( "New" )
-			'This is the variant we'll assign the field values to.
-			v = constructor.Invoke( Null, Null )
-	
-			For Local key := EachIn obj.Keys
-				If key = "Class" Then Continue
-				
-				Local d:= info.GetDecl( key )
-				Local value:= obj[key]
-				
-				'If the field is an object, recursively call LoadFromMap.
-				If value.IsObject
-					Local o := LoadFromMap( key, value.ToObject() )
-					If o Then d.Set( v, o )
-				End
-				'Now let's try to set the other fields.
-				If value.IsString Then d.Set( v, value.ToString() )
-				If value.IsNumber Then d.Set( v, value.ToNumber() )
-				If value.IsBool   Then d.Set( v, value.ToBool() )
-				If value.IsArray
-					Local arr := value.ToArray()
-					Local newArr := New Float[arr.Length]
-					
-					For Local n := 0 Until arr.Length
-						newArr[n] = arr[n].ToNumber()
-					Next
-					
-					d.Set( v, Variant( newArr ) )
-				End
-			Next
-	
-		Else
-			Print( "Error: Class " + objClass + " not found" )
-		End
-	End
-	
-	If v = Null Then Print( "Deserialize Error: Nothing to return" )
-	Return v
-End
+
 
 
 'Function SetFromJsonValue( value:JsonValue, key:String, d:DeclInfo, v:Variant )

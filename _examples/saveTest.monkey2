@@ -1,10 +1,11 @@
 #Import "../game3d"
 #Import "../graphics/grid"
+#Import "../util/navigation"
 
 #Import "components/spin"
 #Import "components/changecolor"
 
-#Import "images/wire.png"
+#Import "images/wireGlow.png"
 #Import "images/cat.png"
 #Import "models/teapotLow.fbx"
 
@@ -40,25 +41,25 @@ Class GameView Extends SceneView
 		Scene.EnvColor = Color.Black
 		Scene.AmbientLight = Color.Black
 		
-		Local  fog := New FogEffect( Color.Black, 0.1, 5.0 )
+		Local  fog := New FogEffect( Color.Black, 0.1, 15.0 )
 		Scene.AddPostEffect( fog )
 		
-		Local light := New GameObject
-		light.Name = "light"
-		Local lightComp := light.AddComponent( New LightComponent )
-		lightComp.CastsShadow = True
-		lightComp.Range = 30.0
-		light.Transform.Move( 10, 10, 0 )
-		light.Transform.PointAt( New Vec3f )
+'		Local light := New GameObject
+'		light.Name = "light"
+'		Local lightComp := light.AddComponent( New LightComponent )
+'		lightComp.CastsShadow = True
+'		lightComp.Range = 30.0
+'		light.Transform.Move( 10, 10, 0 )
+'		light.Transform.PointAt( New Vec3f )
 		
 		Local bounceLight := New GameObject
 		Local bounceLightComp := bounceLight.AddComponent( New LightComponent )
-		bounceLightComp.Color = New Float[]( 0, 0.4, 0.75, 1.0 )
+		bounceLightComp.Color = New Double[]( 0, 0.4, 0.75, 1.0 )
 		bounceLight.Transform.Move( 0, -10, 0 )
 		bounceLight.Transform.Rotate( -90, 0, 0 )
 		bounceLight.Name = "bounceLight"
 	
-		Local wireTex := Texture.Load( "asset::wire.png", "TexWire", TextureFlags.FilterMipmap )
+		Local wireTex := Texture.Load( "asset::wireGlow.png", "TexWire", TextureFlags.FilterMipmap )
 		Local catTex := Texture.Load( "asset::cat.png", "TexCat", TextureFlags.FilterMipmap )
 		
 		Local mat := New PbrMaterial
@@ -106,7 +107,7 @@ Class GameView Extends SceneView
 		test3.Parent = "test1"
 
 		Local gridModel := New Model
-		gridModel.Mesh = CreateGrid( 15.0, 15.0, 20, 20, True )
+		gridModel.Mesh = CreateGrid( 40.0, 40.0, 20, 20, True )
 		gridModel.AssignMaterial( "MatWire" )
 		gridModel.Rotate( 90,0,0)
 				
@@ -118,7 +119,7 @@ Class GameView Extends SceneView
 		Local cam := camera.AddComponent( New CameraComponent )
 		camera.Name = "camera"
 		cam.Near = 0.1
-		cam.Far = 5.0
+		cam.Far = 15.0
 		cam.FOV = 45
 		camera.Transform.Move( 0, 1.5, 3 )
 		camera.Transform.PointAt( test1.Transform.Position )
@@ -131,13 +132,14 @@ Class GameView Extends SceneView
 			json.Serialize( g.Name, g )
 		Next
 		Print json.ToJson()
-		SaveString( json.ToJson(), "/Users/Leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testscene.json" )
+'		SaveString( json.ToJson(), "/Users/Leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testscene.json" )
+		SaveString( json.ToJson(), "/home/leosantos/dev/game3d/_examples/scenes/testscene.json" )
+		
 
 	End
+	
+	
+	Method OnUpdate() Override
+		WasdCameraControl( Camera, Self, 1.0, True )	
+	End
 End
-
-
-'************************* test components *************************
-
-
-

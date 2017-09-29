@@ -27,14 +27,14 @@ Class Component
 '		_gameObj = GameObject.Find( name )
 '	End
 	
-	Property GameObject:GameObject()
-		Return _gameObj
-	End
-	
 	Property Enabled:Bool()
 		Return _enabled
 	Setter( isEnabled:Bool )
 		_enabled = isEnabled
+	End
+	
+	Property GameObject:GameObject()
+		Return _gameObj
 	End
 	
 	Property Entity:Entity()
@@ -53,8 +53,19 @@ Class Component
 		Return _gameObj.Time
 	End
 	
+	Private
+	Property Owner:String()
+		Return _gameObj.Name
+	Setter( name:String )
+		If _gameObj Then _gameObj.RemoveComponent( Self )
+		_gameObj = GameObject.Find( name )
+		_gameObj.AddComponent( Self )
+		Print _gameObj.Name + "+= " + Name
+	End
+	
 	'************************************* Public methods *************************************
 	
+	Public
 '	Method ToJsonValue:JsonValue()
 '		Return Serialize( Self )
 '	End

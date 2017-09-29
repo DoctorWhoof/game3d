@@ -16,7 +16,7 @@ Class GameObject
 	Field _viewer:SceneView
 	Field _time:Double
 	Field _components := New Stack<Component>
-	Field _componentsByName	:= New StringMap<Component>		'allows fast access indexed by name
+	Field _componentsByName	:= New StringMap<Component>
 	
 	Public
 	Property Name:String()
@@ -27,35 +27,42 @@ Class GameObject
 		_name = name
 	End
 	
-	Property Position:Float[]()
+	
+	Property Position:Double[]()
 		If _entity
 			Return Entity.Position.ToArray()
 		Else
+			Print "GameObject: Warning, " + Name + " contains no mojo3d Entity"
 			Return Null
 		End
-	Setter( p:Float[] )
-		If _entity Then Entity.Position = Vec3f.FromArray( p )
+	Setter( p:Double[] )
+		If _entity Then Entity.Position = Vec3<Double>.FromArray( p )
 	End
 	
-	Property Rotation:Float[]()
+	
+	Property Rotation:Double[]()
 		If _entity
 			Return Entity.Rotation.ToArray()
 		Else
+			Print "GameObject: Warning, " + Name + " contains no mojo3d Entity"
 			Return Null
 		End
-	Setter( r:Float[] )
-		If _entity Then Entity.Scale = Vec3f.FromArray( r )
+	Setter( r:Double[] )
+		If _entity Then Entity.Scale = Vec3<Double>.FromArray( r )
 	End
 	
-	Property Scale:Float[]()
+	
+	Property Scale:Double[]()
 		If _entity
 			Return Entity.Scale.ToArray()
 		Else
+			Print "GameObject: Warning, " + Name + " contains no mojo3d Entity"
 			Return Null
 		End
-	Setter( s:Float[] )
-		If _entity Then Entity.Scale = Vec3f.FromArray( s )
+	Setter( s:Double[] )
+		If _entity Then Entity.Scale = Vec3<Double>.FromArray( s )
 	End
+	
 	
 	Property Parent:String()
 		If _entity
@@ -72,6 +79,17 @@ Class GameObject
 		End
 	End
 	
+	
+	Property Components:Component[]()
+		Return _components.ToArray()
+	Setter( compArray:Component[] )
+		_components.Clear()
+		For Local c := Eachin compArray
+			AddComponent( c )
+		Next
+	End
+	
+	
 	Property Entity:Entity()
 		Return _entity
 	End
@@ -86,12 +104,6 @@ Class GameObject
 	
 	Property Time:Double()
 		Return _time	
-	End
-	
-	Property Components:Component[]()
-		Return _components.ToArray()
-	Setter( c:Component[] )
-		'dummy setter for proper serialization!
 	End
 	
 	'************************************* Public Methods *************************************
