@@ -1,16 +1,15 @@
 {
 	"bounceLight":{
 		"Class":"game3d.GameObject",
-		"LightComponent":{
+		"Components":[{
 			"CastsShadow":true,
 			"Class":"game3d.LightComponent",
 			"Color":[0,0.40000000596046448,0.75,1],
 			"Enabled":true,
 			"Name":"LightComponent",
-			"Owner":"bounceLight",
 			"Range":10,
 			"Type":1
-		},
+		}],
 		"Name":"bounceLight",
 		"Parent":"",
 		"Position":[0,-10,0],
@@ -19,16 +18,16 @@
 		"timeOffset":0
 	},
 	"camera":{
-		"CameraComponent":{
+		"Class":"game3d.GameObject",
+		"Components":[{
 			"Class":"game3d.CameraComponent",
 			"Enabled":true,
 			"FOV":45,
 			"Far":15,
+			"FogColor":[0,0,0,1],
 			"Name":"CameraComponent",
-			"Near":0.10000000149011612,
-			"Owner":"camera"
-		},
-		"Class":"game3d.GameObject",
+			"Near":0.10000000149011612
+		}],
 		"Name":"camera",
 		"Parent":"",
 		"Position":[0,1.5,3],
@@ -36,8 +35,84 @@
 		"Scale":[1,1,1],
 		"timeOffset":0
 	},
+	"donut1":{
+		"Class":"game3d.GameObject",
+		"Components":[{
+			"Class":"game3d.DonutModel",
+			"Enabled":true,
+			"Name":"DonutModel",
+			"innerRadius":0.20000000298023224,
+			"innerSegs":12,
+			"outerRadius":0.5,
+			"outerSegs":24
+		},{
+			"Class":"game3d.AssignMaterial",
+			"Enabled":true,
+			"Name":"AssignMaterial",
+			"material":"MatYellow"
+		},{
+			"Class":"game3d.Spin",
+			"Enabled":true,
+			"Name":"Spin",
+			"x":4,
+			"y":0,
+			"z":0
+		}],
+		"Name":"donut1",
+		"Parent":"test1",
+		"Position":[0,0,-1],
+		"Rotation":[-0,-0,0],
+		"Scale":[0.25,0.25,0.25],
+		"timeOffset":0
+	},
+	"donut2":{
+		"Class":"game3d.GameObject",
+		"Components":[{
+			"Class":"game3d.DonutModel",
+			"Enabled":true,
+			"Name":"DonutModel",
+			"innerRadius":0.20000000298023224,
+			"innerSegs":12,
+			"outerRadius":0.5,
+			"outerSegs":24
+		},{
+			"Class":"game3d.AssignMaterial",
+			"Enabled":true,
+			"Name":"AssignMaterial",
+			"material":"MatYellow"
+		},{
+			"Class":"game3d.Spin",
+			"Enabled":true,
+			"Name":"Spin",
+			"x":4,
+			"y":0,
+			"z":0
+		}],
+		"Name":"donut2",
+		"Parent":"test1",
+		"Position":[0,0,1],
+		"Rotation":[-0,-0,0],
+		"Scale":[0.25,0.25,0.25],
+		"timeOffset":0
+	},
 	"grid":{
 		"Class":"game3d.GameObject",
+		"Components":[{
+			"Center":[0.5,0.5],
+			"Class":"game3d.GridModel",
+			"Enabled":true,
+			"Name":"GridModel",
+			"collumns":20,
+			"height":40,
+			"quadMap":true,
+			"rows":20,
+			"width":40
+		},{
+			"Class":"game3d.AssignMaterial",
+			"Enabled":true,
+			"Name":"AssignMaterial",
+			"material":"MatWire"
+		}],
 		"Name":"grid",
 		"Parent":"",
 		"Position":[0,0,0],
@@ -45,111 +120,53 @@
 		"Scale":[1,1,1],
 		"timeOffset":0
 	},
-	"test1":{
-		"ChangeColor":{
-			"Class":"game3d.ChangeColor",
-			"Enabled":true,
-			"Name":"ChangeColor",
-			"Owner":"test1"
-		},
+	"light":{
 		"Class":"game3d.GameObject",
-		"LoadMaterial":{
-			"Class":"game3d.LoadMaterial",
+		"Components":[{
+			"CastsShadow":true,
+			"Class":"game3d.LightComponent",
+			"Color":[1,1,1,1],
 			"Enabled":true,
-			"Material":"MatRed",
-			"Name":"LoadMaterial",
-			"Owner":"test1"
-		},
-		"LoadModel":{
+			"Name":"LightComponent",
+			"Range":30,
+			"Type":1
+		}],
+		"Name":"light",
+		"Parent":"",
+		"Position":[10,10,0],
+		"Rotation":[45,90,-0],
+		"Scale":[1,1,1],
+		"timeOffset":0
+	},
+	"test1":{
+		"Class":"game3d.GameObject",
+		"Components":[{
 			"Class":"game3d.LoadModel",
 			"Enabled":true,
 			"Name":"LoadModel",
-			"Owner":"test1"
-		},
+			"path":"asset::teapotLow.fbx"
+		},{
+			"Class":"game3d.AssignMaterial",
+			"Enabled":true,
+			"Name":"AssignMaterial",
+			"material":"MatRed"
+		},{
+			"Class":"game3d.Spin",
+			"Enabled":true,
+			"Name":"Spin",
+			"x":0,
+			"y":1,
+			"z":0
+		},{
+			"Class":"game3d.ChangeColor",
+			"Enabled":true,
+			"Name":"ChangeColor"
+		}],
 		"Name":"test1",
 		"Parent":"",
 		"Position":[0,0.5,0],
 		"Rotation":[-0,-0,0],
 		"Scale":[1,1,1],
-		"Spin":{
-			"Class":"game3d.Spin",
-			"Enabled":true,
-			"Name":"Spin",
-			"Owner":"test1",
-			"x":0,
-			"y":1,
-			"z":0
-		},
-		"timeOffset":0
-	},
-	"test2":{
-		"Class":"game3d.GameObject",
-		"DonutModel":{
-			"Class":"game3d.DonutModel",
-			"Enabled":true,
-			"Name":"DonutModel",
-			"Owner":"test2",
-			"innerRadius":0.20000000298023224,
-			"innerSegs":12,
-			"outerRadius":0.5,
-			"outerSegs":24
-		},
-		"LoadMaterial":{
-			"Class":"game3d.LoadMaterial",
-			"Enabled":true,
-			"Material":"matYellow",
-			"Name":"LoadMaterial",
-			"Owner":"test2"
-		},
-		"Name":"test2",
-		"Parent":"test1",
-		"Position":[0,0.5,-1],
-		"Rotation":[-0,-0,0],
-		"Scale":[0.25,0.25,0.25],
-		"Spin":{
-			"Class":"game3d.Spin",
-			"Enabled":true,
-			"Name":"Spin",
-			"Owner":"test2",
-			"x":4,
-			"y":0,
-			"z":0
-		},
-		"timeOffset":0
-	},
-	"test3":{
-		"Class":"game3d.GameObject",
-		"DonutModel":{
-			"Class":"game3d.DonutModel",
-			"Enabled":true,
-			"Name":"DonutModel",
-			"Owner":"test3",
-			"innerRadius":0.20000000298023224,
-			"innerSegs":12,
-			"outerRadius":0.5,
-			"outerSegs":24
-		},
-		"LoadMaterial":{
-			"Class":"game3d.LoadMaterial",
-			"Enabled":true,
-			"Material":"matYellow",
-			"Name":"LoadMaterial",
-			"Owner":"test3"
-		},
-		"Name":"test3",
-		"Parent":"test1",
-		"Position":[0,0.5,1],
-		"Rotation":[-0,-0,0],
-		"Scale":[0.25,0.25,0.25],
-		"Spin":{
-			"Class":"game3d.Spin",
-			"Enabled":true,
-			"Name":"Spin",
-			"Owner":"test3",
-			"x":4,
-			"y":0,
-			"z":0
-		},
 		"timeOffset":0
 	}
 }

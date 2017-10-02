@@ -1,14 +1,9 @@
-
 #Import "../game3d"
-#Import "../graphics/grid"
 
 #Import "components/spin"
-#Import "components/loadmodel"
-#Import "components/loadpbrmaterial"
+#Import "components/changecolor"
 
-#Import "images/wire.png"
-#Import "images/cat.png"
-#Import "images/black.png"
+#Import "images/wireGlow.png"
 #Import "models/teapotLow.fbx"
 
 Using game3d..
@@ -37,15 +32,15 @@ Class GameView Extends SceneView
 		displayInfo = True
 		
 		Scene.ClearColor = Color.Black
-		Scene.EnvTexture = Texture.Load( "asset::black.png", Null )
+		Scene.EnvColor = Color.Black
+		Scene.AmbientLight = Color.Black
 
-'		Local json := JsonObject.Load( "/Users/Leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testsceneTemp.json" ) 
-		Local json := JsonObject.Load( "/home/leosantos/dev/game3d/_examples/scenes/testscene.json" ) 
-		Deserialize( json )
-		
-		For Local g := Eachin GameObject.All()
-			g.List()
-		End
+		Local json := JsonObject.Load( "/Users/Leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testScene.json" )
+		DeserializeGameObjects( json )
+	End
+	
+	Method OnUpdate() Override
+		WasdCameraControl( Camera, Self )	
 	End
 End
 

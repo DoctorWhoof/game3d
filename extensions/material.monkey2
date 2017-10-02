@@ -9,7 +9,11 @@ Class Material Extension
 	End
 
 	Function Get:Material( name:String )
-		Return MaterialLibrary.GetMaterial( name )
+		Local mat := MaterialLibrary.GetMaterial( name )
+		If mat
+			Return mat
+		End
+		Return Null
 	End
 
 '	Method ToJson:JsonObject()

@@ -1,6 +1,6 @@
 #Import "<std>"
-#Import "<reflection>"
-#Import "serialize"
+'#Import "../../game3d"
+#Import "../jsonSerial"
 
 Using std..
 
@@ -9,7 +9,6 @@ Using std..
 Function Main()
 	
 	Local test1 := New BaseClass( "test1" )
-	
 	Local test2 := New ExtendedClass( "test2", "Ni!" )
 	
 	Local json := New JsonObject()
@@ -30,7 +29,9 @@ End
 Class BaseClass
 	
 	Property Name:String()
-		Return _name	
+		Return _name
+	Setter( n:String )
+		_name = n
 	End
 	
 	Method New( name:String )

@@ -1,13 +1,15 @@
 To do:
 
-- Component .json
-	- Load
-	- Save
+- Materials need to work! Serialize to separate file. Maybe each material is a separate json file? Like an asset?
 
-- Material lookup by name? Would allow sharing of materials, no need for material components.
-	- Another solution: material component that looks up a material by name... :-)
-	
-- BaseObject Component? Would include name, transforms, tags, etc.
+- Rename OnCreate to something more clear? OnAssign? OnAdded?
+		
+- Environment component
+	- Env Color
+	- Env texture
+	- Ambient light
+	- Bg Color
+	- Bg Texture
 
 Done!
 
@@ -16,3 +18,9 @@ Done!
 	- Mojo Physics
 		- Ray cast
 	- Project a point from 3d to 2d
+- BaseObject Component? Would include name, transforms, tags, etc.
+- Material lookup by name? Would allow sharing of materials, no need for material components.
+	- Another solution: material component that looks up a material by name... :-)
+- Component .json
+	-Loading object arrays returns empty - fixed
+	-Components need "deep" serialization (include super class parameters) - fixed

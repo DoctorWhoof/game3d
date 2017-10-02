@@ -53,15 +53,15 @@ Class Component
 		Return _gameObj.Time
 	End
 	
-	Private
-	Property Owner:String()
-		Return _gameObj.Name
-	Setter( name:String )
-		If _gameObj Then _gameObj.RemoveComponent( Self )
-		_gameObj = GameObject.Find( name )
-		_gameObj.AddComponent( Self )
-		Print _gameObj.Name + "+= " + Name
-	End
+'	Private
+'	Property Owner:String()
+'		Return _gameObj.Name
+'	Setter( name:String )
+'		If _gameObj Then _gameObj.RemoveComponent( Self )
+'		_gameObj = GameObject.Find( name )
+'		_gameObj.AddComponent( Self )
+'		Print _gameObj.Name + "+= " + Name
+'	End
 	
 	'************************************* Public methods *************************************
 	
@@ -72,7 +72,7 @@ Class Component
 '	
 '	Method FromJson( json:JsonObject )
 '	End
-		
+
 	Method New( name:String )
 		Name = name
 	End
@@ -133,7 +133,10 @@ Class Component
 	Method OnCreate() Virtual
 	End
 	
-
+	Method To:String()
+		Return Name	
+	End
+	
 	'************************************* Virtual methods *************************************
 
 	Protected

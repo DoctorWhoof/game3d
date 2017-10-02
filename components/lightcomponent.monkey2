@@ -36,12 +36,11 @@ Class LightComponent Extends Component
 	Public
 	Method New()
 		Super.New( "LightComponent" )
+		_light = New Light
+		_light.Name  = "EntityLight"
 	End
 	
 	Method OnCreate() Override
-		_light = New Light
-		_light.Name  = "EntityLight"
 		GameObject.SetEntity( _light )
-		Print "Creating light!"	
 	End
 End

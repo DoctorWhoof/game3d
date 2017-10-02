@@ -7,10 +7,7 @@ Class DonutModel Extends Component
 	Field innerRadius:= 0.2
 	Field outerSegs := 24
 	Field innerSegs := 12
-	
-	Private
 
-	Public
 	Method New()
 		Super.New( "DonutModel" )
 	End
@@ -18,6 +15,7 @@ Class DonutModel Extends Component
 	Method OnCreate() Override
 		Local model := New Model
 		model.Mesh = Mesh.CreateTorus( outerRadius, innerRadius, outerSegs, innerSegs  )
+'		model.AssignMaterial( New PbrMaterial( Color.Yellow ) )
 		GameObject.SetEntity( model )
 	End
 	

@@ -5,6 +5,7 @@ Namespace game3d
 Class GameObject
 	
 	Field timeOffset:Double = 0.0
+'	Field color:= Color.Red
 	
 	Private
 	Global _all := New Stack<GameObject >
@@ -29,52 +30,51 @@ Class GameObject
 	
 	
 	Property Position:Double[]()
-		If _entity
-			Return Entity.Position.ToArray()
-		Else
-			Print "GameObject: Warning, " + Name + " contains no mojo3d Entity"
-			Return Null
-		End
+		CheckEntity()
+		If _entity Then Return Entity.LocalPosition.ToArray()
+		Return Null
 	Setter( p:Double[] )
-		If _entity Then Entity.Position = Vec3<Double>.FromArray( p )
+		CheckEntity()
+		If _entity Then Entity.LocalPosition = Vec3<Double>.FromArray( p )
 	End
 	
 	
 	Property Rotation:Double[]()
-		If _entity
-			Return Entity.Rotation.ToArray()
-		Else
-			Print "GameObject: Warning, " + Name + " contains no mojo3d Entity"
-			Return Null
-		End
+		CheckEntity()
+		If _entity Then Return Entity.LocalRotation.ToArray()
+		Return Null
 	Setter( r:Double[] )
-		If _entity Then Entity.Scale = Vec3<Double>.FromArray( r )
+		CheckEntity()
+		If _entity Then Entity.LocalRotation = Vec3<Double>.FromArray( r )
 	End
 	
 	
 	Property Scale:Double[]()
-		If _entity
-			Return Entity.Scale.ToArray()
-		Else
-			Print "GameObject: Warning, " + Name + " contains no mojo3d Entity"
-			Return Null
-		End
+		CheckEntity()
+		If _entity Return Entity.LocalScale.ToArray()
+		Return Null
 	Setter( s:Double[] )
-		If _entity Then Entity.Scale = Vec3<Double>.FromArray( s )
+		CheckEntity()
+		If _entity Then Entity.LocalScale = Vec3<Double>.FromArray( s )
 	End
 	
 	
 	Property Parent:String()
+		CheckEntity()
 		If _entity
 			If _entity.Parent Return GetFromEntity( _entity.Parent ).Name
 		End
-		Return Null
+		Return Null		
 	Setter( pName:String )
+		CheckEntity()
+		Local gameObjParent := Find( pName )
 		If _entity
-			If pName <> ""
-				_entity.Parent = Find( pName ).Entity
-			Else
-				_entity.Parent = Null
+			If gameObjParent
+				If pName <> ""
+					_entity.Parent = Find( pName ).Entity
+				Else
+					_entity.Parent = Null
+				End
 			End
 		End
 	End
@@ -85,7 +85,7 @@ Class GameObject
 	Setter( compArray:Component[] )
 		_components.Clear()
 		For Local c := Eachin compArray
-			AddComponent( c )
+			If c Then AddComponent( c )
 		Next
 	End
 	
@@ -125,8 +125,14 @@ Class GameObject
 			_allByEntity.Remove( _entity )
 			_entity.Destroy()
 		End
+		_entity = Null
 		_entity = ent
 		_allByEntity.Add( _entity, Self )
+	End
+	
+	
+	Method CheckEntity()
+		If Not _entity Print( "GameObject: Error, " + Name + " contains no mojo3d Entity" )
 	End
 	
 
@@ -138,6 +144,7 @@ Class GameObject
 		_componentsByName.Add( c.Name, c )
 		_components.Push( c )
 		c.SetGameObject( Self )
+'		Print c.Name + ".OnCreate()"
 		c.OnCreate()
 		Return c
 	End
@@ -174,10 +181,17 @@ Class GameObject
 		Print "~n" + Name
 		For Local d := Eachin info.GetDecls()
 			If( d.Kind = "Field" And Not d.Name.StartsWith( "_" ) ) Or ( d.Kind = "Property" And d.Settable )
-				Print "    " + d.Name + ": " + VariantToString( d.Get( v ))
+				Select d.Name
+				Case "Components"
+					Print "Components:"
+					For Local c := Eachin Components
+						Print "|   |    " + c.Name
+					Next
+				Default
+					Print "|   " + d.Name + ": " + VariantToString( d.Get( v ) )
+				End
 			End
 		End
-		
 	End
 	
 	
@@ -249,6 +263,13 @@ Class GameObject
 	End
 
 	Function  Find:GameObject( name:String )
+		If name <> ""
+			Local g := _allByName[ name ]
+			If Not g
+				Print ( "GameObject: Can't find GameObject " + name )
+				Return Null
+			End
+		End
 		Return _allByName[ name ]
 	End
 	
