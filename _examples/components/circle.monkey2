@@ -4,9 +4,8 @@ Class Circle Extends Component
 	
 	Field radius:Double = 32.0
 	
-	Method New( radius:Double)
+	Method New()
 		Super.New( "CircleRenderer" )
-		Self.radius = radius
 	End
 	
 	Method OnDraw( canvas:Canvas ) Override

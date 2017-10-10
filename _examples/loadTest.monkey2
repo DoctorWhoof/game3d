@@ -16,7 +16,7 @@ End
 
 Class TestWindow Extends Window
 	Method New()
-		Super.New( "Test", 1280, 720, WindowFlags.Resizable )
+		Super.New( "Test", 1280, 720, WindowFlags.Resizable | WindowFlags.Maximized )
 		Local gameView := New GameView( 1280, 720, True )
 		ContentView = gameView
 	End
@@ -35,7 +35,7 @@ Class GameView Extends SceneView
 		Scene.EnvColor = Color.Black
 		Scene.AmbientLight = Color.Black
 
-		Local json := JsonObject.Load( "/Users/Leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testScene.json" )
+		Local json := JsonObject.Load(	"/Users/leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testScene.json" )
 		DeserializeGameObjects( json )
 	End
 	

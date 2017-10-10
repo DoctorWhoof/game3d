@@ -4,6 +4,7 @@
 #Import "components/changecolor"
 
 #Import "images/wireGlow.png"
+#Import "images/cat.png"
 #Import "models/teapotLow.fbx"
 
 Using game3d..
@@ -36,8 +37,24 @@ Class GameView Extends SceneView
 		Scene.EnvColor = Color.Black
 		Scene.AmbientLight = Color.Black
 		
-'		Local  fog := New FogEffect( Color.Black, 0.1, 15.0 )
-'		Scene.AddPostEffect( fog )
+		'-----------------------------------------------------------------
+	
+		Local wireTex := Texture.Load( "asset::wireGlow.png", "TexWire", TextureFlags.FilterMipmap )
+		Local catTex := Texture.Load( "asset::cat.png", "TexCat", TextureFlags.FilterMipmap )
+'		
+		Local mat := New PbrMaterial
+		mat.Name = "MatWire"
+		mat.ColorTexture = wireTex
+		mat.ColorFactor = New Color( 0, 1, 1.5 )
+		mat.EmissiveTexture = wireTex
+		mat.EmissiveFactor = New Color( 0, 1, 1.5 )
+
+		Local matRed := New PbrMaterial( Color.Red, 0.1, 0.5 )
+		matRed.Name = "MatRed"
+		matRed.CullMode = CullMode.None
+		
+		Local matYellow := New PbrMaterial( Color.Yellow, 0.1, 0.5 )
+		matYellow.Name = "MatYellow"
 		
 		'-----------------------------------------------------------------
 		
@@ -68,12 +85,6 @@ Class GameView Extends SceneView
 		
 		'-----------------------------------------------------------------
 		
-'		Local bounceLight := New GameObject
-'		Local bounceLightComp := bounceLight.AddComponent( New LightComponent )
-'		bounceLightComp.Color = New Double[]( 0, 0.4, 0.75, 1.0 )
-'		bounceLight.Transform.Move( 0, -10, 0 )
-'		bounceLight.Transform.Rotate( -90, 0, 0 )
-'		bounceLight.Name = "bounceLight"
 		Local bounceLight := New GameObject
 		bounceLight.Name = "bounceLight"
 		
@@ -83,25 +94,6 @@ Class GameView Extends SceneView
 		
 		bounceLight.Transform.Move( 0, -10, 0 )
 		bounceLight.Transform.Rotate( -90, 0, 0 )
-
-		'-----------------------------------------------------------------
-	
-'		Local wireTex := Texture.Load( "asset::wireGlow.png", "TexWire", TextureFlags.FilterMipmap )
-'		Local catTex := Texture.Load( "asset::cat.png", "TexCat", TextureFlags.FilterMipmap )
-'		
-'		Local mat := New PbrMaterial
-'		mat.Name = "MatWire"
-'		mat.ColorTexture = wireTex
-'		mat.ColorFactor = New Color( 0, 1, 1.5 )
-'		mat.EmissiveTexture = wireTex
-'		mat.EmissiveFactor = New Color( 0, 1, 1.5 )
-'
-'		Local matRed := New PbrMaterial( Color.Red, 0.1, 0.5 )
-'		matRed.Name = "MatRed"
-'		matRed.CullMode = CullMode.None
-'		
-'		Local matYellow := New PbrMaterial( Color.Yellow, 0.1, 0.5 )
-'		matYellow.Name = "MatYellow"
 		
 		'-----------------------------------------------------------------
 		
@@ -187,15 +179,16 @@ Class GameView Extends SceneView
 		'-----------------------------------------------------------------
 	
 '		light.Entity.Visible = False
-'		MaterialLibrary.Save( "" )
 
-		Local json := New JsonObject
-		For Local g := Eachin GameObject.GetFromScene( Scene )
-			json.Serialize( g.Name, g )
-		Next
+'		Local json := New JsonObject
+'		For Local g := Eachin GameObject.GetFromScene( Scene )
+'			json.Serialize( g.Name, g )
+'		Next
 		
-		Print json.ToJson()
-		SaveString( json.ToJson(), "/Users/Leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testscene.json" )
+		Print MaterialLibrary.Save( "" ).ToJson()
+		
+'		Print json.ToJson()
+'		SaveString( json.ToJson(), "/Users/Leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testscene.json" )
 '		SaveString( json.ToJson(), "/home/leosantos/dev/game3d/_examples/scenes/testscene.json" )
 		
 

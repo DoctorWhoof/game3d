@@ -53,7 +53,21 @@ Class JsonObject Extension
 	End
 	
 	
-	Method Serialize( key:String, v:Variant )		
+	Method Serialize( key:String, v:Variant )
+		
+'		Print "~n" + key
+'		Local type := v.Type
+'		If v.Type.Kind = "Class" Or v.Type.Kind = "Interface"
+'			For Local d := Eachin v.DynamicType.GetDecls()
+'				If d.Kind = "Method"
+'					Print d
+'				End
+'			Next
+'			If v.Type.GetDecl( "ToJson" )
+'				Print "ToJson method found!"	
+'			End
+'		End
+			
 		Local value := JsonValueFromVariant( v )
 
 		If value.IsNumber
@@ -67,6 +81,33 @@ Class JsonObject Extension
 		ElseIf value.IsArray
 			SetArray( key, value.ToArray() )
 		End
+	End
+	
+	
+	Method Serialize( v:Variant )
+		
+		Local json := New JsonObject
+		For Local d := Eachin v.DynamicType.GetDecls()
+			If d.Kind = "Property" Or d.Kind = "Field"
+				If d.Settable
+					If Not d.Name.StartsWith( "_" )
+						Select d.Type.Kind
+						Case "Primitive"
+							json.Serialize( d.Name, d.Get( v ) )
+						Case "Class","Interface"
+							If d.Type.Name = "mojo.graphics.Texture"
+								Local t := Cast<Texture>( d.Get( v ) )
+								json.SetString( d.Name, t.Name )
+							Else
+								json.Serialize( d.Name, d.Get( v ))
+							End
+						End
+					End
+				End
+			End
+		End
+		
+		Merge( json )
 	End
 	
 	

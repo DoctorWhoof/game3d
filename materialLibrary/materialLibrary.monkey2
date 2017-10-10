@@ -54,31 +54,28 @@ Class MaterialLibrary
 	
 	'******************************** I/O '********************************
 	
-	Function Save( path:String )
+	Function Save:JsonObject( path:String )
 		Local json := New JsonObject
 		Local texturesJson:= New JsonObject
 		Local materialsJson:= New JsonObject
 		
 		'textures!
 		For Local name := Eachin _allTextures.Keys
-			Local tex := GetTexture( name )
-'			texturesJson.Serialize( name, _allTextures[ name ] )
-'			texturesJson.SetObject( name, tex.ToJson().ToObject() )
+			texturesJson.SetObject( name, _allTextures[name].ToJson().ToObject() )
 		End
 		
 		'materials!
-'		For Local name := Eachin _allMaterials.Keys
-'			Local mat := GetMaterial( name )
-''			materialsJson.SetObject( name, mat.ToJson().ToObject() )
-'			materialsJson.SetObject( name, GetJson( mat ).ToObject() )
-'		End
+		For Local name := Eachin _allMaterials.Keys
+			materialsJson.SetObject( name, _allMaterials[name].ToJson().ToObject()  )
+'			materialsJson.Serialize( name, Variant( _allMaterials[ name ] ) )
+		End
 		
 		'combine!
 		json.SetObject( "Textures", texturesJson.ToObject() )
 		json.SetObject( "Materials", materialsJson.ToObject() )
 		
 		'Doesn't save yet...
-		Print json.ToJson()
+		Return json
 	End
 	
 End

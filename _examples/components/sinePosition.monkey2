@@ -7,12 +7,8 @@ Class SinePosition Extends Component
 	Field z:Double = 0.0
 	Field period:Double = 1.0
 	
-	Method New( period:Double, x:Double, y:Double, z:Double )
+	Method New()
 		Super.New( "SinePosition" )
-		Self.period = period
-		Self.x = x
-		Self.y = y
-		Self.z = z
 	End
 	
 	Method OnUpdate() Override

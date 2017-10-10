@@ -11,3 +11,23 @@ Struct Color Extension
 	End
 	
 End
+
+
+'Struct Color Extension
+'
+'	Property Type:String()
+'		Return "Color"
+'	End
+'
+'	Method ToJson:JsonValue()
+''		Local json := New JsonObject
+'		Local jValue := New JsonArray
+'		jValue.SetNumber( 0, R )
+'		jValue.SetNumber( 1, G )
+'		jValue.SetNumber( 2, B )
+'		jValue.SetNumber( 3, A )
+''		json.SetArray( "Color", jValue.ToArray() )
+'		Return jValue
+'	End
+'
+'End
