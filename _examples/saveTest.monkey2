@@ -10,7 +10,10 @@
 Using game3d..
 
 Function Main()
-	New AppInstance
+	Local config:=New StringMap<String>
+	config["mojo3d_renderer"]="forward"
+
+	New AppInstance( config )
 	New TestWindow
 	App.Run()
 End
@@ -41,7 +44,7 @@ Class GameView Extends SceneView
 	
 		Local wireTex := Texture.Load( "asset::wireGlow.png", "TexWire", TextureFlags.FilterMipmap )
 		Local catTex := Texture.Load( "asset::cat.png", "TexCat", TextureFlags.FilterMipmap )
-'		
+		
 		Local mat := New PbrMaterial
 		mat.Name = "MatWire"
 		mat.ColorTexture = wireTex
@@ -90,6 +93,7 @@ Class GameView Extends SceneView
 		
 		Local bounceLightComp := New LightComponent
 		bounceLightComp.Color = New Double[]( 0, 0.4, 0.75, 1.0 )
+		bounceLightComp.CastsShadow = False
 		bounceLight.AddComponent( bounceLightComp )
 		
 		bounceLight.Transform.Move( 0, -10, 0 )
@@ -180,16 +184,16 @@ Class GameView Extends SceneView
 	
 '		light.Entity.Visible = False
 
-'		Local json := New JsonObject
-'		For Local g := Eachin GameObject.GetFromScene( Scene )
-'			json.Serialize( g.Name, g )
-'		Next
+		Local json := New JsonObject
+		For Local g := Eachin GameObject.GetFromScene( Scene )
+			json.Serialize( g.Name, g )
+		Next
 		
-		Print MaterialLibrary.Save( "" ).ToJson()
+'		Print MaterialLibrary.Save( "" ).ToJson()
 		
-'		Print json.ToJson()
+		Print json.ToJson()
 '		SaveString( json.ToJson(), "/Users/Leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testscene.json" )
-'		SaveString( json.ToJson(), "/home/leosantos/dev/game3d/_examples/scenes/testscene.json" )
+		SaveString( json.ToJson(), "/home/leosantos/dev/game3d/_examples/scenes/testscene.json" )
 		
 
 	End
