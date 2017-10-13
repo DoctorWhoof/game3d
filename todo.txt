@@ -1,6 +1,8 @@
 To do:
 
-- Materials need to work! Serialize to separate file. Maybe each material is a separate json file? Like an asset?
+- Break Load and Save functions per class:
+	- Get rid of DeserializeGameObjects, Use GameObject.Load
+	- Get rid of MaterialLibrary.Save and Load, use Material.Load, Material.Save, Texture.Load, Texture.Save
 
 - Rename OnCreate to something more clear? OnAssign? OnAdded?
 		
@@ -10,6 +12,9 @@ To do:
 	- Ambient light
 	- Bg Color
 	- Bg Texture
+
+
+------------------------------------------------------------------------------------------------------------------------
 
 Done!
 

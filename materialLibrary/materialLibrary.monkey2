@@ -66,19 +66,37 @@ Class MaterialLibrary
 		
 		'materials!
 		For Local name := Eachin _allMaterials.Keys
-			materialsJson.SetObject( name, _allMaterials[name].ToJson().ToObject()  )
-'			materialsJson.Serialize( name, Variant( _allMaterials[ name ] ) )
+			materialsJson.Merge( _allMaterials[name].ToJson() )
 		End
 		
 		'combine!
 		json.SetObject( "Textures", texturesJson.ToObject() )
 		json.SetObject( "Materials", materialsJson.ToObject() )
 		
-		'Doesn't save yet...
+		'Save!
+		SaveString( json.ToJson(), path )
 		Return json
+	End
+	
+	
+	Function Load( path:String )
+		
+		Local json := JsonObject.Load( path )
+		
+		For Local key := Eachin json.ToObject().Keys
+			
+			If key = "Materials"
+				Print "Materials, yay"
+			End
+			
+			If key = "Textures"
+				Print "Textures, yay"
+			End
+			
+		Next
+		
+		
 	End
 	
 End
 
-
-'To do: material load from Json!

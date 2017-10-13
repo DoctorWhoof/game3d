@@ -184,16 +184,16 @@ Class GameView Extends SceneView
 	
 '		light.Entity.Visible = False
 
-		Local json := New JsonObject
-		For Local g := Eachin GameObject.GetFromScene( Scene )
-			json.Serialize( g.Name, g )
-		Next
+'		Local json := New JsonObject
+'		For Local g := Eachin GameObject.GetFromScene( Scene )
+'			json.Serialize( g.Name, g )
+'		Next
 		
-'		Print MaterialLibrary.Save( "" ).ToJson()
+		Print MaterialLibrary.Save( "/Users/Leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testMaterials.json" ).ToJson()
 		
-		Print json.ToJson()
+'		Print json.ToJson()
 '		SaveString( json.ToJson(), "/Users/Leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testscene.json" )
-		SaveString( json.ToJson(), "/home/leosantos/dev/game3d/_examples/scenes/testscene.json" )
+'		SaveString( json.ToJson(), "/home/leosantos/dev/game3d/_examples/scenes/testscene.json" )
 		
 
 	End

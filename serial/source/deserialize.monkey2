@@ -7,9 +7,8 @@ Namespace std.Json
 Using std..
 Using mojo..
 
-
-'Creates a new object from scratch, then loads its properties
-Function LoadFromJsonObject:Variant( obj:StringMap<JsonValue>, include:StringStack = Null, exclude:StringStack = Null )
+'Simply creates the object, doesn't load any values into it
+Function BasicDeserialize:Variant( obj:StringMap<JsonValue> )
 	
 	Local v:Variant
 	
@@ -19,26 +18,7 @@ Function LoadFromJsonObject:Variant( obj:StringMap<JsonValue>, include:StringSta
 		If info
 			Local constructor := info.GetDecl( "New" )
 			If constructor
-				'This is the variant we'll assign the field values to.
 				v = constructor.Invoke( Null, Null )
-				
-				For Local key := EachIn obj.Keys
-					If key = "Class" Continue
-					If include
-						If Not include.Empty
-							If Not include.Contains( key ) Continue	
-						End
-					End
-					If exclude
-						If Not exclude.Empty
-							If exclude.Contains( key ) Continue
-						End
-					End
-					
-					Local d:= info.GetDecl( key )
-					Local value := LoadFromJsonValue( obj[key], v, d )
-					Prompt( key + " = " + VariantToString( value ) )
-				Next
 			Else
 				Print( "~nDeserialize: Error, Class constructors can't have arguments.~n" )
 				App.Terminate()
@@ -51,6 +31,80 @@ Function LoadFromJsonObject:Variant( obj:StringMap<JsonValue>, include:StringSta
 	If v = Null Then Print( "Deserialize: Nothing to return." )
 	Return v
 End
+
+
+'Creates a new object from scratch, then loads its properties
+Function LoadFromJsonObject:Variant( obj:StringMap<JsonValue>, include:StringStack = Null, exclude:StringStack = Null )
+	
+	Local v := BasicDeserialize( obj )
+	Local info := v.DynamicType
+				
+	For Local key := EachIn obj.Keys
+		If key = "Class" Continue
+		If include
+			If Not include.Empty
+				If Not include.Contains( key ) Continue	
+			End
+		End
+		If exclude
+			If Not exclude.Empty
+				If exclude.Contains( key ) Continue
+			End
+		End
+		
+		Local d:= info.GetDecl( key )
+		Local value := LoadFromJsonValue( obj[key], v, d )
+		Prompt( key + " = " + VariantToString( value ) )
+	Next
+	
+	Return v
+
+End
+
+
+''Creates a new object from scratch, then loads its properties
+'Function LoadFromJsonObject:Variant( obj:StringMap<JsonValue>, include:StringStack = Null, exclude:StringStack = Null )
+'	
+'	Local v:Variant
+'	
+'	If obj["Class"]
+'	 	Local objClass:= obj["Class"].ToString()
+'		Local info := TypeInfo.GetType( objClass )
+'		If info
+'			Local constructor := info.GetDecl( "New" )
+'			If constructor
+'				'This is the variant we'll assign the field values to.
+'				v = constructor.Invoke( Null, Null )
+'				
+'				For Local key := EachIn obj.Keys
+'					If key = "Class" Continue
+'					If include
+'						If Not include.Empty
+'							If Not include.Contains( key ) Continue	
+'						End
+'					End
+'					If exclude
+'						If Not exclude.Empty
+'							If exclude.Contains( key ) Continue
+'						End
+'					End
+'					
+'					Local d:= info.GetDecl( key )
+'					Local value := LoadFromJsonValue( obj[key], v, d )
+'					Prompt( key + " = " + VariantToString( value ) )
+'				Next
+'			Else
+'				Print( "~nDeserialize: Error, Class constructors can't have arguments.~n" )
+'				App.Terminate()
+'			End
+'		Else
+'			Print( "Deserialize: Class " + objClass + " not found." )
+'		End
+'	End
+'	
+'	If v = Null Then Print( "Deserialize: Nothing to return." )
+'	Return v
+'End
 
 
 'Use this if the target object has already been created, and all you want is to load its properties

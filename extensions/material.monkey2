@@ -20,34 +20,35 @@ Class Material Extension
 	
 	Method ToJson:JsonObject()
 		Local json := New JsonObject
+		json.Serialize( Name, Variant( Self ) )
 		
-		json.Serialize( Variant( Self ) )
-		
-'		For Local d := Eachin InstanceType.GetDecls()
-'			If d.Kind = "Property" Or d.Kind = "Field"
-'				Select d.Type.Kind
-'				Case "Primitive"
-'					json.Serialize( d.Name, d.Get( Self ))
-'				Case "Class"
-'					If d.Type.Name = "mojo.graphics.Texture"
-'						Local t := Cast<Texture>( d.Get( Self ) )
-'						json.SetString( d.Name, t.Name )
-'					Else
-'						json.Serialize( d.Name, d.Get( Self ))
-'					End
-'				End
-'			End
-'		End
+		For Local d := Eachin InstanceType.GetDecls()
+			If d.Kind = "Property" And d.Settable
+				
+				If d.Type.Name = "mojo.graphics.Texture"
+					Local t := Cast<Texture>( d.Get( Self ) )
+					Cast<JsonObject>( json[Name] ).SetString( d.Name, t.Name )
+				End
+				
+				If d.Type.Name = "std.graphics.Color"
+					Local c := Cast<Color>( d.Get( Self ) )
+					Cast<JsonObject>( json[Name] ).SetArray( d.Name, c.ToJsonArray() )
+				End
+				
+			End
+		End
 		
 		Return json
 	End
-'	
-'	
-'	Function FromJson:Texture( json:JsonObject )
-'		Local flags:TextureFlags = IntFlags( UInt( json[ "Flags"].ToNumber() ) )
-'		Local name:= json[ "Name"].ToString()
-'		Local path := json[ "Path"].ToString()
-'		Return Load( name, path, flags )
-'	End
+
+
+	Function FromJson( json:JsonObject )
+		Local v := BasicDeserialize( json.ToObject() )
+		Local info := v.DynamicType
+		
+		If v.Type.Name = "Material"
+			Print "Material!!!"	
+		End
+	End
 	
 End

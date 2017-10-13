@@ -10,6 +10,24 @@ Struct Color Extension
 		Return New Color( arr[0], arr[1], arr[2], arr[3] )
 	End
 	
+	Method ToJsonArray:JsonValue[]()
+		Local arr := New Stack<JsonValue>
+		arr.Push( New JsonNumber(R) )
+		arr.Push( New JsonNumber(G) )
+		arr.Push( New JsonNumber(B) )
+		arr.Push( New JsonNumber(A) )
+		Return arr.ToArray()
+	End
+	
+	Method FromJsonArray( arr:JsonArray )
+		If arr.Length >= 3
+			R = arr[0].ToNumber()
+			G = arr[1].ToNumber()
+			B = arr[2].ToNumber()
+		End
+		If arr.Length = 4 Then A = arr[3].ToNumber()
+	End
+	
 End
 
 

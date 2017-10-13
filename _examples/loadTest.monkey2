@@ -38,13 +38,15 @@ Class GameView Extends SceneView
 		Scene.EnvColor = Color.Black
 		Scene.AmbientLight = Color.Black
 
-'		Local json := JsonObject.Load(	"/Users/leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testscene.json" )
-		Local json := JsonObject.Load(	"/home/leosantos/dev/game3d/_examples/scenes/testscene.json" )
-		DeserializeGameObjects( json )
+		Local json := JsonObject.Load(	"/Users/leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testscene.json" )
+'		Local json := JsonObject.Load(	"/home/leosantos/dev/game3d/_examples/scenes/testscene.json" )
+
+		DeserializeGameObjects( json )	'Move this to GameObject class!
+		MaterialLibrary.Load( "/Users/Leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testMaterials.json" )
 	End
 	
 	Method OnUpdate() Override
-		WasdCameraControl( Camera, Self, 1.0, True )	
+		WasdCameraControl( Camera, Self )', 1.0, True )	
 	End
 End
 
