@@ -9,8 +9,10 @@ Class ChangeColor Extends Component
 	End
 
 	Method OnUpdate() Override
-		If Keyboard.KeyHit( Key.Space )
+		
+		If Time > 1.0
 			Cast<Model>(Entity).Materials = New Material[]( New PbrMaterial( New Color( Rnd(), Rnd(), Rnd() ), 0.1, 0.5 ) )
+			GameObject.ResetTime()
 		End
 	End
 End

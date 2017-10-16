@@ -1,0 +1,12 @@
+{
+	"TexCat":{
+		"Flags":12,
+		"Name":"TexCat",
+		"Path":"asset::cat.png"
+	},
+	"TexWire":{
+		"Flags":12,
+		"Name":"TexWire",
+		"Path":"asset::wireGlow.png"
+	}
+}

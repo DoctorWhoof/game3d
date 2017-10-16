@@ -5,7 +5,6 @@ Namespace game3d
 Class GameObject
 	
 	Field timeOffset:Double = 0.0
-'	Field color:= Color.Red
 	
 	Private
 	Global _all := New Stack<GameObject >
@@ -26,6 +25,19 @@ Class GameObject
 		_allByName.Remove( _name )
 		_allByName.Add( name, Self )
 		_name = name
+	End
+	
+	
+	Property Visible:Bool()
+		If _entity
+			Return _entity.Visible
+		Else
+			Return False
+		End
+	Setter( vis:Bool )
+		If Entity
+			_entity.Visible = vis
+		End
 	End
 	
 	
@@ -111,7 +123,6 @@ Class GameObject
 	Method New()
 		_viewer = SceneView.Current()		'May need rethinking. Do we need it to be assigned more specifically?
 		_all.Push( Self )
-'		SetEntity( New Entity )
 	End
 	
 	
@@ -144,8 +155,6 @@ Class GameObject
 		_componentsByName.Add( c.Name, c )
 		_components.Push( c )
 		c.SetGameObject( Self )
-'		Print c.Name + ".OnCreate()"
-		c.OnCreate()
 		Return c
 	End
 	
@@ -230,6 +239,11 @@ Class GameObject
 		For Local c:= Eachin _components
 			c.Reset()
 		Next
+	End
+	
+	
+	Method ResetTime()
+		timeOffset = -Clock.Now()
 	End
 
 	'To do:destroy needs to be called from Entity.Destroyed

@@ -22,7 +22,7 @@ Class GridModel Extends Component
 		Super.New( "GridModel" )
 	End
 	
-	Method OnCreate() Override
+	Method OnAttach() Override
 		Local model := New Model
 		model.Mesh = CreateGrid( width, height, rows, collumns, True, _center )
 		GameObject.SetEntity( model )

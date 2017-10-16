@@ -53,6 +53,12 @@ Class JsonObject Extension
 	End
 	
 	
+	Method Serialize( v:Variant )
+		Local value := Cast<JsonObject>( JsonValueFromVariant( v ) )
+		Merge( value )
+	End
+	
+	
 	Method Serialize( key:String, v:Variant )
 		Local value := JsonValueFromVariant( v )
 

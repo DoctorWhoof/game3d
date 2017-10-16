@@ -1,10 +1,8 @@
 To do:
 
-- Break Load and Save functions per class:
-	- Get rid of DeserializeGameObjects, Use GameObject.Load
-	- Get rid of MaterialLibrary.Save and Load, use Material.Load, Material.Save, Texture.Load, Texture.Save
+- Update old examples
 
-- Rename OnCreate to something more clear? OnAssign? OnAdded?
+- Test Houdini-To-Monkey model pipeline
 		
 - Environment component
 	- Env Color
@@ -29,3 +27,7 @@ Done!
 - Component .json
 	-Loading object arrays returns empty - fixed
 	-Components need "deep" serialization (include super class parameters) - fixed
+- Rename OnCreate to something more clear? OnAssign? OnAdded?
+- Break Load and Save functions per class:
+	- Get rid of DeserializeGameObjects, Use GameObject.Load
+	- Get rid of MaterialLibrary.Save and Load, use Material.Load, Material.Save, Texture.Load, Texture.Save

@@ -45,8 +45,7 @@ Function JsonValueFromVariant:JsonValue( v:Variant )
 			newValue = New JsonBool( Cast<Bool>( v ) )
 		Default
 			Local obj := New JsonObject
-'			Print info.Kind
-			If info.Kind="Class" or info.Kind="Interface"
+			If info.Kind="Class" Or info.Kind="Interface"
 				obj.Merge( SerializeDecls( v.Type, v ) )				'shouldn't be necessary?
 				obj.Merge( SerializeDecls( v.Type.SuperType, v ) )		'shouldn't be necessary?
 				obj.Merge( SerializeDecls( v.DynamicType, v ) )

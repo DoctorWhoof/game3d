@@ -19,33 +19,15 @@ Struct Color Extension
 		Return arr.ToArray()
 	End
 	
-	Method FromJsonArray( arr:JsonArray )
-		If arr.Length >= 3
-			R = arr[0].ToNumber()
-			G = arr[1].ToNumber()
-			B = arr[2].ToNumber()
+	Function FromJsonArray:Color( arr:JsonArray )
+		Local c:= New Color
+		If arr.Length > 2
+			c.R = arr[0].ToNumber()
+			c.G = arr[1].ToNumber()
+			c.B = arr[2].ToNumber()
 		End
-		If arr.Length = 4 Then A = arr[3].ToNumber()
+		If arr.Length > 3 Then c.A = arr[3].ToNumber()
+		Return c
 	End
 	
 End
-
-
-'Struct Color Extension
-'
-'	Property Type:String()
-'		Return "Color"
-'	End
-'
-'	Method ToJson:JsonValue()
-''		Local json := New JsonObject
-'		Local jValue := New JsonArray
-'		jValue.SetNumber( 0, R )
-'		jValue.SetNumber( 1, G )
-'		jValue.SetNumber( 2, B )
-'		jValue.SetNumber( 3, A )
-''		json.SetArray( "Color", jValue.ToArray() )
-'		Return jValue
-'	End
-'
-'End

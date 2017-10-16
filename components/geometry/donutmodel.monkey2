@@ -12,7 +12,7 @@ Class DonutModel Extends Component
 		Super.New( "DonutModel" )
 	End
 	
-	Method OnCreate() Override
+	Method OnAttach() Override
 		Local model := New Model
 		model.Mesh = Mesh.CreateTorus( outerRadius, innerRadius, outerSegs, innerSegs  )
 '		model.AssignMaterial( New PbrMaterial( Color.Yellow ) )

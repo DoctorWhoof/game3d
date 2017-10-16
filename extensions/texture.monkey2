@@ -17,12 +17,21 @@ Class Texture Extension
 	
 	
 	Function Get:Texture( name:String )
-		Return MaterialLibrary.GetTexture( name )
+		If name
+			Local tex := MaterialLibrary.GetTexture( name )
+			If Not tex
+				Print( "Texture: Error, texture " + name + " not found")
+			Else
+				Return MaterialLibrary.GetTexture( name )
+			End
+		End
+		Return Null
 	End
 	
 	
-	Function Load:Texture( path:String, name:String, flags:TextureFlags )
+	Function Create:Texture( name:String, path:String, flags:TextureFlags )
 		Local tex := Texture.Load( path, flags )
+		Assert( tex, "Texture: Load fail" )
 		tex.Name = name
 		tex.Path = path
 		Return tex
@@ -32,7 +41,7 @@ Class Texture Extension
 	
 	Method ToJson:JsonObject()
 		Local json := New JsonObject
-		json.SetString( "Name", Path )
+		json.SetString( "Name", Name )
 		json.SetString( "Path", Path )
 		json.SetNumber( "Flags", UInt( Flags ) )
 		Return json
@@ -43,7 +52,32 @@ Class Texture Extension
 		Local flags:TextureFlags = IntFlags( UInt( json[ "Flags"].ToNumber() ) )
 		Local name:= json[ "Name"].ToString()
 		Local path := json[ "Path"].ToString()
-		Return Load( name, path, flags )
+		Return Create( name, path, flags )
+	End
+	
+	'****************************** I/O ******************************
+	
+	Function Save:JsonObject( path:String )
+		Local json := New JsonObject
+
+		For Local name := Eachin MaterialLibrary.AllTextures().Keys
+			json.SetObject( name, Get(name).ToJson().ToObject() )
+		End
+	
+		SaveString( json.ToJson(), path )
+		Return json
+	End
+	
+	
+	Function Load( path:String )
+		Local json := JsonObject.Load( path )
+		Assert( json, "Texture: Json load fail" )
+			
+		For Local obj := Eachin json.ToObject().Values
+			If obj.IsObject
+				Texture.FromJson( Cast<JsonObject>( obj ) )	
+			End
+		Next
 	End
 	
 End

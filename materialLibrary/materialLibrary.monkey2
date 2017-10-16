@@ -4,8 +4,9 @@ Class MaterialLibrary
 	
 	Private
 	Global _allMaterials := New Map< String,Material >
-	Global _allTextures := New Map< String,Texture >
 	Global _allMaterialNames := New Map< Material, String >
+	
+	Global _allTextures := New Map< String,Texture >
 	Global _allTextureNames := New Map< Texture, String >
 	Global _allTexturePaths := New Map< String, String >
 	
@@ -27,6 +28,18 @@ Class MaterialLibrary
 		Return _allMaterialNames[ mat ]	
 	End
 	
+	Function Remove( mat:Material )
+		Local name := GetName( mat )
+		If name Then _allMaterials.Remove( name )
+		_allMaterialNames.Remove( mat )
+	End
+	
+	Function AllMaterials:Map< String,Material >()
+		Return _allMaterials
+	End
+	
+	'******************************** textures '********************************
+	
 	Function AddTexture( name:String, tex:Texture )
 		_allTextures.Add( name, tex )
 		_allTextureNames.Add( tex, name )
@@ -35,8 +48,6 @@ Class MaterialLibrary
 	Function AddTexturePath( name:String, path:String )
 		_allTexturePaths.Add( name, path )
 	End
-	
-	'******************************** textures '********************************
 	
 	Function GetTexture:Texture( name:String )
 		If Not name Return Null
@@ -52,50 +63,8 @@ Class MaterialLibrary
 		Return _allTextureNames[ tex ]	
 	End
 	
-	'******************************** I/O '********************************
-	
-	Function Save:JsonObject( path:String )
-		Local json := New JsonObject
-		Local texturesJson:= New JsonObject
-		Local materialsJson:= New JsonObject
-		
-		'textures!
-		For Local name := Eachin _allTextures.Keys
-			texturesJson.SetObject( name, _allTextures[name].ToJson().ToObject() )
-		End
-		
-		'materials!
-		For Local name := Eachin _allMaterials.Keys
-			materialsJson.Merge( _allMaterials[name].ToJson() )
-		End
-		
-		'combine!
-		json.SetObject( "Textures", texturesJson.ToObject() )
-		json.SetObject( "Materials", materialsJson.ToObject() )
-		
-		'Save!
-		SaveString( json.ToJson(), path )
-		Return json
-	End
-	
-	
-	Function Load( path:String )
-		
-		Local json := JsonObject.Load( path )
-		
-		For Local key := Eachin json.ToObject().Keys
-			
-			If key = "Materials"
-				Print "Materials, yay"
-			End
-			
-			If key = "Textures"
-				Print "Textures, yay"
-			End
-			
-		Next
-		
-		
+	Function AllTextures:Map< String,Texture >()
+		Return _allTextures
 	End
 	
 End

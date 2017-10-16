@@ -40,7 +40,7 @@ Class LightComponent Extends Component
 		_light.Name  = "EntityLight"
 	End
 	
-	Method OnCreate() Override
+	Method OnAttach() Override
 		GameObject.SetEntity( _light )
 	End
 End

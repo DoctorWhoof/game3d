@@ -9,6 +9,9 @@
 
 Using game3d..
 
+Const devPath := "/Users/leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/"
+'Const devPath := "/home/leosantos/dev/game3d/_examples/scenes/"
+
 Function Main()
 	Local config:=New StringMap<String>
 	config["mojo3d_renderer"]="forward"
@@ -18,17 +21,19 @@ Function Main()
 	App.Run()
 End
 
+
 Class TestWindow Extends Window
 	Method New()
 		Super.New( "Test", 1280, 720, WindowFlags.Resizable )
-		
 		Local gameView := New GameView( 1280, 720, True )
 		gameView.Layout = "letterbox"
 		gameView.displayInfo = True
+		
 		ContentView = gameView
 		ClearColor = Color.Black
 	End
 End
+
 
 Class GameView Extends SceneView
 	Method New( width:Int, height:Int, enable3D:Bool )
@@ -36,14 +41,9 @@ Class GameView Extends SceneView
 	End
 
 	Method OnStart() Override
-		Scene.ClearColor = Color.Black
-		Scene.EnvColor = Color.Black
-		Scene.AmbientLight = Color.Black
-		
-		'-----------------------------------------------------------------
-	
-		Local wireTex := Texture.Load( "asset::wireGlow.png", "TexWire", TextureFlags.FilterMipmap )
-		Local catTex := Texture.Load( "asset::cat.png", "TexCat", TextureFlags.FilterMipmap )
+
+		Local wireTex := Texture.Create( "TexWire", "asset::wireGlow.png", TextureFlags.FilterMipmap )
+		Local catTex := Texture.Create( "TexCat", "asset::cat.png", TextureFlags.FilterMipmap )
 		
 		Local mat := New PbrMaterial
 		mat.Name = "MatWire"
@@ -69,6 +69,9 @@ Class GameView Extends SceneView
 		cam.Far = 15.0
 		cam.FOV = 45
 		cam.FogColor = New Double[]( 0, 0, 0, 1 )
+		cam.EnvColor = New Double[]( 0, 0, 0, 1 )
+		cam.ClearColor = New Double[]( 0, 0, 0, 1 )
+		cam.AmbientLight = New Double[]( 0, 0, 0, 1 )
 		camera.AddComponent( cam )
 		
 		camera.Transform.Move( 0, 1.5, 3 )
@@ -92,8 +95,8 @@ Class GameView Extends SceneView
 		bounceLight.Name = "bounceLight"
 		
 		Local bounceLightComp := New LightComponent
-		bounceLightComp.Color = New Double[]( 0, 0.4, 0.75, 1.0 )
-		bounceLightComp.CastsShadow = False
+		bounceLightComp.Color = New Double[]( 0, 0.8, 1.5, 2.0 )
+		bounceLightComp.CastsShadow = True
 		bounceLight.AddComponent( bounceLightComp )
 		
 		bounceLight.Transform.Move( 0, -10, 0 )
@@ -101,24 +104,24 @@ Class GameView Extends SceneView
 		
 		'-----------------------------------------------------------------
 		
-		Local test1 := New GameObject
-		test1.Name = "test1"
+		Local teapot := New GameObject
+		teapot.Name = "teapot"
 		
-		Local test1Model := New LoadModel
-		test1Model.path = "asset::teapotLow.fbx" 
-		test1.AddComponent( test1Model )
+		Local teapotModel := New LoadModel
+		teapotModel.path = "asset::teapotLow.fbx" 
+		teapot.AddComponent( teapotModel )
 		
-		Local test1Mat := New AssignMaterial
-		test1Mat.material = "MatRed"
-		test1.AddComponent( test1Mat )
+		Local teapotMat := New AssignMaterial
+		teapotMat.material = "MatRed"
+		teapot.AddComponent( teapotMat )
 		
-		Local test1Spin := New Spin
-		test1Spin.y = 1.0
-		test1.AddComponent( test1Spin )
+		Local teapotSpin := New Spin
+		teapotSpin.y = 1.0
+		teapot.AddComponent( teapotSpin )
 		
-		test1.AddComponent( New ChangeColor )
+		teapot.AddComponent( New ChangeColor )
 		
-		test1.Transform.Move( New Vec3f( 0, 0.5, 0 ) )
+		teapot.Transform.Move( New Vec3f( 0, 0.5, 0 ) )
 		
 		'-----------------------------------------------------------------
 		
@@ -137,7 +140,7 @@ Class GameView Extends SceneView
 		donut1Spin.x = 4.0
 		donut1.AddComponent( donut1Spin )
 		
-		donut1.Parent = "test1"
+		donut1.Parent = "teapot"
 		donut1.Transform.Move( New Vec3f( 0, 0, -1.0 ) )
 		donut1.Transform.Scale = New Vec3f( 0.25 )
 	
@@ -158,7 +161,7 @@ Class GameView Extends SceneView
 		donut2Spin.x = 4.0
 		donut2.AddComponent( donut2Spin )
 		
-		donut2.Parent = "test1"
+		donut2.Parent = "teapot"
 		donut2.Transform.Move( New Vec3f( 0, 0, 1.0 ) )
 		donut2.Transform.Scale = New Vec3f( 0.25 )
 		
@@ -182,24 +185,24 @@ Class GameView Extends SceneView
 		
 		'-----------------------------------------------------------------
 	
-'		light.Entity.Visible = False
+		light.Entity.Visible = False
+		Print ( "Vis: " + (light.Visible? "true" Else "false") )
+		
+		Local result := Cast<Bool>( Variant( light.Visible ) )
+		
+		Print ( "Vis: " + ( light.Visible?  "true" Else "false") )
+		
+		Local json := New JsonObject
+		For Local g := Eachin GameObject.GetFromScene( Scene )
+			json.Serialize( g.Name, g )
+		Next
 
-'		Local json := New JsonObject
-'		For Local g := Eachin GameObject.GetFromScene( Scene )
-'			json.Serialize( g.Name, g )
-'		Next
+		Print json.ToJson()
+		SaveString( json.ToJson(), devPath + "testscene.json" )
 		
-		Print MaterialLibrary.Save( "/Users/Leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testMaterials.json" ).ToJson()
-		
-'		Print json.ToJson()
-'		SaveString( json.ToJson(), "/Users/Leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/testscene.json" )
-'		SaveString( json.ToJson(), "/home/leosantos/dev/game3d/_examples/scenes/testscene.json" )
-		
+		Print Texture.Save( devPath + "testTextures.json" ).ToJson()
+		Print Material.Save( devPath + "testMaterials.json" ).ToJson()
 
 	End
-	
-	
-'	Method OnUpdate() Override
-'		WasdCameraControl( Camera, Self )	
-'	End
+
 End

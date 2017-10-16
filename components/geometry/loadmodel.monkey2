@@ -9,7 +9,7 @@ Class LoadModel Extends Component
 		Super.New( "LoadModel" )
 	End
 	
-	Method OnCreate() Override
+	Method OnAttach() Override
 		GameObject.SetEntity( Model.Load( path ) )
 	End
 	

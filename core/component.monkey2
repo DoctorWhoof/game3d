@@ -21,12 +21,6 @@ Class Component
 		_superClass = name
 	End
 	
-'	Property GameObjectByName:String()
-'		Return _gameObj.Name
-'	Setter( name:String )
-'		_gameObj = GameObject.Find( name )
-'	End
-	
 	Property Enabled:Bool()
 		Return _enabled
 	Setter( isEnabled:Bool )
@@ -53,41 +47,16 @@ Class Component
 		Return _gameObj.Time
 	End
 	
-'	Private
-'	Property Owner:String()
-'		Return _gameObj.Name
-'	Setter( name:String )
-'		If _gameObj Then _gameObj.RemoveComponent( Self )
-'		_gameObj = GameObject.Find( name )
-'		_gameObj.AddComponent( Self )
-'		Print _gameObj.Name + "+= " + Name
-'	End
-	
 	'************************************* Public methods *************************************
 	
 	Public
-'	Method ToJsonValue:JsonValue()
-'		Return Serialize( Self )
-'	End
-'	
-'	Method FromJson( json:JsonObject )
-'	End
-
 	Method New( name:String )
 		Name = name
 	End
-	
-'	Method Init()
-'		'Call this after deserializing, to ensure all fields values are applied, and before OnCreate()
-'		Local type := Self.DynamicType	
-'		For Local d := Eachin type.GetDecls()
-'			Print Name + ":" + d.Name
-'		Next
-'	End
-'	
+
 	Method SetGameObject( obj:GameObject )
 		_gameObj = obj
-'		Print "    " + Name + " gameObject:" + obj.Name
+		OnAttach()
 	End
 	
 	Method Start()
@@ -129,10 +98,6 @@ Class Component
 		_gameObj = Null
 	End
 	
-	'Called right after component is added (and already knows its gameobject)
-	Method OnCreate() Virtual
-	End
-	
 	Method To:String()
 		Return Name	
 	End
@@ -145,6 +110,11 @@ Class Component
 	Method OnStart() Virtual
 	End
 	
+	'Called right after component is added to a GameObject
+	Method OnAttach() Virtual
+	End
+	
+	'Called on every frame update
 	Method OnUpdate() Virtual
 	End
 	

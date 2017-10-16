@@ -8,7 +8,7 @@ Using std..
 Using mojo..
 
 'Simply creates the object, doesn't load any values into it
-Function BasicDeserialize:Variant( obj:StringMap<JsonValue> )
+Function BasicDeserialize:Variant( obj:StringMap<JsonValue>, constructorArgTypes:TypeInfo = Null, arguments:Variant[] = Null )
 	
 	Local v:Variant
 	
@@ -20,8 +20,12 @@ Function BasicDeserialize:Variant( obj:StringMap<JsonValue> )
 			If constructor
 				v = constructor.Invoke( Null, Null )
 			Else
-				Print( "~nDeserialize: Error, Class constructors can't have arguments.~n" )
-				App.Terminate()
+				If( Not arguments = Null ) And ( Not constructorArgTypes = Null )
+					constructor = info.GetDecl( "New", constructorArgTypes )
+					v = constructor.Invoke( Null, arguments )
+				Else
+					Print( "Deserialize: Error, Invalid constructor arguments type or arguments." )
+				End
 			End
 		Else
 			Print( "Deserialize: Class " + objClass + " not found." )
@@ -33,7 +37,7 @@ Function BasicDeserialize:Variant( obj:StringMap<JsonValue> )
 End
 
 
-'Creates a new object from scratch, then loads its properties
+'Creates a new object, then loads its properties with optional filtering.
 Function LoadFromJsonObject:Variant( obj:StringMap<JsonValue>, include:StringStack = Null, exclude:StringStack = Null )
 	
 	Local v := BasicDeserialize( obj )
@@ -53,58 +57,13 @@ Function LoadFromJsonObject:Variant( obj:StringMap<JsonValue>, include:StringSta
 		End
 		
 		Local d:= info.GetDecl( key )
-		Local value := LoadFromJsonValue( obj[key], v, d )
+		Local value := LoadFromJsonValue( v, obj[key], d )
 		Prompt( key + " = " + VariantToString( value ) )
 	Next
 	
 	Return v
 
 End
-
-
-''Creates a new object from scratch, then loads its properties
-'Function LoadFromJsonObject:Variant( obj:StringMap<JsonValue>, include:StringStack = Null, exclude:StringStack = Null )
-'	
-'	Local v:Variant
-'	
-'	If obj["Class"]
-'	 	Local objClass:= obj["Class"].ToString()
-'		Local info := TypeInfo.GetType( objClass )
-'		If info
-'			Local constructor := info.GetDecl( "New" )
-'			If constructor
-'				'This is the variant we'll assign the field values to.
-'				v = constructor.Invoke( Null, Null )
-'				
-'				For Local key := EachIn obj.Keys
-'					If key = "Class" Continue
-'					If include
-'						If Not include.Empty
-'							If Not include.Contains( key ) Continue	
-'						End
-'					End
-'					If exclude
-'						If Not exclude.Empty
-'							If exclude.Contains( key ) Continue
-'						End
-'					End
-'					
-'					Local d:= info.GetDecl( key )
-'					Local value := LoadFromJsonValue( obj[key], v, d )
-'					Prompt( key + " = " + VariantToString( value ) )
-'				Next
-'			Else
-'				Print( "~nDeserialize: Error, Class constructors can't have arguments.~n" )
-'				App.Terminate()
-'			End
-'		Else
-'			Print( "Deserialize: Class " + objClass + " not found." )
-'		End
-'	End
-'	
-'	If v = Null Then Print( "Deserialize: Nothing to return." )
-'	Return v
-'End
 
 
 'Use this if the target object has already been created, and all you want is to load its properties
@@ -124,7 +83,7 @@ Function GetPropertiesFromJsonObject( target:Variant, json:JsonObject, include:S
 			End
 		End
 		If ( d.Kind = "Property" And d.Settable ) Or ( d.Kind = "Field" And Not d.Name.StartsWith("_") )
-			Local value := LoadFromJsonValue( json.GetValue( d.Name ), target, d )
+			Local value := LoadFromJsonValue( target, json.GetValue( d.Name ), d )
 			Prompt( d.Name + " = " + VariantToString( value ) )
 		End
 		
@@ -132,8 +91,17 @@ Function GetPropertiesFromJsonObject( target:Variant, json:JsonObject, include:S
 End
 
 
+'loads a single value into an existing object.
+Function LoadFromJsonValue:Variant( v:Variant, valueName:String, jsonValue:JsonValue )
+	Local info := v.DynamicType
+	Local d:= info.GetDecl( valueName )
+	Local value := LoadFromJsonValue( v, jsonValue, d )
+	Return v
+End
+
+
 'Our main workhorse, recursively loads a properly cast JasonValue into an object's Declaration.
-Function LoadFromJsonValue:Variant( value:JsonValue , v:Variant, d:DeclInfo )	
+Function LoadFromJsonValue:Variant( v:Variant, value:JsonValue, d:DeclInfo )	
 	Local newVar:Variant
 	
 	If value.IsNumber	
@@ -189,7 +157,7 @@ End
 Function JsonArrayToVariantArray<T>:Variant( jsonArr:Stack<JsonValue> )
 	Local arr := New T[ jsonArr.Length ]
 	For Local n := 0 Until jsonArr.Length
-		Local value:= LoadFromJsonValue( jsonArr[n], Null, Null )
+		Local value:= LoadFromJsonValue( Null, jsonArr[n], Null )
 		arr[ n ] = Cast<T>( value )
 	Next
 	Return Variant( arr )

@@ -22,19 +22,40 @@ Class CameraComponent Extends Component
 		If _fog Then _fog.Far = far
 	End
 	
+	Property Aspect:Double()
+		Return _cam.Aspect
+	End
+	
 	Property FogColor:Double[]()
 		Return _fog.Color.ToArray()
 	Setter( c:Double[] )
 		_fog.Color = std.graphics.Color.FromArray( c )
 	End
 	
-	Property Aspect:Double()
-		Return _cam.Aspect
+	Property EnvColor:Double[]()
+		Return _envColor.ToArray()
+	Setter( c:Double[] )
+		_envColor = std.graphics.Color.FromArray( c )
+	End
+	
+	Property ClearColor:Double[]()
+		Return _clearColor.ToArray()
+	Setter( c:Double[] )
+		_clearColor = std.graphics.Color.FromArray( c )
+	End
+	
+	Property AmbientLight:Double[]()
+		Return _ambLight.ToArray()
+	Setter( c:Double[] )
+		_ambLight = std.graphics.Color.FromArray( c )
 	End
 	
 	Private
 	Field _cam :Camera
 	Field _fog :FogEffect
+	Field _envColor: Color
+	Field _clearColor: Color
+	Field _ambLight: Color
 	
 	Public
 	Method New()
@@ -45,10 +66,13 @@ Class CameraComponent Extends Component
 		_fog = New FogEffect( Color.Blue, _cam.Near, _cam.Far )
 	End
 	
-	Method OnCreate() Override
+	Method OnAttach() Override
 		GameObject.SetEntity( _cam )
-		GameObject.Viewer.Camera = _cam
-		GameObject.Viewer.Scene.AddPostEffect( _fog )
+		Viewer.Camera = _cam
+		If _fog Then Viewer.Scene.AddPostEffect( _fog )
+		If _envColor Then Viewer.Scene.EnvColor = _envColor
+		If _clearColor Then Viewer.Scene.ClearColor = _clearColor
+		If _ambLight Then Viewer.Scene.AmbientLight = _ambLight
 	End
 	
 End
