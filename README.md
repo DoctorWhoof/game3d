@@ -5,7 +5,7 @@ Still very early in development and missing tons of features, but I want to ensu
 Main features:
 - Add gameplay and new features by simply creating new components and attaching them to game objects.
 - Embraces Mojo3D's design. The Component system works "on top" of Mojo3D's Scenes, Entities, Etc.
-- Json based scene files, with "hot reloading" - no need to recompile to see changes!
+- Json based scene files, with "hot reloading" - no need to recompile to see changes! Simply hit Command+Alt+R to reload the current scene.
 - Name based textures, materials and game objects
 
 Main stuff missing:
