@@ -55,10 +55,10 @@ Const smallFont:Font = Font.Load( "font::DejaVuSans.ttf", 12 )
 Global developmentPath:String = Null
 
 Class SceneView Extends View
-	Field keyPause := Key.P						'shortcut used to pause
-	Field keyReload := Key.R					'shortcut used to reload the current scene
+	Field keyPause := Key.P						'shortcut to pause while in devMode
+	Field keyReload := Key.R					'shortcut to reload the current scene in devMode
 	
-	Field devMode:= False					'displays feedback info, allows dev shortcuts
+	Field devMode:= False						'displays feedback info, allows dev shortcuts
 	Field editMode:= False						'allows content editing
 	Field autoRender := True					'if on, events need to call RequestRender(), app style
 	Field render3DScene := False				'enable to render Mojo3D scenes
