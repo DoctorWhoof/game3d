@@ -24,8 +24,10 @@ Class Game3dView Extends SceneView
 		'traditional mojo3d model creation... but with components!
 		Local test1 := Model.CreateTorus( 2, .5, 48, 24, New PbrMaterial( Color.Red, 0.1, 0.5 ) )
 		test1.Name = "Test2"
-		test1.AddComponent( New Spin( 0, 1, 0 ) )
-
+		
+		Local spin := test1.AddComponent( New Spin )
+		spin.y = 1.0
+		
 		'component based model creation - the component only "runs" at the start
 		Local test2 := New Model
 		test2.Name = "Test2"

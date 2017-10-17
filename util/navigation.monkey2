@@ -115,10 +115,12 @@ Function WasdCameraControl( cam:Entity, view:View, delta:Double = 1.0, touchStyl
 			cam.MoveX( finalWalkSpeed )
 		End
 		
-		If Keyboard.KeyDown( Key.R )
-			cam.MoveY( finalWalkSpeed )
-		ElseIf Keyboard.KeyDown( Key.F )
-			cam.MoveY( -finalWalkSpeed )
+		If Not Keyboard.KeyDown( Key.LeftGui )
+			If Keyboard.KeyDown( Key.R )
+				cam.MoveY( finalWalkSpeed )
+			ElseIf Keyboard.KeyDown( Key.F )
+				cam.MoveY( -finalWalkSpeed )
+			End
 		End
 		
 		If touchStyle

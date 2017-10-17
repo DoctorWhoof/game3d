@@ -247,7 +247,7 @@ Class GameObject
 	End
 
 	'To do:destroy needs to be called from Entity.Destroyed
-	Method Destroy()
+	Method Destroy( destroyEntity:Bool = True )
 		For Local c:= Eachin _components
 			c.Destroy()
 		Next
@@ -256,9 +256,11 @@ Class GameObject
 		_all.Remove( Self )
 		_allByName.Remove( Name )
 		_allByEntity.Remove( _entity )
-		If _entity
-			_entity.Destroy()
-			_entity = Null
+		If destroyEntity
+			If _entity
+				_entity.Destroy()
+				_entity = Null
+			End
 		End
 	End
 	'************************************* Static Functions *************************************

@@ -1,10 +1,12 @@
 To do:
 
-- Update old examples
-
 - Test Houdini-To-Monkey model pipeline
-		
-- Environment component
+
+------------------------------------------------------------------------------------------------------------------------
+
+Wishlist:
+
+- Transfer all Environment variables in json format:
 	- Env Color
 	- Env texture
 	- Ambient light
@@ -31,3 +33,6 @@ Done!
 - Break Load and Save functions per class:
 	- Get rid of DeserializeGameObjects, Use GameObject.Load
 	- Get rid of MaterialLibrary.Save and Load, use Material.Load, Material.Save, Texture.Load, Texture.Save
+- Wireframe component
+- Update old examples
+- "Hot reloading" of scenes (no recompiling!)

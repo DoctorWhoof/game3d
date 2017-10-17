@@ -2,7 +2,7 @@
 #Import "<mojo>"
 #Import "<mojox>"
 
-#Import "view/game2dview"
+#Import "src/game2dview"
 #Import "../util/navigation"
 
 Using std..
@@ -35,7 +35,7 @@ Class GameDock Extends DockingView
 	Method New()
 		gameView = New Game2dView( 320, 180 )
 		gameView.Style.Font = smallFont
-		gameView.displayInfo = True
+		gameView.devMode = True
 		gameView.editMode = False
 		gameView.Layout = "fill"
 		

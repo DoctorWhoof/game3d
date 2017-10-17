@@ -13,50 +13,7 @@ Class Canvas Extension
 				End
 			End
 		End
-		game3d.SceneView.Current().Echo( Truncate(s0) + ",   " + Truncate(s1) )
 	End
-	
-	#rem
-	'Needs serious optimizing! how about casting a ray only once per vertex?...	
-	Method DrawWireframe( world:World, camera:Camera, model:Model, offsetX:Float=0, offsetY:Float=0, push:Float = 0.1 )
-		Local vertices := model.Mesh.GetVertices()
-		Local indices := model.Mesh.GetAllIndices()
-		Local matrix := model.Matrix
-		For Local n := 0 Until indices.Length - 1 Step 3
-			
-			Local v0 := matrix * vertices[indices[n]].position 
-			Local v1 := matrix * vertices[indices[n+1]].position
-			Local v2 := matrix * vertices[indices[n+2]].position
-			
-			Local p0 := matrix * (vertices[indices[n]].normal*push) 
-			Local p1 := matrix * (vertices[indices[n+1]].normal*push)
-			Local p2 := matrix * (vertices[indices[n+2]].normal*push)
-
-			Local ray0 := world.RayCast( camera.Position, v0 + p0 )
-			Local ray1 := world.RayCast( camera.Position, v1 + p1 )
-			Local ray2 := world.RayCast( camera.Position, v2 + p2 )
-			
-'			Local forward := camera.Basis * New Vec3f( 0, 0, 1.0 )
-'			Local dot0 := forward.Dot( v0 )
-'			Local dot1 := forward.Dot( v1 )
-'			Local dot2 := forward.Dot( v2 )
-'			Echo( Truncate(forward) )
-
-'			If dot0 > 0 And dot1 > 0 And dot2 > 0
-				If( ray0 = Null ) And ( ray1 = Null )
-					Draw3DLine( camera, v0, v1, offsetX, offsetY )
-				End
-				If( ray1 = Null ) And ( ray2 = Null )
-					Draw3DLine( camera, v1, v2, offsetX, offsetY )
-				End
-'				If( ray2 = Null ) And ( ray0 = Null )
-'					Draw3DLine( camera, v2, v0, offsetX, offsetY )
-'				End
-'			End
-		Next
-	End
-	#end
-	
 
 	'Draws the same image repeatedly
 	Method DrawBatch( img:Image, startX:Double, startY:Double, width:Double, height:Double, cellWidth:Float = -1, cellHeight:Float = -1 )
@@ -113,7 +70,7 @@ Class Canvas Extension
 		End
 	End
 
-
+	'To do
 '	Method DrawPatch( imgs:Image[], startX:Double, startY:Double, width:Double, height:Double )
 '		If imgs
 ''   			DrawImage( imgs[0], startX

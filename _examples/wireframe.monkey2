@@ -1,16 +1,15 @@
 #Import "../game3d"
-
 #Import "components/spin"
-#Import "components/changecolor"
+#Import "../components/wireframerenderer"
 
-#Import "images/wireGlow.png"
-#Import "images/cat.png"
-#Import "models/teapotLow.fbx"
+#Import "models/asteroidLow.fbx"
+
+#Import "scenes/wireframeScene.json"
+#Import "scenes/testMaterials.json"
 
 Using game3d..
 
-Const devPath := "/Users/leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/"
-'Const devPath := "/home/leosantos/dev/game3d/_examples/scenes/"
+Const devPath := "asset::"
 
 Function Main()
 	Local config:=New StringMap<String>
@@ -27,8 +26,7 @@ Class TestWindow Extends Window
 		Super.New( "Test", 1280, 720, WindowFlags.Resizable )
 		Local gameView := New GameView( 1280, 720, True )
 		gameView.Layout = "letterbox"
-		gameView.displayInfo = True
-		
+		gameView.devMode = True
 		ContentView = gameView
 		ClearColor = Color.Black
 	End
@@ -41,13 +39,25 @@ Class GameView Extends SceneView
 	End
 
 	Method OnStart() Override
-		Texture.Load( devPath + "testTextures.json" )
 		Material.Load( devPath + "testMaterials.json" )
-		GameObject.Load( devPath + "testscene.json" )
-	End
-
-	Method OnUpdate() Override
-		WasdCameraControl( Camera, Self )', 1.0, True )	
+		GameObject.Load( devPath + "wireframeScene.json" )
 	End
 End
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

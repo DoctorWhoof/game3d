@@ -4,7 +4,7 @@ Namespace std.Json
 
 Class GameObject Extension
 
-	Function Load( path:String )
+	Function Load:JsonObject( path:String )
 		Local json := JsonObject.Load( path )
 		Assert( json, "Deserialize Game Objects: Json file error")
 		
@@ -41,7 +41,8 @@ Class GameObject Extension
 			GetPropertiesFromJsonObject( Variant(gameobj), json.GetObject( key ), include, exclude  )
 			Prompt( "" )
 		Next
-	
+		
+		Return json
 	End
 
 End

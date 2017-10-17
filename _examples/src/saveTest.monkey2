@@ -1,16 +1,13 @@
-#Import "../game3d"
+#Import "../../game3d"
+#Import "../components/spin"
+#Import "../components/changecolor"
 
-#Import "components/spin"
-#Import "components/changecolor"
-
-#Import "images/wireGlow.png"
-#Import "images/cat.png"
-#Import "models/teapotLow.fbx"
+#Import "../images/"
+#Import "../models/"
 
 Using game3d..
 
-Const devPath := "/Users/leo/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/"
-'Const devPath := "/home/leosantos/dev/game3d/_examples/scenes/"
+Const devPath := HomeDir() + "/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/"
 
 Function Main()
 	Local config:=New StringMap<String>
@@ -27,7 +24,7 @@ Class TestWindow Extends Window
 		Super.New( "Test", 1280, 720, WindowFlags.Resizable )
 		Local gameView := New GameView( 1280, 720, True )
 		gameView.Layout = "letterbox"
-		gameView.displayInfo = True
+		gameView.devMode = True
 		
 		ContentView = gameView
 		ClearColor = Color.Black
@@ -185,12 +182,7 @@ Class GameView Extends SceneView
 		
 		'-----------------------------------------------------------------
 	
-		light.Entity.Visible = False
-		Print ( "Vis: " + (light.Visible? "true" Else "false") )
-		
-		Local result := Cast<Bool>( Variant( light.Visible ) )
-		
-		Print ( "Vis: " + ( light.Visible?  "true" Else "false") )
+		light.Visible = False
 		
 		Local json := New JsonObject
 		For Local g := Eachin GameObject.GetFromScene( Scene )
@@ -198,8 +190,7 @@ Class GameView Extends SceneView
 		Next
 
 		Print json.ToJson()
-		SaveString( json.ToJson(), devPath + "testscene.json" )
-		
+		SaveString( json.ToJson(), devPath + "testScene.json" )
 		Print Texture.Save( devPath + "testTextures.json" ).ToJson()
 		Print Material.Save( devPath + "testMaterials.json" ).ToJson()
 

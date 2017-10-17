@@ -5,11 +5,10 @@ Namespace game3d
 #Import "<mojo>"
 #Import "<mojo3d>"
 #Import "<mojo3d-loaders>"
-'#Import "<mojo3d-physics>"
+#Import "<mojo3d-physics>"
 
 #Import "core/gameobject"
-#Import "core/serialize"
-#Import "materialLibrary/materialLibrary"
+#Import "core/materialLibrary"
 
 #Import "components/cameracomponent"
 #Import "components/lightcomponent"
@@ -28,6 +27,7 @@ Namespace game3d
 #Import "extensions/material"
 #Import "extensions/texture"
 #Import "extensions/model"
+#Import "extensions/gameobject"
 
 #Import "core/serial"
 
@@ -37,6 +37,7 @@ Namespace game3d
 #Import "clock/clock"
 
 #Import "graphics/grid"
+
 #Import "util/profile"
 #Import "util/navigation"
 
@@ -55,7 +56,9 @@ Global developmentPath:String = Null
 
 Class SceneView Extends View
 	Field keyPause := Key.P						'shortcut used to pause
-	Field displayInfo:= False					'displays feedback info
+	Field keyReload := Key.R					'shortcut used to reload the current scene
+	
+	Field devMode:= False					'displays feedback info, allows dev shortcuts
 	Field editMode:= False						'allows content editing
 	Field autoRender := True					'if on, events need to call RequestRender(), app style
 	Field render3DScene := False				'enable to render Mojo3D scenes
@@ -81,6 +84,7 @@ Class SceneView Extends View
 	Field _echoColorStack:= New Stack<Color>	'Contains all the text messages colors
 	
 	Public
+	
 	'********************************* Public Properties *********************************
 
 	Property Canvas:Canvas()
@@ -190,7 +194,7 @@ Class SceneView Extends View
 		Self.render3DScene = render3DScene
 
 		'3D Scene
-		_scene = Scene.GetCurrent()
+'		_scene = Scene.GetCurrent()
 		
 		Style.Font = smallFont
 	End
@@ -207,17 +211,19 @@ Class SceneView Extends View
 		If autoRender Then App.RequestRender()		
 		Self._canvas = canvas
 		
-		'********* Init *********
+		'****************** Init *********************
 		If Not _init
-			If Layout = "fill" Then _camera2D.SetSize( Width, Height )
-			Clock.Reset()
-			OnStart()
-			_init = True
-			Return
+'			If Layout = "fill" Then _camera2D.SetSize( Width, Height )
+'			Clock.Reset()
+'			OnStart()
+'			_init = True
+'			Return
+			Reload()
 		End
 		
-		'********* First frame *********
+		'****************** First frame **************
 		If _firstFrame
+			Print( "Game3D: First frame" )
 			Scene.Start()	'Maybe: set Viewer property here?
 			StartDone()
 			_firstFrame = False
@@ -226,21 +232,21 @@ Class SceneView Extends View
 		'********* Update necessary modules *********
 		Clock.Update()
 		
-		'********* Update loop *********
+		'****************** Update loop *************
 		Profile.Start( "upd" )
 		
 		If Not editMode
 			If Not _paused
 				OnUpdate()
 				Scene.Update()
-'				_scene.World.Update()
+				_scene.World.Update()
 			End
 		End
 		
 		Profile.Finish( "upd" )
 		Echo( "Update: " + Profile.GetString( "upd" ) )
 		
-		'********* Draw loop *********
+		'****************** Draw loop ****************
 		Profile.Start( "drw" )
 		
 		'3D drawing
@@ -273,21 +279,51 @@ Class SceneView Extends View
 		
 		Profile.Finish( "drw" )
 		Echo( "Render: " + Profile.GetString( "drw" ) )
-		If displayInfo Then DrawEcho( canvas )
+		If devMode Then DrawEcho( canvas )
 
-		'********* Input *********
-'		If Keyboard.KeyHit( keyPause ) Then PauseToggle()		'Needs to happen after DrawEcho()
+		'**************** Input ****************
+		If devMode And Keyboard.KeyDown( Key.LeftGui )
+			If Keyboard.KeyHit( keyPause ) Then Paused = Not Paused		'Needs to happen after DrawEcho()
+			If Keyboard.KeyHit( keyReload ) Then Reload()
+		End
 		
-		'********* Clean up *********
+		'**************** Clean up ****************
 		If Not _paused
 			_echoStack.Clear()
 			_echoColorStack.Clear()
 		End
 	End
 	
+	
+	Method Reload()
+		
+		'****************** Clear current Mojo3d scene *********************
+		Print( "Game3D: Init" )
+		MaterialLibrary.Clear()
+		
+		If _scene
+			For Local obj := Eachin GameObject.GetFromScene( _scene )
+				obj.Destroy( False )
+			Next
+			_scene.DestroyAllEntities()
+		End
+
+		'****************** Init *********************
+		_scene = New Scene
+		mojo3d.graphics.Scene.SetCurrent( _scene )
+		
+		If Layout = "fill" Then _camera2D.SetSize( Width, Height )
+		Clock.Reset()
+		OnStart()
+		_init = True
+		_firstFrame = True
+		
+	End
+	
+	
 	Method Echo( text:String, alwaysDisplay:Bool = True, color:Color = Color.White )
 		If Not Paused
-			If displayInfo Or alwaysDisplay
+			If devMode Or alwaysDisplay
 				_echoStack.Push( text )
 				_echoColorStack.Push( color )
 			End

@@ -12,6 +12,14 @@ Class MaterialLibrary
 	
 	Public
 	
+	Function Clear()
+		_allMaterials.Clear()
+		_allMaterialNames.Clear()
+		_allTextures.Clear()
+		_allTextureNames.Clear()
+		_allTexturePaths.Clear()
+	End
+	
 	'******************************** materials '********************************
 	
 	Function AddMaterial( name:String, mat:Material )
