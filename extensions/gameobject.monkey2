@@ -44,5 +44,15 @@ Class GameObject Extension
 		
 		Return json
 	End
+	
+	
+	Function Save:JsonObject( scene:Scene, path:String )
+		Local json := New JsonObject
+		For Local g := Eachin GameObject.GetFromScene( scene )
+			json.Serialize( g.Name, g )
+		Next
+		SaveString( json.ToJson(), path )
+		Return json
+	End
 
 End

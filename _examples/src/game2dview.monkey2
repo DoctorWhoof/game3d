@@ -3,6 +3,8 @@
 #Import "../components/grid2d"
 #Import "../../components/geometry/pivot"
 
+Const devPath := HomeDir() + "/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/"
+
 Class Game2dView Extends SceneView
 
 	Method New( width:Int, height:Int )
@@ -12,8 +14,8 @@ Class Game2dView Extends SceneView
 	End
 	
 	Method OnStart() Override
-		'Look Ma! No 3d entity! :-)
 		Local obj2D := New GameObject
+		obj2D.Name = "Object2D"
 		
 		Local pivot := obj2D.AddComponent( New Pivot )
 		
@@ -26,6 +28,9 @@ Class Game2dView Extends SceneView
 		sine.x = 20
 		sine.y = 20
 		sine.period = 0.5
+		
+		GameObject.Save( Scene, devPath + "test2D.json" )
+		
 	End
 	
 End

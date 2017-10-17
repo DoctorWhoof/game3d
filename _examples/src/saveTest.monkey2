@@ -184,15 +184,9 @@ Class GameView Extends SceneView
 	
 		light.Visible = False
 		
-		Local json := New JsonObject
-		For Local g := Eachin GameObject.GetFromScene( Scene )
-			json.Serialize( g.Name, g )
-		Next
-
-		Print json.ToJson()
-		SaveString( json.ToJson(), devPath + "testScene.json" )
 		Print Texture.Save( devPath + "testTextures.json" ).ToJson()
 		Print Material.Save( devPath + "testMaterials.json" ).ToJson()
+		Print GameObject.Save( Scene, devPath + "testScene.json" ).ToJson()
 
 	End
 
