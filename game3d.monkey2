@@ -283,27 +283,28 @@ Class SceneView Extends View
 
 		'**************** Input ****************	'Needs to be after DrawEcho()
 		
-		If devMode And Keyboard.KeyDown( Key.LeftGui ) And Keyboard.KeyDown( Key.LeftAlt )
-			If Keyboard.KeyHit( keyPause ) Then Paused = Not Paused		
-			If Keyboard.KeyHit( keyReload )
+		If Keyboard.KeyHit( keyPause )
+			If DevKeys() Then Paused = Not Paused
+		End
+		If Keyboard.KeyHit( keyReload )
+			If DevKeys()
 				Reload()
-				Paused = False	
+				Paused = False
 			End
 		End
-		
+
 		'**************** Clean up ****************
 		
 		If Not _paused
 			_echoStack.Clear()
 			_echoColorStack.Clear()
 		End
+		
 	End
-	
+
 	
 	Method Reload()
-		
 		'****************** Clear current Mojo3d scene *********************
-		
 		Print( "Game3D: Init" )
 		MaterialLibrary.Clear()
 		
@@ -315,7 +316,6 @@ Class SceneView Extends View
 		End
 
 		'****************** Init *********************
-		
 		_scene = New Scene
 		mojo3d.graphics.Scene.SetCurrent( _scene )
 		
@@ -324,7 +324,6 @@ Class SceneView Extends View
 		OnStart()
 		_init = True
 		_firstFrame = True	'forces OnStart() to run again
-		
 	End
 	
 	
@@ -355,7 +354,6 @@ Class SceneView Extends View
 	
 	Private
 
-	
 	Method DrawEcho( canvas:Canvas, drawRect:Bool = False )
 		canvas.PushMatrix()
 		canvas.Scale( 1.0/ CanvasScale.X, 1.0/ CanvasScale.Y )	'compensates for Layout scaling
@@ -375,6 +373,10 @@ Class SceneView Extends View
 		canvas.PopMatrix()
 	End
 	
+	Function DevKeys:Bool()
+		If Keyboard.KeyDown( Key.LeftGui ) And Keyboard.KeyDown( Key.LeftAlt ) Then Return True
+		Return False
+	End
 	
 	'********************************* Static Functions *********************************
 	
@@ -383,7 +385,7 @@ Class SceneView Extends View
 	Function Current:SceneView()
 		Return _currentViewer	
 	End
-	
+
 End
 
 Function Asset:String( folder:String, file:String )

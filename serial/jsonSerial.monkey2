@@ -20,11 +20,11 @@ Class JsonValue Extension
 		Return Float( ToNumber() )
 	End
 	
-	Method ToInt:Float()
+	Method ToInt:Int()
 		Return Int( ToNumber() )
 	End
 	
-	Method ToUInt:Float()
+	Method ToUInt:UInt()
 		Return UInt( ToNumber() )
 	End
 		
