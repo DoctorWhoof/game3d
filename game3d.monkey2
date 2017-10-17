@@ -212,16 +212,13 @@ Class SceneView Extends View
 		Self._canvas = canvas
 		
 		'****************** Init *********************
+		
 		If Not _init
-'			If Layout = "fill" Then _camera2D.SetSize( Width, Height )
-'			Clock.Reset()
-'			OnStart()
-'			_init = True
-'			Return
 			Reload()
 		End
 		
 		'****************** First frame **************
+		
 		If _firstFrame
 			Print( "Game3D: First frame" )
 			Scene.Start()	'Maybe: set Viewer property here?
@@ -230,9 +227,11 @@ Class SceneView Extends View
 		End
 		
 		'********* Update necessary modules *********
+		
 		Clock.Update()
 		
 		'****************** Update loop *************
+		
 		Profile.Start( "upd" )
 		
 		If Not editMode
@@ -247,6 +246,7 @@ Class SceneView Extends View
 		Echo( "Update: " + Profile.GetString( "upd" ) )
 		
 		'****************** Draw loop ****************
+		
 		Profile.Start( "drw" )
 		
 		'3D drawing
@@ -281,13 +281,18 @@ Class SceneView Extends View
 		Echo( "Render: " + Profile.GetString( "drw" ) )
 		If devMode Then DrawEcho( canvas )
 
-		'**************** Input ****************
-		If devMode And Keyboard.KeyDown( Key.LeftGui )
-			If Keyboard.KeyHit( keyPause ) Then Paused = Not Paused		'Needs to happen after DrawEcho()
-			If Keyboard.KeyHit( keyReload ) Then Reload()
+		'**************** Input ****************	'Needs to be after DrawEcho()
+		
+		If devMode And Keyboard.KeyDown( Key.LeftGui ) And Keyboard.KeyDown( Key.LeftAlt )
+			If Keyboard.KeyHit( keyPause ) Then Paused = Not Paused		
+			If Keyboard.KeyHit( keyReload )
+				Reload()
+				Paused = False	
+			End
 		End
 		
 		'**************** Clean up ****************
+		
 		If Not _paused
 			_echoStack.Clear()
 			_echoColorStack.Clear()
@@ -298,6 +303,7 @@ Class SceneView Extends View
 	Method Reload()
 		
 		'****************** Clear current Mojo3d scene *********************
+		
 		Print( "Game3D: Init" )
 		MaterialLibrary.Clear()
 		
@@ -309,6 +315,7 @@ Class SceneView Extends View
 		End
 
 		'****************** Init *********************
+		
 		_scene = New Scene
 		mojo3d.graphics.Scene.SetCurrent( _scene )
 		
@@ -316,7 +323,7 @@ Class SceneView Extends View
 		Clock.Reset()
 		OnStart()
 		_init = True
-		_firstFrame = True
+		_firstFrame = True	'forces OnStart() to run again
 		
 	End
 	
