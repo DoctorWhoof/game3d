@@ -11,6 +11,7 @@ Main features:
 Main stuff missing:
 - Player system (WIP). Will allow the same components to be used on AI controlled or Player controlled objects.
 - A lot more work is needed on the 2D side of things (WIP)
+- Better serialization system error messages.
 - A more robust set of Core components
 - Animation handling, with Json loading.
 - Mojo3D Physics/Collisions
