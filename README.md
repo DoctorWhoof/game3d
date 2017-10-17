@@ -9,7 +9,7 @@ Main features:
 - Name based textures, materials and game objects
 
 Main stuff missing:
-- Player system (WIP)
+- Player system (WIP). Will allow the same components to be used on AI controlled or Player controlled objects.
 - A lot more work is needed on the 2D side of things (WIP)
 - A more robust set of Core components
 - Animation handling, with Json loading.
