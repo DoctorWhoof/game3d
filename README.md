@@ -7,3 +7,12 @@ Main features:
 - Embraces Mojo3D's design. The Component system works "on top" of Mojo3D's Scenes, Entities, Etc.
 - Json based scene files, with "hot reloading" - no need to recompile to see changes!
 - Name based textures, materials and game objects
+
+Main stuff missing:
+- Player system (WIP)
+- A lot more work is needed on the 2D side of things (WIP)
+- A more robust set of Core components
+- Animation handling, with Json loading.
+- Mojo3D Physics/Collisions
+- Configuration load/save
+
