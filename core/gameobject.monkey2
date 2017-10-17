@@ -154,7 +154,7 @@ Class GameObject
 		End
 		_componentsByName.Add( c.Name, c )
 		_components.Push( c )
-		c.SetGameObject( Self )
+		c.Attach( Self )
 		Return c
 	End
 	

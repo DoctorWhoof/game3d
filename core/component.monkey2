@@ -54,7 +54,7 @@ Class Component
 		Name = name
 	End
 
-	Method SetGameObject( obj:GameObject )
+	Method Attach( obj:GameObject )
 		_gameObj = obj
 		OnAttach()
 	End
