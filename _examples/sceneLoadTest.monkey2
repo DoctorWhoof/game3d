@@ -8,13 +8,14 @@
 
 Using game3d..
 
-Const devPath := "asset::"
+Const devPath := HomeDir() + "/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/"
+'Const devPath := "asset::"
 
 Function Main()
 	Local config:=New StringMap<String>
 	config["mojo3d_renderer"]="forward"
-
 	New AppInstance( config )
+'	New AppInstance
 	New TestWindow
 	App.Run()
 End
@@ -42,6 +43,9 @@ Class GameView Extends SceneView
 		Texture.Load( devPath + "testTextures.json" )
 		Material.Load( devPath + "testMaterials.json" )
 		GameObject.Load( devPath + "testScene.json" )
+		
+		Local glow := New BloomEffect(6)
+		Scene.AddPostEffect( glow )
 	End
 
 	Method OnUpdate() Override

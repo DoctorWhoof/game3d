@@ -27,15 +27,15 @@
 		"RoughnessFactor":1,
 		"RoughnessTexture":""
 	},
-	"MatYellow":{
+	"MatPalette":{
 		"Class":"mojo3d.graphics.PbrMaterial",
-		"ColorFactor":[1,1,0,1],
-		"ColorTexture":"",
-		"EmissiveFactor":[0,0,0,1],
-		"EmissiveTexture":"",
-		"MetalnessFactor":0.10000000149011612,
+		"ColorFactor":[0,0,0,0],
+		"ColorTexture":"Palette",
+		"EmissiveFactor":[2,2,2,1],
+		"EmissiveTexture":"Palette",
+		"MetalnessFactor":0,
 		"MetalnessTexture":"",
-		"Name":"MatYellow",
+		"Name":"MatPalette",
 		"NormalTexture":"",
 		"OcclusionTexture":"",
 		"RoughnessFactor":0.5,
