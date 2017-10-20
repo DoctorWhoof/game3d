@@ -1,17 +1,10 @@
 {
-	"Object2D":{
+	"CircleObject":{
 		"Class":"game3d.GameObject",
 		"Components":[{
 			"Class":"game3d.Pivot",
 			"Enabled":true,
 			"Name":"Pivot"
-		},{
-			"Class":"game3d.Grid2D",
-			"Enabled":true,
-			"Name":"Grid2DRenderer",
-			"radius":32,
-			"x":0,
-			"y":0
 		},{
 			"Class":"game3d.Circle",
 			"Enabled":true,
@@ -26,12 +19,64 @@
 			"y":20,
 			"z":0
 		}],
-		"Name":"Object2D",
+		"Name":"CircleObject",
 		"Parent":"",
 		"Position":[0,0,0],
 		"Rotation":[-0,-0,0],
 		"Scale":[1,1,1],
 		"Visible":false,
+		"timeOffset":0
+	},
+
+	"SpriteObject":{
+		"Class":"game3d.GameObject",
+		"Components":[{
+			"Class":"game3d.Pivot",
+			"Enabled":true,
+			"Name":"Pivot"
+		},{
+			"Class":"game3d.Circle",
+			"Enabled":true,
+			"Name":"CircleRenderer",
+			"radius":10
+		},{
+			"Class":"game3d.SinePosition",
+			"Enabled":true,
+			"Name":"SinePosition",
+			"period":0.5,
+			"x":50,
+			"y":50,
+			"z":0
+		}],
+		"Name":"SpriteObject",
+		"Parent":"",
+		"Position":[0,0,0],
+		"Rotation":[-0,-0,0],
+		"Scale":[1,1,1],
+		"Visible":true,
+		"timeOffset":0
+	},
+
+	"Grid":{
+		"Class":"game3d.GameObject",
+		"Components":[{
+			"Class":"game3d.Pivot",
+			"Enabled":true,
+			"Name":"Pivot"
+		},{
+			"Class":"game3d.Grid2D",
+			"Enabled":true,
+			"Name":"Grid2DRenderer",
+			"radius":32,
+			"x":0,
+			"y":0
+		}],
+		"Name":"Grid",
+		"Parent":"",
+		"Position":[0,0,0],
+		"Rotation":[-0,-0,0],
+		"Scale":[1,1,1],
+		"Visible":true,
 		"timeOffset":0
 	}
 }

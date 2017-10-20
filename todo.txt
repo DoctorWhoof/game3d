@@ -1,5 +1,9 @@
 To do:
 
+- Clean up examples.
+	- provide a more advanced 2d example
+	- simplify where possible
+
 - Test Houdini-To-Monkey model pipeline
 
 ------------------------------------------------------------------------------------------------------------------------

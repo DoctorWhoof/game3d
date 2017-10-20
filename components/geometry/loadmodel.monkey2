@@ -12,7 +12,7 @@ Class LoadModel Extends Component
 	Method OnAttach() Override
 		Local model := Model.Load( path )
 		GameObject.SetEntity( model )
-		Print GameObject.Name + " materials:" + model.Mesh.NumMaterials
+'		Print GameObject.Name + " materials:" + model.Mesh.NumMaterials
 	End
 	
 End
