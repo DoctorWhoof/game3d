@@ -54,7 +54,7 @@
 			"Class":"game3d.AssignMaterial",
 			"Enabled":true,
 			"Name":"AssignMaterial",
-			"material":"MatRed"
+			"material":"MatYellow"
 		},{
 			"Class":"game3d.Spin",
 			"Enabled":true,
@@ -85,7 +85,7 @@
 			"Class":"game3d.AssignMaterial",
 			"Enabled":true,
 			"Name":"AssignMaterial",
-			"material":"MatRed"
+			"material":"MatYellow"
 		},{
 			"Class":"game3d.Spin",
 			"Enabled":true,
@@ -131,50 +131,20 @@
 	"light":{
 		"Class":"game3d.GameObject",
 		"Components":[{
-			"CastsShadow":false,
+			"CastsShadow":true,
 			"Class":"game3d.LightComponent",
-			"Color":[2,1.8,0,1],
+			"Color":[1,1,1,1],
 			"Enabled":true,
 			"Name":"LightComponent",
-			"Range":5,
-			"Type":2
+			"Range":30,
+			"Type":1
 		}],
 		"Name":"light",
 		"Parent":"",
-		"Position":[0,1.5,0],
+		"Position":[10,10,0],
 		"Rotation":[45,90,-0],
 		"Scale":[1,1,1],
-		"Visible":true,
-		"timeOffset":0
-	},
-	"orb":{
-		"Class":"game3d.GameObject",
-		"Components":[{
-			"Class":"game3d.LoadModel",
-			"Enabled":true,
-			"Name":"LoadModel",
-			"path":"asset::orb.fbx"
-		},
-		{
-			"Class":"game3d.AssignMaterial",
-			"Enabled":true,
-			"Name":"AssignMaterial",
-			"material":"MatPalette"
-		},
-		{
-			"Class":"game3d.Spin",
-			"Enabled":true,
-			"Name":"Spin",
-			"x":0,
-			"y":-4,
-			"z":0
-		}],
-		"Name":"orb",
-		"Parent":"",
-		"Position":[0,1.5,0],
-		"Rotation":[0,0,0],
-		"Scale":[1,1,1],
-		"Visible":true,
+		"Visible":false,
 		"timeOffset":0
 	},
 	"teapot":{

@@ -238,7 +238,7 @@ Class SceneView Extends View
 			If Not _paused
 				OnUpdate()
 				Scene.Update()
-				_scene.World.Update()
+'				_scene.World.Update()
 			End
 		End
 		
@@ -317,7 +317,7 @@ Class SceneView Extends View
 
 		'****************** Init *********************
 		_scene = New Scene
-		mojo3d.graphics.Scene.SetCurrent( _scene )
+		mojo3d.Scene.SetCurrent( _scene )
 		
 		If Layout = "fill" Then _camera2D.SetSize( Width, Height )
 		Clock.Reset()

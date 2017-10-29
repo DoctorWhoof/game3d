@@ -19,7 +19,7 @@ Class AssignMaterial Extends Component
 		Local model := Cast<Model>( Entity )
 		Assert( model, "LoadModel: Entity needs to be of 'Model' class" )
 		
-		Local materialFromName := mojo3d.graphics.Material.Get( material )
+		Local materialFromName := mojo3d.Material.Get( material )
 		If materialFromName
 			model.Materials = New Material[]( materialFromName )
 		Else
