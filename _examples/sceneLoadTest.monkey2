@@ -44,7 +44,7 @@ Class GameView Extends SceneView
 		Material.Load( devPath + "testMaterials.json" )
 		GameObject.Load( devPath + "testScene.json" )
 		
-		Local glow := New BloomEffect(6)
+		Local glow := New BloomEffect(2)
 		Scene.AddPostEffect( glow )
 	End
 

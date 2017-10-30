@@ -27,6 +27,20 @@
 		"RoughnessFactor":1,
 		"RoughnessTexture":""
 	},
+	"MatVector":{
+		"Class":"mojo3d.PbrMaterial",
+		"ColorFactor":[0,0,0,1],
+		"ColorTexture":"TexVector",
+		"EmissiveFactor":[2,2,2,1],
+		"EmissiveTexture":"TexVector",
+		"MetalnessFactor":0,
+		"MetalnessTexture":"",
+		"Name":"MatVector",
+		"NormalTexture":"",
+		"OcclusionTexture":"",
+		"RoughnessFactor":1,
+		"RoughnessTexture":""
+	},
 	"MatYellow":{
 		"Class":"mojo3d.PbrMaterial",
 		"ColorFactor":[1,1,0,1],

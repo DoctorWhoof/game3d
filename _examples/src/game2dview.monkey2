@@ -93,16 +93,16 @@ Class Game2dView Extends SceneView
 		
 		'-----------------------------------------------------------------
 		
-'		Local donut1:= New GameObject
-'		donut1.Name = "donut1"
+		Local donut1:= New GameObject
+		donut1.Name = "donut1"
 
-'		Local donutComp1 := New DonutModel
-'		donutComp1.outerRadius = 0.5
-'		donut1.AddComponent( donutComp1 )
+		Local donutComp1 := New DonutModel
+		donutComp1.outerRadius = 0.5
+		donut1.AddComponent( donutComp1 )
 		
-'		Local donut1Spin := New Spin
-'		donut1Spin.x = 4.0
-'		donut1.AddComponent( donut1Spin )
+		Local donut1Spin := New Spin
+		donut1Spin.x = 4.0
+		donut1.AddComponent( donut1Spin )
 		
 		'-----------------------------------------------------------------
 		

@@ -1,4 +1,4 @@
-Namespace mojo3d.graphics
+Namespace game3d
 
 
 Class SpriteAnim Extends Component

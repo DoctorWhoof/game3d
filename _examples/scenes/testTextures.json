@@ -8,5 +8,10 @@
 		"Flags":12,
 		"Name":"TexWire",
 		"Path":"asset::wireGlow.png"
+	},
+	"TexVector":{
+		"Flags":12,
+		"Name":"TexVector",
+		"Path":"asset::palette.png"
 	}
 }

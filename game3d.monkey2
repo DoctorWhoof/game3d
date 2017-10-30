@@ -237,7 +237,7 @@ Class SceneView Extends View
 		If Not editMode
 			If Not _paused
 				OnUpdate()
-				Scene.Update()
+				Scene.GameUpdate()
 '				_scene.World.Update()
 			End
 		End

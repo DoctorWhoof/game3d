@@ -9,11 +9,11 @@ Class Scene Extension
 		Next
 	End
 	
-'	Method Update()
-'		For Local e:= Eachin GetRootEntities()
-'			e.Update()
-'		Next
-'	End
+	Method GameUpdate()
+		For Local e:= Eachin GetRootEntities()
+			e.Update()
+		Next
+	End
 	
 	Method Draw( canvas:Canvas )
 		For Local e:= Eachin GetRootEntities()

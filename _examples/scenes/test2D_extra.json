@@ -3,7 +3,7 @@
 		"Class":"game3d.GameObject",
 		"Components":[{
 			"Animation":"WalkRight",
-			"Class":"mojo3d.graphics.SpriteAnim",
+			"Class":"game3d.SpriteAnim",
 			"Enabled":true,
 			"Frame":0,
 			"FrameOffset":0,
@@ -42,6 +42,32 @@
 		"Name":"camera",
 		"Parent":"",
 		"Position":[0,0,-5],
+		"Rotation":[-0,-0,0],
+		"Scale":[1,1,1],
+		"Visible":true,
+		"timeOffset":0
+	},
+	"donut1":{
+		"Class":"game3d.GameObject",
+		"Components":[{
+			"Class":"game3d.DonutModel",
+			"Enabled":true,
+			"Name":"DonutModel",
+			"innerRadius":0.20000000298023224,
+			"innerSegs":12,
+			"outerRadius":0.5,
+			"outerSegs":24
+		},{
+			"Class":"game3d.Spin",
+			"Enabled":true,
+			"Name":"Spin",
+			"x":4,
+			"y":0,
+			"z":0
+		}],
+		"Name":"donut1",
+		"Parent":"",
+		"Position":[0,0,0],
 		"Rotation":[-0,-0,0],
 		"Scale":[1,1,1],
 		"Visible":true,
