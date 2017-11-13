@@ -91,7 +91,8 @@ Class Material Extension
 		
 		For Local obj := Eachin json.ToObject().Values
 			If obj.IsObject
-				Material.FromJson( Cast<JsonObject>( obj ) )	
+				Material.FromJson( Cast<JsonObject>( obj ) )
+				Print( "Material: " + obj.ToObject().Get("Name").ToString() + " loaded" )
 			End
 		Next
 	End

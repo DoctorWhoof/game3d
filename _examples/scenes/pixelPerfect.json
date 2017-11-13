@@ -13,15 +13,24 @@
 			"border":0,
 			"cellHeight":16,
 			"cellWidth":16,
+			"defaultAnimation":"WalkRight",
 			"flags":0,
 			"padding":0,
 			"path":"asset::blob.png"
+		},{
+			"Class":"game3d.SinePosition",
+			"Enabled":true,
+			"Name":"SinePosition",
+			"period":0.5,
+			"x":16,
+			"y":16,
+			"z":0
 		}],
 		"Name":"Object2D",
 		"Parent":"",
 		"Position":[0,0,0],
 		"Rotation":[-0,-0,0],
-		"Scale":[1,1,1],
+		"Scale":[16,16,1],
 		"Visible":true,
 		"timeOffset":0
 	},
@@ -34,61 +43,43 @@
 			"Enabled":true,
 			"EnvColor":[0,0,0,1],
 			"FOV":45,
-			"Far":150,
-			"FogColor":[0.30000001192092896,0.30000001192092896,0.30000001192092896,1],
+			"Far":1000,
+			"FogColor":[0,0,0,0],
 			"Name":"CameraComponent",
 			"Near":0.10000000149011612
 		}],
 		"Name":"camera",
 		"Parent":"",
-		"Position":[0,0,-5],
+		"Position":[0,0,-217.27922058105469],
 		"Rotation":[-0,-0,0],
 		"Scale":[1,1,1],
 		"Visible":true,
 		"timeOffset":0
 	},
-	"donut1":{
+	"checkerboard":{
 		"Class":"game3d.GameObject",
 		"Components":[{
-			"Class":"game3d.DonutModel",
+			"Animation":"",
+			"Class":"game3d.SpriteAnim",
 			"Enabled":true,
-			"Name":"DonutModel",
-			"innerRadius":0.20000000298023224,
-			"innerSegs":12,
-			"outerRadius":0.5,
-			"outerSegs":24
-		},{
-			"Class":"game3d.Spin",
-			"Enabled":true,
-			"Name":"Spin",
-			"x":4,
-			"y":0,
-			"z":0
+			"Frame":0,
+			"FrameOffset":0,
+			"FrameRate":15,
+			"Name":"SpriteAnim",
+			"animationPath":"",
+			"border":0,
+			"cellHeight":180,
+			"cellWidth":320,
+			"defaultAnimation":"",
+			"flags":0,
+			"padding":0,
+			"path":"asset::checkerboard.png"
 		}],
-		"Name":"donut1",
+		"Name":"checkerboard",
 		"Parent":"",
-		"Position":[0,0,0],
+		"Position":[0,0,217.27922058105469],
 		"Rotation":[-0,-0,0],
-		"Scale":[1,1,1],
-		"Visible":true,
-		"timeOffset":0
-	},
-	"light":{
-		"Class":"game3d.GameObject",
-		"Components":[{
-			"CastsShadow":true,
-			"Class":"game3d.LightComponent",
-			"Color":[1,1,1,1],
-			"Enabled":true,
-			"Name":"LightComponent",
-			"Range":10,
-			"Type":1
-		}],
-		"Name":"light",
-		"Parent":"",
-		"Position":[10,10,0],
-		"Rotation":[45,90,-0],
-		"Scale":[1,1,1],
+		"Scale":[640,360,1],
 		"Visible":true,
 		"timeOffset":0
 	}

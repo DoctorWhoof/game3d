@@ -1,8 +1,8 @@
 Namespace game3d
 
-#Import "../../graphics/animsprite"
+#Import "../../../graphics/animsprite"
 
-Class SpriteAnim Extends Component
+Class SpriteManager Extends Component
 	
 	'To do: move some of the AnimSprite functionality into this component? Maybe all of it, and just use regular Sprites?
 	

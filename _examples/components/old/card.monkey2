@@ -1,7 +1,7 @@
 Namespace game3d
 
-#Import "../../graphics/grid"
-#Import "../../graphics/atlas"
+#Import "../../../graphics/grid"
+#Import "../../../graphics/atlas"
 
 Class Card Extends Component
 	
@@ -28,7 +28,7 @@ Class Card Extends Component
 	
 	Method OnStart() Override
 		mesh = CreateCard( frame, sheet.Coords, quadSize.X, quadSize.Y, center )
-		mat =  New PbrMaterial( True, False, False )
+		mat =  New PbrMaterial( False )
 		mat.ColorTexture = sheet.Texture
 		
 		model = Cast<Model>( Entity )

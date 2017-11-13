@@ -5,6 +5,7 @@ Class SpriteAnim Extends Component
 	
 	Field path :String				'Path to texture file
 	Field animationPath: String		'Path to json animations file
+	Field defaultAnimation: String 
 	
 	Field cellWidth:Int
 	Field cellHeight:Int
@@ -74,7 +75,6 @@ Class SpriteAnim Extends Component
 		If _anim Return _anim.name
 		Return ""
 	Setter( name:String )
-		
 		If _animations[ name ]
 			_anim = _animations[ name ]
 		Else
@@ -154,16 +154,18 @@ Class SpriteAnim Extends Component
 	Method OnAttach() Override
 		LoadSprite( path, cellWidth, cellHeight, padding, border, IntFlags( flags ) )
 		Assert( _sprite, "SpriteAnim: Load fail" )
-		
 		Load( animationPath )
+		Animation = defaultAnimation
 		GameObject.SetEntity( _sprite )	
 	End
 	
 	
 	Method LoadSprite( path:String, cellWidth:Int, cellHeight:Int, padding:Int = 0, border:Int = 0, flags:TextureFlags = TextureFlags.FilterMipmap )
 		'Creates new Sprite with material
-		_sprite = New Sprite( SpriteMaterial.Load( path, flags ) )
-		Local texture := Cast<SpriteMaterial>( _sprite.Material ).ColorTexture
+		Local mat := SpriteMaterial.Load( path, flags )
+		_sprite = New Sprite( mat )
+		
+		Local texture := mat.ColorTexture
 		Assert( texture, "SpriteAnim: Load fail" )
 		
 		Local _paddedWidth:Double = cellWidth + ( padding * 2 )
@@ -181,7 +183,7 @@ Class SpriteAnim Extends Component
 			_coordinates.Push( New Rectf( x/w, y/h, (x+cellWidth)/w, (y+cellHeight)/h ) )
 		Next
 		'Defaults to frame 0
-		Frame = 0
+		Self.Frame = 0
 		Self.cellWidth = cellWidth
 		Self.cellHeight = cellHeight
 		Self.padding = padding
@@ -199,7 +201,6 @@ Class SpriteAnim Extends Component
 		If _anim
 			If _anim.loop
 				Frame = _anim.frames[ Int( ( time Mod Duration ) / frameLength ) ]
-				Viewer.Echo( "test" + Frame )
 			Else
 				Frame = _anim.frames[ Int( time / frameLength ) ]
 			End
@@ -217,6 +218,7 @@ Class SpriteAnim Extends Component
 		animClip.frames = _frames
 		animClip.framerate = framerate
 		_animations.Add( _name, animClip )
+'		Print( "SpriteAnim: Added animation " + _name )
 	End
 	
 	'Loads Json file
@@ -235,8 +237,6 @@ Class SpriteAnim Extends Component
 					For Local n := 0 Until frameStack.Length
 						frames[n] = frameStack[n].ToNumber()
 					Next
-					
-					
 					AddAnimationClip( a.Key, loop, rate, frames )
 				Next
 			End

@@ -1,7 +1,6 @@
 Namespace game3d
 
 #Import "<std>"
-#Import "<reflection>"
 #Import "<mojo>"
 #Import "<mojo3d>"
 #Import "<mojo3d-loaders>"
@@ -29,8 +28,6 @@ Namespace game3d
 #Import "extensions/model"
 #Import "extensions/gameobject"
 
-#Import "core/serial"
-
 #Import "math/math"
 #Import "math/area"
 
@@ -40,6 +37,12 @@ Namespace game3d
 
 #Import "util/profile"
 #Import "util/navigation"
+
+#Import "<reflection>"
+#Reflect game3d..
+#Reflect mojo..
+#Reflect mojo3d..
+#Reflect std..
 
 
 Using std..

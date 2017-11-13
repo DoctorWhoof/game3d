@@ -29,6 +29,7 @@ Class CameraComponent Extends Component
 	Property FogColor:Double[]()
 		Return _fog.Color.ToArray()
 	Setter( c:Double[] )
+		If Not _fog Then _fog = New FogEffect( Color.Blue, _cam.Near, _cam.Far ) 
 		_fog.Color = std.graphics.Color.FromArray( c )
 	End
 	
@@ -63,7 +64,7 @@ Class CameraComponent Extends Component
 		_cam = New Camera
 		_cam.Name  = "EntityCamera"
 		
-		_fog = New FogEffect( Color.Blue, _cam.Near, _cam.Far )
+'		_fog = New FogEffect( Color.Blue, _cam.Near, _cam.Far )
 	End
 	
 	Method OnAttach() Override

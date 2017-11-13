@@ -75,7 +75,7 @@ Class Texture Extension
 			
 		For Local obj := Eachin json.ToObject().Values
 			If obj.IsObject
-				Texture.FromJson( Cast<JsonObject>( obj ) )	
+				Texture.FromJson( Cast<JsonObject>( obj ) )
 			End
 		Next
 	End

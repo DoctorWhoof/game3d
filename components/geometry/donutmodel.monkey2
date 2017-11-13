@@ -15,7 +15,7 @@ Class DonutModel Extends Component
 	Method OnAttach() Override
 		Local model := New Model
 		model.Mesh = Mesh.CreateTorus( outerRadius, innerRadius, outerSegs, innerSegs  )
-'		model.AssignMaterial( New PbrMaterial( Color.Yellow ) )
+		model.AssignMaterial( New PbrMaterial( Color.Yellow ) )
 		GameObject.SetEntity( model )
 	End
 	
