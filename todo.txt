@@ -1,5 +1,7 @@
 To do:
 
+- Morpher: Get single GameObject, multiple Entities working (currently doesn't render, and requires too many "elvises")
+
 - Clean up examples.
 	- provide a more advanced 2d example
 	- simplify where possible

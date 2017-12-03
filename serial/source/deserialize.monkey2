@@ -42,6 +42,8 @@ Function LoadFromJsonObject:Variant( obj:StringMap<JsonValue>, include:StringSta
 	
 	Local v := BasicDeserialize( obj )
 	Local info := v.DynamicType
+	
+	Assert( info.Kind <> "Void", "~nDeserialize Error: Invalid Class? (Hint: Is the required class source file properly imported?~n" )
 				
 	For Local key := EachIn obj.Keys
 		If key = "Class" Continue
@@ -103,7 +105,7 @@ End
 'Our main workhorse, recursively loads a properly cast JasonValue into an object's Declaration.
 Function LoadFromJsonValue:Variant( v:Variant, value:JsonValue, d:DeclInfo )	
 	Local newVar:Variant
-	
+	If Not value Return Null
 	If value.IsNumber	
 		newVar = Variant( value.ToNumber() )
 		If d And v

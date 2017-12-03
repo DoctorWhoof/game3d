@@ -3,12 +3,9 @@
 #Import "<mojox>"
 #Import "../game3d"
 
-#Import "../game3d"
 #Import "components/circle"
 #Import "components/sinePosition"
 #Import "components/grid2d"
-#Import "../components/geometry/pivot"
-#Import "../components/geometry/spriteanim"
 
 #Import "scenes/"
 #Import "images/"

@@ -1,20 +1,14 @@
 #Import "../game3d"
-#Import "components/spin"
-#Import "../components/wireframerenderer"
 
-#Import "models/asteroidLow.fbx"
-
-#Import "scenes/wireframeScene.json"
-#Import "scenes/testMaterials.json"
+#Import "models/"
+#Import "scenes/"
+#Import "materials/"
 
 Using game3d..
-
-Const devPath := "asset::"
 
 Function Main()
 	Local config:=New StringMap<String>
 	config["mojo3d_renderer"]="forward"
-
 	New AppInstance( config )
 	New TestWindow
 	App.Run()
@@ -39,8 +33,8 @@ Class GameView Extends SceneView
 	End
 
 	Method OnStart() Override
-		Material.Load( devPath + "testMaterials.json" )
-		GameObject.Load( devPath + "wireframeScene.json" )
+		Material.Load( "asset::testMaterials.json" )
+		GameObject.Load( "asset::wireframeScene.json" )
 	End
 End
 

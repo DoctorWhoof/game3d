@@ -52,6 +52,7 @@ Class Texture Extension
 		Local flags:TextureFlags = IntFlags( UInt( json[ "Flags"].ToNumber() ) )
 		Local name:= json[ "Name"].ToString()
 		Local path := json[ "Path"].ToString()
+		Print "Texture: " + name + " loaded"
 		Return Create( name, path, flags )
 	End
 	

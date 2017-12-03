@@ -12,9 +12,17 @@ Namespace game3d
 #Import "components/cameracomponent"
 #Import "components/lightcomponent"
 #Import "components/assignmaterial"
+
+#Import "components/animation/spin"
+
 #Import "components/geometry/loadmodel"
 #Import "components/geometry/donutmodel"
 #Import "components/geometry/gridmodel"
+#Import "components/geometry/ModelMorph"
+#Import "components/geometry/MeshWire"
+#Import "components/geometry/pivot"
+#Import "components/geometry/spriteanim"
+#Import "components/wireframerenderer"
 
 #Import "extensions/entity"
 #Import "extensions/matrix"
@@ -34,6 +42,7 @@ Namespace game3d
 #Import "clock/clock"
 
 #Import "graphics/grid"
+#Import "graphics/morpher"
 
 #Import "util/profile"
 #Import "util/navigation"
@@ -63,6 +72,7 @@ Class SceneView Extends View
 	
 	Field devMode:= False						'displays feedback info, allows dev shortcuts
 	Field editMode:= False						'allows content editing
+
 	Field autoRender := True					'if on, events need to call RequestRender(), app style
 	Field render3DScene := False				'enable to render Mojo3D scenes
 	
@@ -79,7 +89,10 @@ Class SceneView Extends View
 	
 	Private
 	Global _currentViewer:SceneView
-
+	
+	Field _renderImage:Image
+	Field _imageCanvas:Canvas
+	
 	Field _firstFrame := True
 	Field _init := False
 	Field _paused:= False
@@ -92,6 +105,13 @@ Class SceneView Extends View
 
 	Property Canvas:Canvas()
 		Return _canvas
+	End
+	
+
+	Property Flags:TextureFlags()
+		Return _renderImage?.Texture.Flags
+	Setter( flags:TextureFlags )
+		_renderImage?.Texture?.Flags = flags
 	End
 	
 	
@@ -188,7 +208,7 @@ Class SceneView Extends View
 	
 	'********************************* Public Methods *********************************
 	
-	Method New( width:Int=1280, height:Int=720, render3DScene:Bool = True )
+	Method New( width:Int=1280, height:Int=720, render3DScene:Bool = True, renderToImage:Bool = False )
 		_currentViewer = Self
 		
 		'Camera2D, used for 2D rendering on top of the 3D scene. Sets the virtual resolution.
@@ -200,6 +220,11 @@ Class SceneView Extends View
 '		_scene = Scene.GetCurrent()
 		
 		Style.Font = smallFont
+		
+		If renderToImage
+			_renderImage = New Image( width, height )
+			_imageCanvas = New Canvas( _renderImage )	
+		End
 	End
 	
 	
@@ -211,9 +236,13 @@ Class SceneView Extends View
 	Method OnRender( canvas:Canvas ) Override Final
 		Echo( "Width="+Frame.Width+",Height="+Frame.Height+",    Camera2D=" + Camera2D.ToString() + ",    FPS="+App.FPS + ",    WorldMouse=" + WorldMouse + ",    Clock:" + Truncate( Clock.Now() ) )
 
-		If autoRender Then App.RequestRender()		
-		Self._canvas = canvas
-		
+		If autoRender Then App.RequestRender()
+		If _renderImage
+			_canvas = _imageCanvas
+		Else
+			_canvas = canvas			
+		End	
+
 		'****************** Init *********************
 		
 		If Not _init
@@ -262,7 +291,7 @@ Class SceneView Extends View
 		End
 		
 		'2D drawing
-		canvas.PushMatrix()
+		_canvas.PushMatrix()
 		
 		_camera2D.Width = Clamp<Double>( _camera2D.Width, 8.0 * AspectRatio, 2160.0 * AspectRatio )
 		_camera2D.Height = Clamp<Double>( _camera2D.Height, 8.0, 2160.0 )
@@ -274,14 +303,20 @@ Class SceneView Extends View
 			Local scale := Double(Frame.Height)/_camera2D.Height
 			canvas.Scale( scale, scale )
 		End
-		canvas.Translate( -_camera2D.X + (_camera2D.Width/2.0), -_camera2D.Y + (_camera2D.Height/2.0) )
-		Scene.Draw( canvas )
-		OnDraw( canvas )
-		canvas.PopMatrix()			
-		canvas.Flush()
+		_canvas.Translate( -_camera2D.X + (_camera2D.Width/2.0), -_camera2D.Y + (_camera2D.Height/2.0) )
+		Scene.Draw( _canvas )
+		OnDraw( _canvas )
+		_canvas.PopMatrix()			
+		_canvas.Flush()
 		
 		Profile.Finish( "drw" )
 		Echo( "Render: " + Profile.GetString( "drw" ) )
+		
+		If _renderImage
+			canvas.DrawImage( _renderImage, 0, Height, 0, 1.0, -1.0 )
+			canvas.Flush()
+		End
+		
 		If devMode Then DrawEcho( canvas )
 
 		'**************** Input ****************	'Needs to be after DrawEcho()
@@ -313,13 +348,13 @@ Class SceneView Extends View
 		
 		If _scene
 			For Local obj := Eachin GameObject.GetFromScene( _scene )
-				obj.Destroy( False )
+				obj?.Destroy( False )
 			Next
 			_scene.DestroyAllEntities()
 		End
 
 		'****************** Init *********************
-		_scene = New Scene
+		_scene = New mojo3d.Scene
 		mojo3d.Scene.SetCurrent( _scene )
 		
 		If Layout = "fill" Then _camera2D.SetSize( Width, Height )
@@ -327,6 +362,8 @@ Class SceneView Extends View
 		OnStart()
 		_init = True
 		_firstFrame = True	'forces OnStart() to run again
+		
+
 	End
 	
 	

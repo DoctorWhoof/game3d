@@ -1,6 +1,5 @@
 
 #Import "../components/old/card"
-#Import "../components/spin"
 #Import "../components/old/spriteManager"
 #Import "../components/old/donut"
 #Import "../../graphics/animsprite"

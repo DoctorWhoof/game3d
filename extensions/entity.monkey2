@@ -16,35 +16,35 @@ Class Entity Extension
 
 	Method Start()
 		Local obj := GameObject.GetFromEntity( Self )
-		obj.Start()
+		obj?.Start()
 		For Local c := Eachin Children
 			c.Start()
 		Next
 	End
 
 	Method Update()
-		GameObject.GetFromEntity( Self ).Update()
+		GameObject.GetFromEntity( Self )?.Update()
 		For Local c := Eachin Children
 			c.Update()
 		Next
 	End
 	
 	Method Draw( canvas:Canvas )
-		GameObject.GetFromEntity( Self ).Draw( canvas )
+		GameObject.GetFromEntity( Self )?.Draw( canvas )
 		For Local c := Eachin Children
 			c.Draw( canvas )
 		Next
 	End
 	
 	Method LateUpdate()
-		GameObject.GetFromEntity( Self ).LateUpdate()
+		GameObject.GetFromEntity( Self )?.LateUpdate()
 		For Local c := Eachin Children
 			c.LateUpdate()
 		Next
 	End
 	
 	Method Reset()
-		GameObject.GetFromEntity( Self ).Reset()
+		GameObject.GetFromEntity( Self )?.Reset()
 		For Local c := Eachin Children
 			c.Reset()
 		Next

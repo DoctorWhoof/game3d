@@ -2,7 +2,7 @@
 	"bounceLight":{
 		"Class":"game3d.GameObject",
 		"Components":[{
-			"CastsShadow":true,
+			"CastsShadow":false,
 			"Class":"game3d.LightComponent",
 			"Color":[0,0.80000001192092896,1.5,2],
 			"Enabled":true,
@@ -144,7 +144,7 @@
 		"Position":[10,10,0],
 		"Rotation":[45,90,-0],
 		"Scale":[1,1,1],
-		"Visible":false,
+		"Visible":true,
 		"timeOffset":0
 	},
 	"teapot":{

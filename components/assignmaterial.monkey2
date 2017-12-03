@@ -10,18 +10,21 @@ Class AssignMaterial Extends Component
 		Super.New( "AssignMaterial" )
 	End
 	
-'	Method New( mat:String )
-'		Super.New( "AssignMaterial" )
-'		material = mat
-'	End
-	
 	Method OnStart() Override
-		Local model := Cast<Model>( Entity )
-		Assert( model, "LoadModel: Entity needs to be of 'Model' class" )
+		Local model:= Cast<Model>( Entity )
+		Local morpher := Cast<Morpher>( Entity )
+		Assert( model Or morpher, "LoadModel: Entity needs to be of 'Model' class" )
 		
 		Local materialFromName := mojo3d.Material.Get( material )
 		If materialFromName
-			model.Materials = New Material[]( materialFromName )
+			If model
+				model.Materials = New Material[]( materialFromName )
+				Print Name + ": " + material + " assigned to model " + GameObject.Name
+			Else If morpher
+				morpher.material = materialFromName
+				Print Name + ": " + material + " assigned to morpher " + GameObject.Name
+			End
+			
 		Else
 			Print "AssignMaterial: Warning, material " + material + " not found."
 			model.Materials = New Material[]( New PbrMaterial( Color.Grey ) )

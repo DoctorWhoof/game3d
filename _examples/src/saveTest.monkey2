@@ -7,7 +7,7 @@
 
 Using game3d..
 
-Const devPath := HomeDir() + "/GoogleDrive/Code/Monkey2/game3d/_examples/scenes/"
+Const devPath := HomeDir() + "/GoogleDrive/Code/Monkey2/game3d/_examples/"
 
 Function Main()
 	Local config:=New StringMap<String>
@@ -93,7 +93,7 @@ Class GameView Extends SceneView
 		
 		Local bounceLightComp := New LightComponent
 		bounceLightComp.Color = New Double[]( 0, 0.8, 1.5, 2.0 )
-		bounceLightComp.CastsShadow = True
+		bounceLightComp.CastsShadow = False
 		bounceLight.AddComponent( bounceLightComp )
 		
 		bounceLight.Transform.Move( 0, -10, 0 )
@@ -182,11 +182,11 @@ Class GameView Extends SceneView
 		
 		'-----------------------------------------------------------------
 	
-		light.Visible = False
+'		light.Visible = False
 		
-		Print Texture.Save( devPath + "testTextures.json" ).ToJson()
-		Print Material.Save( devPath + "testMaterials.json" ).ToJson()
-		Print GameObject.Save( Scene, devPath + "testScene.json" ).ToJson()
+		Print Texture.Save( devPath + "materials/testTextures.json" ).ToJson()
+		Print Material.Save( devPath + "materials/testMaterials.json" ).ToJson()
+		Print GameObject.Save( Scene, devPath + "scenes/testScene.json" ).ToJson()
 
 	End
 

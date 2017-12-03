@@ -134,8 +134,8 @@ Function WasdCameraControl( cam:Entity, view:View, delta:Double = 1.0, touchStyl
 			prevMouse = MouseLook( cam, view, prevMouse, -mouseLookSpeed )
 			
 			'limits mouse to center of screen to prevent losing it out of the window
-			Local threshold := view.Height / 10
-			Local center := New Vec2i( view.Width/2, view.Height/2 )
+			Local threshold := view.Frame.Height / 10
+			Local center := New Vec2i( view.Frame.Width/2, view.Frame.Height/2 )
 			Local limit := New Recti( center.X - threshold, center.Y - threshold, center.X + threshold, center.Y + threshold )
 			If Mouse.X < limit.Left Or Mouse.X > limit.Right Or Mouse.Y < limit.Top Or Mouse.Y > limit.Bottom
 				Mouse.Location = New Vec2i( center.X, center.Y )

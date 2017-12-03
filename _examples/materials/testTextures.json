@@ -4,6 +4,11 @@
 		"Name":"TexCat",
 		"Path":"asset::cat.png"
 	},
+	"TexPalette":{
+		"Flags":12,
+		"Name":"TexPalette",
+		"Path":"asset::palette.png"
+	},
 	"TexWire":{
 		"Flags":12,
 		"Name":"TexWire",
