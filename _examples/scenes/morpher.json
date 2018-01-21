@@ -31,7 +31,9 @@
 			"pathBase":"asset::orb.obj",
 			"pathWire":"asset::orb_wire.obj",
 			"matBase":"MatBlack",
-			"matWire":"MatWireYellow"
+			"matWire":"MatWireYellow",
+			"nearPush":-0.001,
+			"farPush":0.1
 		},{
 			"Class":"game3d.Spin",
 			"x":1.0,

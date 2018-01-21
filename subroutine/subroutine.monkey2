@@ -27,7 +27,7 @@ Class Subroutine
 		Self.length = length
 		Self.func = func
 		Self.loop = loop
-		Self.startTime = Timing.Now()
+		Self.startTime = Clock.Now()
 		If owner <> Null Then Self.owner = owner
 		routines.Push( Self )
 	End

@@ -141,6 +141,7 @@ Function WasdCameraControl( cam:Entity, view:View, delta:Double = 1.0, touchStyl
 				Mouse.Location = New Vec2i( center.X, center.Y )
 				prevMouse = Mouse.Location
 			End
+			SceneView.Current().Echo( center )
 		End
 	End
 End

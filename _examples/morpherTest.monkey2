@@ -20,7 +20,9 @@ Class TestWindow Extends Window
 		Super.New( "Test", 1280, 720, WindowFlags.Resizable )
 		Local gameView := New GameView( 1280, 720, True )
 		gameView.Layout = "letterbox"
+		
 		gameView.devMode = True
+'		gameView.componentExportPath = HomeDir() + "/GoogleDrive/Code/Monkey2/wizards/dev3d/geo/components.json"
 		
 		ContentView = gameView
 		ClearColor = Color.Black

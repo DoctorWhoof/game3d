@@ -6,13 +6,13 @@ Class Canvas Extension
 	Method Draw3DLine( camera:Camera, v0:Vec3f, v1:Vec3f, offsetX:Float=0, offsetY:Float=0  )		
 		Local s0 := camera.ProjectToViewport( v0 )
 		Local s1 := camera.ProjectToViewport( v1 )
-		If( ( Abs(s0.X) / camera.Viewport.Width ) < 2.0  )And ( ( Abs(s0.Y) / camera.Viewport.Height ) < 2.0 )
-			If( ( Abs(s1.X) / camera.Viewport.Width ) < 2.0  )And ( ( Abs(s1.Y) / camera.Viewport.Height ) < 2.0 )
+'		If( ( Abs(s0.X) / camera.Viewport.Width ) < 2.0  )And ( ( Abs(s0.Y) / camera.Viewport.Height ) < 2.0 )
+'			If( ( Abs(s1.X) / camera.Viewport.Width ) < 2.0  )And ( ( Abs(s1.Y) / camera.Viewport.Height ) < 2.0 )
 				If camera.Viewport.Contains( s0 , s1 )
 					DrawLine( s0.X-offsetX, -s0.Y+offsetY, s1.X-offsetX, -s1.Y+offsetY )
 				End
-			End
-		End
+'			End
+'		End
 	End
 
 	'Draws the same image repeatedly

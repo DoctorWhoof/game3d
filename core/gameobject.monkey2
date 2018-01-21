@@ -263,6 +263,7 @@ Class GameObject
 			End
 		End
 	End
+	
 	'************************************* Static Functions *************************************
 
 	Function  GetFromEntity:GameObject( e:Entity )

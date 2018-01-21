@@ -1,12 +1,23 @@
 To do:
 
-- Morpher: Get single GameObject, multiple Entities working (currently doesn't render, and requires too many "elvises")
+- Export components to Houdini
+	-Read json in Houdini and generate node for each one
+
+- Meshes should be referred to by name, just like materials and textures
+
+- Serialization should detect Vectors and Colors and automatically handle convertion to/from arrays
+	-Most used Enums as well?
 
 - Clean up examples.
 	- provide a more advanced 2d example
 	- simplify where possible
+	- GLTF animation example
 
 - Test Houdini-To-Monkey model pipeline
+
+- Generalize serialization 
+	- Remove references to game3d
+	- Add some way to extend specific classes, and implement that into game3d
 
 ------------------------------------------------------------------------------------------------------------------------
 
@@ -44,3 +55,4 @@ Done!
 - Wireframe component
 - Update old examples
 - "Hot reloading" of scenes (no recompiling!)
+- Morpher: Get single GameObject, multiple Entities working (currently doesn't render, and requires too many "elvises")

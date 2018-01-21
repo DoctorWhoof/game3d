@@ -1,7 +1,7 @@
 Namespace std.Json
 
-#Import "../serial/jsonSerial"
-
+'#Import "../../serializer/serializer"
+'
 Class GameObject Extension
 
 	Function Load:JsonObject( path:String )
@@ -17,29 +17,29 @@ Class GameObject Extension
 			LoadFromJsonObject( json[ key ].ToObject(), include, exclude )
 		Next
 		
-		Prompt( "~n------------------- loading Components ----------------------------~n" )
+'		Prompt( "~n------------------- loading Components ----------------------------~n" )
 	
 		include.Clear()
 		exclude.Clear()
 		include.Push( "Components" )
 		For Local key := EachIn json.ToObject().Keys
 			Local gameobj := GameObject.Find( key )
-			Prompt( key )
+'			Prompt( key )
 			GetPropertiesFromJsonObject( Variant(gameobj), json.GetObject( key ), include, exclude )
-			Prompt( "" )
+'			Prompt( "" )
 		Next
 		
-		Prompt( "~n------------------- loading other fields and properties ----------------------------~n" )
+'		Prompt( "~n------------------- loading other fields and properties ----------------------------~n" )
 	
 		For Local key := EachIn json.ToObject().Keys
 			Local gameobj := GameObject.Find( key )
-			Prompt( key )
+'			Prompt( key )
 			include.Clear()
 			exclude.Clear()
 			exclude.Push( "Components" )
 			exclude.Push( "Name" )
 			GetPropertiesFromJsonObject( Variant(gameobj), json.GetObject( key ), include, exclude  )
-			Prompt( "" )
+'			Prompt( "" )
 		Next
 		
 		Return json

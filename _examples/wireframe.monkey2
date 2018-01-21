@@ -8,8 +8,7 @@ Using game3d..
 
 Function Main()
 	Local config:=New StringMap<String>
-	config["mojo3d_renderer"]="forward"
-	New AppInstance( config )
+	New AppInstance
 	New TestWindow
 	App.Run()
 End
@@ -17,7 +16,7 @@ End
 
 Class TestWindow Extends Window
 	Method New()
-		Super.New( "Test", 1280, 720, WindowFlags.Resizable )
+		Super.New( "Test", 1280, 720, WindowFlags.Resizable | WindowFlags.HighDPI )
 		Local gameView := New GameView( 1280, 720, True )
 		gameView.Layout = "letterbox"
 		gameView.devMode = True

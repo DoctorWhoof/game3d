@@ -11,8 +11,8 @@ Class WireMesh Extends Component
 	Field near:= 1.0
 	Field far:= 120.0
 
-	Field nearPush := 0.12
-	Field farPush := 0.18
+	Field nearPush := 0.0 
+	Field farPush := 0.5
 	
 	Private
 	Field _morpher:Morpher
@@ -28,8 +28,15 @@ Class WireMesh Extends Component
 		
 		Local mesh0 := Mesh.Load( pathWire )
 		Local mesh1 := Mesh.Load( pathWire )
+
+		'push mesh0
+		For Local i:=0 Until mesh0.NumVertices
+			Local v:=mesh0.GetVertex( i )
+			v.position += ( v.normal * nearPush)
+			mesh0.SetVertex( i,v )
+		Next
 		
-		'push mesh2
+		'push mesh1
 		For Local i:=0 Until mesh1.NumVertices
 			Local v:=mesh1.GetVertex( i )
 			v.position += ( v.normal * farPush )

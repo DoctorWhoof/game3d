@@ -1,5 +1,5 @@
 #Import "../../game3d"
-#Import "../components/spin"
+'#Import "../components/spin"
 #Import "../components/changecolor"
 
 #Import "../images/"
@@ -10,10 +10,7 @@ Using game3d..
 Const devPath := HomeDir() + "/GoogleDrive/Code/Monkey2/game3d/_examples/"
 
 Function Main()
-	Local config:=New StringMap<String>
-	config["mojo3d_renderer"]="forward"
-
-	New AppInstance( config )
+	New AppInstance
 	New TestWindow
 	App.Run()
 End

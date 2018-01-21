@@ -4,10 +4,10 @@ Namespace game3d
 #Import "<mojo>"
 #Import "<mojo3d>"
 #Import "<mojo3d-loaders>"
-#Import "<mojo3d-physics>"
+'#Import "<mojo3d-physics>"
 
 #Import "core/gameobject"
-#Import "core/materialLibrary"
+#Import "../matlab/matlab"
 
 #Import "components/cameracomponent"
 #Import "components/lightcomponent"
@@ -29,17 +29,18 @@ Namespace game3d
 #Import "extensions/rect"
 #Import "extensions/canvas"
 #Import "extensions/vector"
-#Import "extensions/color"
+'#Import "extensions/color"
 #Import "extensions/scene"
-#Import "extensions/material"
-#Import "extensions/texture"
+'#Import "extensions/material"
+'#Import "extensions/texture"
 #Import "extensions/model"
 #Import "extensions/gameobject"
+#Import "extensions/customArray"
 
 #Import "math/math"
 #Import "math/area"
-
 #Import "clock/clock"
+#Import "subroutine/subroutine"
 
 #Import "graphics/grid"
 #Import "graphics/morpher"
@@ -49,10 +50,9 @@ Namespace game3d
 
 #Import "<reflection>"
 #Reflect game3d..
-#Reflect mojo..
 #Reflect mojo3d..
+#Reflect mojo..
 #Reflect std..
-
 
 Using std..
 Using mojo..
@@ -61,12 +61,17 @@ Using mojo3d..
 Using math..
 Using clock..
 Using util..
+Using subroutine..
+Using matlab..
 
 Const smallFont:Font = Font.Load( "font::DejaVuSans.ttf", 12 )
 
 Global developmentPath:String = Null
 
 Class SceneView Extends View
+	
+	Global componentExportPath:String = Null	'Generates a json file containing the names and parameters for every component
+	
 	Field keyPause := Key.P						'shortcut to pause while in devMode
 	Field keyReload := Key.R					'shortcut to reload the current scene in devMode
 	
@@ -215,16 +220,14 @@ Class SceneView Extends View
 		_camera2D = New Area<Double>( 0, 0, width, height )
 		
 		Self.render3DScene = render3DScene
-
-		'3D Scene
-'		_scene = Scene.GetCurrent()
-		
 		Style.Font = smallFont
 		
 		If renderToImage
 			_renderImage = New Image( width, height )
 			_imageCanvas = New Canvas( _renderImage )	
 		End
+		
+		std.Json.customArraySerializer = New Game3DArrays
 	End
 	
 	
@@ -246,6 +249,9 @@ Class SceneView Extends View
 		'****************** Init *********************
 		
 		If Not _init
+			If devMode And componentExportPath
+				ExportComponents( componentExportPath )
+			End
 			Reload()
 		End
 		
@@ -413,10 +419,37 @@ Class SceneView Extends View
 		canvas.PopMatrix()
 	End
 	
+	
+	Method ExportComponents( path:String )
+		Local json := New JsonObject
+		For Local type:=Eachin TypeInfo.GetTypes()
+			If type.Kind = "Class"
+				If type.SuperType.Name = "game3d.Component"
+					Local params := New JsonObject
+					For Local decl:=Eachin type.GetDecls()
+						If decl.Settable
+							If decl.Kind = "Property" Or decl.Kind = "Field"
+								If Not decl.Name.StartsWith( "_" )
+'									Print "~t"+decl
+									params.SetString( decl.Name, decl.Type.Name )
+								End
+							End
+						End
+					Next
+					json.SetObject( type.Name, params.ToObject() )
+				End
+			End
+		Next
+		Print json.ToJson()
+		SaveString( json.ToJson(), path )
+	End
+	
+	
 	Function DevKeys:Bool()
 		If Keyboard.KeyDown( Key.LeftGui ) And Keyboard.KeyDown( Key.LeftAlt ) Then Return True
 		Return False
 	End
+	
 	
 	'********************************* Static Functions *********************************
 	

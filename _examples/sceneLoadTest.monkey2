@@ -10,9 +10,7 @@ Using game3d..
 
 Function Main()
 	Local config:=New StringMap<String>
-	config["mojo3d_renderer"]="forward"
-	New AppInstance( config )
-'	New AppInstance
+	New AppInstance
 	New TestWindow
 	App.Run()
 End
